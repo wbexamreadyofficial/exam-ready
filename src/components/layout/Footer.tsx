@@ -1,51 +1,74 @@
 import Link from 'next/link';
-import { BookOpen } from 'lucide-react';
-import { EXAM_CATEGORIES } from '@/lib/constants';
+import { Logo } from '@/components/ui/Logo';
+
+const quickLinks = [
+  { title: 'Mock Tests', href: '/exams' },
+  { title: 'Courses', href: '/quizzes' },
+  { title: 'Study Materials', href: '/about' },
+  { title: 'Results', href: '/leaderboard' },
+  { title: 'Pricing', href: '/subscriptions' },
+];
+
+const examLinks = [
+  { title: 'WB Constable', href: '/exams/wb-constable' },
+  { title: 'WB SI', href: '/exams/wb-si' },
+  { title: 'Food SI', href: '/exams/food-si' },
+  { title: 'PSC Clerkship', href: '/exams/psc-clerkship' },
+  { title: 'State PSC Exams', href: '/exams/others' },
+];
+
+const supportLinks = [
+  { title: 'Help Center', href: '/contact' },
+  { title: 'Contact Us', href: '/contact' },
+  { title: 'Privacy Policy', href: '/about' },
+  { title: 'Terms & Conditions', href: '/about' },
+  { title: 'Refund Policy', href: '/about' },
+];
+
+const socialLinks = [
+  { name: 'Facebook', icon: 'f', href: '#' },
+  { name: 'Twitter', icon: '𝕏', href: '#' },
+  { name: 'Instagram', icon: 'ig', href: '#' },
+  { name: 'YouTube', icon: '▶', href: '#' },
+  { name: 'Telegram', icon: '✈', href: '#' },
+];
 
 export function Footer() {
   return (
-    <footer className="border-t border-[var(--color-border)] bg-[var(--color-background)]">
-      <div className="container py-10">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          {/* Brand */}
-          <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="flex items-center gap-2 mb-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--color-primary)]">
-                <BookOpen className="h-4 w-4 text-[var(--color-primary-foreground)]" />
-              </div>
-              <span className="font-extrabold text-base">Exam Ready</span>
-            </Link>
-            <p className="text-xs text-[var(--color-muted-foreground)] leading-relaxed max-w-[220px]">
-              Prepare. Practice. Perform. Your trusted competitive examination preparation platform.
+    <footer className="border-t border-blue-100 dark:border-slate-800 bg-[#edf5ff] dark:bg-slate-950 text-slate-700 dark:text-slate-300">
+      <div className="container py-12 md:py-16">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-10">
+          {/* Brand Column */}
+          <div className="col-span-2 md:col-span-3 lg:col-span-1">
+            <div className="mb-4">
+              <Logo size="md" showTagline={true} />
+            </div>
+            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-5 max-w-[260px]">
+              India&apos;s most trusted platform for government exam preparation. Practice, analyze and achieve your dream job.
             </p>
-          </div>
 
-          {/* Exam Categories */}
-          <div>
-            <h3 className="text-sm font-bold mb-3">Exam Categories</h3>
-            <ul className="space-y-2">
-              {EXAM_CATEGORIES.map((exam) => (
-                <li key={exam}>
-                  <Link href="/exams" className="text-xs text-[var(--color-muted-foreground)] hover:text-[var(--color-primary)] transition-colors">
-                    {exam}
-                  </Link>
-                </li>
+            {/* Circular outline social links matching Image 3 */}
+            <div className="flex items-center gap-2.5">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.name}
+                  href={social.href}
+                  aria-label={social.name}
+                  className="w-8 h-8 rounded-full border border-blue-400/60 dark:border-slate-700 bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all flex items-center justify-center text-xs font-bold shadow-xs"
+                >
+                  {social.icon}
+                </a>
               ))}
-            </ul>
+            </div>
           </div>
 
-          {/* Platform */}
+          {/* Quick Links */}
           <div>
-            <h3 className="text-sm font-bold mb-3">Platform</h3>
-            <ul className="space-y-2">
-              {[
-                { title: 'About', href: '/about' },
-                { title: 'Contact', href: '/contact' },
-                { title: 'Quizzes', href: '/quizzes' },
-                { title: 'Leaderboard', href: '/leaderboard' },
-              ].map((item) => (
-                <li key={item.href}>
-                  <Link href={item.href} className="text-xs text-[var(--color-muted-foreground)] hover:text-[var(--color-primary)] transition-colors">
+            <h3 className="text-sm font-bold mb-4 text-slate-900 dark:text-white">Quick Links</h3>
+            <ul className="space-y-2.5">
+              {quickLinks.map((item) => (
+                <li key={item.title}>
+                  <Link href={item.href} className="text-sm text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                     {item.title}
                   </Link>
                 </li>
@@ -53,32 +76,77 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Account */}
+          {/* Exams */}
           <div>
-            <h3 className="text-sm font-bold mb-3">Account</h3>
-            <ul className="space-y-2">
-              {[
-                { title: 'Login', href: '/login' },
-                { title: 'Register', href: '/register' },
-                { title: 'Dashboard', href: '/dashboard' },
-                { title: 'Results', href: '/results' },
-              ].map((item) => (
-                <li key={item.href}>
-                  <Link href={item.href} className="text-xs text-[var(--color-muted-foreground)] hover:text-[var(--color-primary)] transition-colors">
+            <h3 className="text-sm font-bold mb-4 text-slate-900 dark:text-white">Exams</h3>
+            <ul className="space-y-2.5">
+              {examLinks.map((item) => (
+                <li key={item.title}>
+                  <Link href={item.href} className="text-sm text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                     {item.title}
                   </Link>
                 </li>
               ))}
             </ul>
+          </div>
+
+          {/* Support */}
+          <div>
+            <h3 className="text-sm font-bold mb-4 text-slate-900 dark:text-white">Support</h3>
+            <ul className="space-y-2.5">
+              {supportLinks.map((item) => (
+                <li key={item.title}>
+                  <Link href={item.href} className="text-sm text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                    {item.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Download App */}
+          <div>
+            <h3 className="text-sm font-bold mb-4 text-slate-900 dark:text-white">Download App</h3>
+            <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">Get our app on</p>
+            <div className="flex flex-col gap-2.5">
+              {/* Google Play black button */}
+              <a
+                href="#"
+                className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-black text-white hover:bg-slate-900 transition-colors shadow-sm"
+              >
+                <svg className="h-6 w-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M3.609 1.814L13.793 12 3.61 22.186a.996.996 0 0 1-.61-.92V2.734a1 1 0 0 1 .609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-1.707l2.608 1.51a1 1 0 0 1 0 1.727l-2.609 1.51-2.534-2.534 2.535-2.213zM5.864 2.658L16.8 8.99l-2.302 2.302L5.864 2.658z"/>
+                </svg>
+                <div>
+                  <div className="text-[9px] text-slate-300 leading-none">GET IT ON</div>
+                  <div className="text-sm font-bold text-white leading-tight">Google Play</div>
+                </div>
+              </a>
+
+              {/* App Store black button */}
+              <a
+                href="#"
+                className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-black text-white hover:bg-slate-900 transition-colors shadow-sm"
+              >
+                <svg className="h-6 w-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                </svg>
+                <div>
+                  <div className="text-[9px] text-slate-300 leading-none">Download on the</div>
+                  <div className="text-sm font-bold text-white leading-tight">App Store</div>
+                </div>
+              </a>
+            </div>
           </div>
         </div>
 
-        <div className="border-t border-[var(--color-border)] mt-8 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-[var(--color-muted-foreground)]">
-            &copy; {new Date().getFullYear()} Exam Ready. All rights reserved.
+        {/* Bottom Bar */}
+        <div className="border-t border-blue-200/70 dark:border-slate-800 mt-10 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
+            &copy; {new Date().getFullYear()} ExamReady. All Rights Reserved.
           </p>
-          <p className="text-xs text-[var(--color-muted-foreground)]">
-            Prepare. Practice. Perform.
+          <p className="text-sm text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1">
+            Made with <span className="text-red-500">❤</span> in India
           </p>
         </div>
       </div>

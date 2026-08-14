@@ -10,10 +10,12 @@ export const siteConfig = {
   },
   nav: [
     { title: 'Home', href: '/' },
-    { title: 'Exams', href: '/exams' },
-    { title: 'Quizzes', href: '/quizzes' },
-    { title: 'Pass Pro ⚡', href: '/subscriptions' },
-    { title: 'About', href: '/about' },
+    { title: 'Mock Tests', href: '/exams' },
+    { title: 'Courses', href: '/quizzes' },
+    { title: 'Study Materials', href: '/about' },
+    { title: 'Results', href: '/leaderboard' },
+    { title: 'Pricing', href: '/subscriptions' },
+    { title: 'Blog', href: '/contact' },
     { title: 'Contact', href: '/contact' },
   ],
   adminNav: [
