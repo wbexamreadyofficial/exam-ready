@@ -12,7 +12,7 @@ interface LanguageStore {
 export const useLanguageStore = create<LanguageStore>()(
   persist(
     (set) => ({
-      language: 'BN', // Default to Bengali for WB competitive exams
+      language: 'EN', // Default language set to English
       setLanguage: (language) => set({ language }),
       toggleLanguage: () =>
         set((state) => ({

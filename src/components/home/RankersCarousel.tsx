@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { Trophy, ChevronLeft, ChevronRight, Sparkles, MapPin, CheckCircle2 } from 'lucide-react';
+import { Trophy, ChevronLeft, ChevronRight, MapPin, CheckCircle2, Award, Star, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from '@/lib/i18n';
 
@@ -16,11 +16,15 @@ interface Ranker {
   medal: string;
   avatarBg: string;
   badgeBg: string;
+  cardBg: string;
   borderColor: string;
+  textColor: string;
+  districtColor: string;
+  examBg: string;
 }
 
 const RANKER_SLIDES: Ranker[][] = [
-  // Slide 1: Top 1 - 3
+  // Slide 1: Top 1 - 3 (Gold, Silver, Bronze Champions)
   [
     {
       rank: 1,
@@ -30,9 +34,13 @@ const RANKER_SLIDES: Ranker[][] = [
       score: '94 / 100',
       accuracy: '98% Accuracy',
       medal: '🥇',
-      avatarBg: 'bg-gradient-to-br from-amber-400 via-yellow-400 to-amber-500 text-slate-950',
-      badgeBg: 'bg-amber-400 text-slate-950 font-black',
-      borderColor: 'border-amber-400/80 shadow-amber-500/20',
+      avatarBg: 'bg-slate-950 text-amber-400 border border-amber-300 shadow-lg',
+      badgeBg: 'bg-slate-950 text-amber-300 border border-amber-300 font-black shadow-lg',
+      cardBg: 'bg-gradient-to-br from-amber-400 via-yellow-400 to-amber-500',
+      borderColor: 'border-2 border-yellow-200 shadow-2xl shadow-amber-500/50',
+      textColor: 'text-slate-950 font-black',
+      districtColor: 'text-amber-950/90 font-extrabold',
+      examBg: 'bg-slate-950/90 text-amber-300 border border-amber-400/50',
     },
     {
       rank: 2,
@@ -42,9 +50,13 @@ const RANKER_SLIDES: Ranker[][] = [
       score: '91 / 100',
       accuracy: '95% Accuracy',
       medal: '🥈',
-      avatarBg: 'bg-gradient-to-br from-slate-200 via-slate-300 to-slate-400 text-slate-950',
-      badgeBg: 'bg-slate-300 text-slate-950 font-bold',
-      borderColor: 'border-slate-400/80 shadow-slate-500/20',
+      avatarBg: 'bg-slate-950 text-slate-200 border border-slate-300 shadow-lg',
+      badgeBg: 'bg-slate-950 text-slate-200 border border-slate-300 font-black shadow-lg',
+      cardBg: 'bg-gradient-to-br from-slate-100 via-slate-200 to-slate-300',
+      borderColor: 'border-2 border-white shadow-2xl shadow-slate-400/50',
+      textColor: 'text-slate-950 font-black',
+      districtColor: 'text-slate-800 font-extrabold',
+      examBg: 'bg-slate-950/90 text-slate-200 border border-slate-400/50',
     },
     {
       rank: 3,
@@ -54,12 +66,16 @@ const RANKER_SLIDES: Ranker[][] = [
       score: '88 / 100',
       accuracy: '93% Accuracy',
       medal: '🥉',
-      avatarBg: 'bg-gradient-to-br from-amber-700 via-amber-800 to-yellow-900 text-white',
-      badgeBg: 'bg-amber-700 text-white font-bold',
-      borderColor: 'border-amber-700/80 shadow-amber-700/20',
+      avatarBg: 'bg-amber-400 text-slate-950 font-black shadow-lg',
+      badgeBg: 'bg-amber-400 text-slate-950 font-black shadow-lg',
+      cardBg: 'bg-gradient-to-br from-amber-600 via-amber-700 to-amber-800',
+      borderColor: 'border-2 border-amber-400 shadow-2xl shadow-amber-700/50',
+      textColor: 'text-white font-black',
+      districtColor: 'text-amber-200/90 font-extrabold',
+      examBg: 'bg-slate-950/90 text-amber-300 border border-amber-500/50',
     },
   ],
-  // Slide 2: Ranks 4 - 6
+  // Slide 2: Ranks 4 - 6 (Electric Violet, Emerald Glow, Crimson Rose)
   [
     {
       rank: 4,
@@ -69,9 +85,13 @@ const RANKER_SLIDES: Ranker[][] = [
       score: '86 / 100',
       accuracy: '92% Accuracy',
       medal: '🏅',
-      avatarBg: 'bg-gradient-to-br from-purple-500 to-indigo-600 text-white',
-      badgeBg: 'bg-purple-600 text-white font-bold',
-      borderColor: 'border-purple-400/80 shadow-purple-500/20',
+      avatarBg: 'bg-gradient-to-br from-purple-400 to-indigo-400 text-slate-950 shadow-md',
+      badgeBg: 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-extrabold shadow-lg shadow-purple-500/40',
+      cardBg: 'bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-950',
+      borderColor: 'border-2 border-purple-400/90 shadow-2xl shadow-purple-500/40',
+      textColor: 'text-white font-black',
+      districtColor: 'text-purple-200 font-semibold',
+      examBg: 'bg-purple-900/60 text-purple-200 border border-purple-500/50',
     },
     {
       rank: 5,
@@ -81,9 +101,13 @@ const RANKER_SLIDES: Ranker[][] = [
       score: '135 / 150',
       accuracy: '91% Accuracy',
       medal: '🌟',
-      avatarBg: 'bg-gradient-to-br from-emerald-500 to-teal-600 text-white',
-      badgeBg: 'bg-emerald-600 text-white font-bold',
-      borderColor: 'border-emerald-400/80 shadow-emerald-500/20',
+      avatarBg: 'bg-gradient-to-br from-emerald-400 to-teal-400 text-slate-950 shadow-md',
+      badgeBg: 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-extrabold shadow-lg shadow-emerald-500/40',
+      cardBg: 'bg-gradient-to-br from-emerald-950 via-teal-950 to-slate-950',
+      borderColor: 'border-2 border-emerald-400/90 shadow-2xl shadow-emerald-500/40',
+      textColor: 'text-white font-black',
+      districtColor: 'text-emerald-200 font-semibold',
+      examBg: 'bg-emerald-900/60 text-emerald-200 border border-emerald-500/50',
     },
     {
       rank: 6,
@@ -93,12 +117,16 @@ const RANKER_SLIDES: Ranker[][] = [
       score: '84 / 100',
       accuracy: '90% Accuracy',
       medal: '✨',
-      avatarBg: 'bg-gradient-to-br from-rose-500 to-pink-600 text-white',
-      badgeBg: 'bg-rose-600 text-white font-bold',
-      borderColor: 'border-rose-400/80 shadow-rose-500/20',
+      avatarBg: 'bg-gradient-to-br from-rose-400 to-pink-400 text-slate-950 shadow-md',
+      badgeBg: 'bg-gradient-to-r from-rose-500 to-pink-500 text-white font-extrabold shadow-lg shadow-rose-500/40',
+      cardBg: 'bg-gradient-to-br from-rose-950 via-pink-950 to-slate-950',
+      borderColor: 'border-2 border-rose-400/90 shadow-2xl shadow-rose-500/40',
+      textColor: 'text-white font-black',
+      districtColor: 'text-rose-200 font-semibold',
+      examBg: 'bg-rose-900/60 text-rose-200 border border-rose-500/50',
     },
   ],
-  // Slide 3: Ranks 7 - 9
+  // Slide 3: Ranks 7 - 9 (Royal Blue, Cyan Blue, Vibrant Emerald)
   [
     {
       rank: 7,
@@ -108,9 +136,13 @@ const RANKER_SLIDES: Ranker[][] = [
       score: '83 / 100',
       accuracy: '89% Accuracy',
       medal: '⭐',
-      avatarBg: 'bg-gradient-to-br from-blue-500 to-cyan-600 text-white',
-      badgeBg: 'bg-blue-600 text-white font-bold',
-      borderColor: 'border-blue-400/80 shadow-blue-500/20',
+      avatarBg: 'bg-gradient-to-br from-blue-400 to-cyan-400 text-slate-950 shadow-md',
+      badgeBg: 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-extrabold shadow-lg shadow-blue-500/40',
+      cardBg: 'bg-gradient-to-br from-blue-950 via-cyan-950 to-slate-950',
+      borderColor: 'border-2 border-blue-400/90 shadow-2xl shadow-blue-500/40',
+      textColor: 'text-white font-black',
+      districtColor: 'text-blue-200 font-semibold',
+      examBg: 'bg-blue-900/60 text-blue-200 border border-blue-500/50',
     },
     {
       rank: 8,
@@ -120,9 +152,13 @@ const RANKER_SLIDES: Ranker[][] = [
       score: '82 / 100',
       accuracy: '88% Accuracy',
       medal: '🎯',
-      avatarBg: 'bg-gradient-to-br from-indigo-500 to-blue-600 text-white',
-      badgeBg: 'bg-indigo-600 text-white font-bold',
-      borderColor: 'border-indigo-400/80 shadow-indigo-500/20',
+      avatarBg: 'bg-gradient-to-br from-cyan-400 to-sky-400 text-slate-950 shadow-md',
+      badgeBg: 'bg-gradient-to-r from-cyan-500 to-sky-500 text-slate-950 font-extrabold shadow-lg shadow-cyan-500/40',
+      cardBg: 'bg-gradient-to-br from-cyan-950 via-blue-950 to-slate-950',
+      borderColor: 'border-2 border-cyan-400/90 shadow-2xl shadow-cyan-500/40',
+      textColor: 'text-white font-black',
+      districtColor: 'text-cyan-200 font-semibold',
+      examBg: 'bg-cyan-900/60 text-cyan-200 border border-cyan-500/50',
     },
     {
       rank: 9,
@@ -132,12 +168,16 @@ const RANKER_SLIDES: Ranker[][] = [
       score: '81 / 100',
       accuracy: '87% Accuracy',
       medal: '🚀',
-      avatarBg: 'bg-gradient-to-br from-teal-500 to-emerald-600 text-white',
-      badgeBg: 'bg-teal-600 text-white font-bold',
-      borderColor: 'border-teal-400/80 shadow-teal-500/20',
+      avatarBg: 'bg-gradient-to-br from-teal-400 to-emerald-400 text-slate-950 shadow-md',
+      badgeBg: 'bg-gradient-to-r from-teal-500 to-emerald-500 text-slate-950 font-extrabold shadow-lg shadow-teal-500/40',
+      cardBg: 'bg-gradient-to-br from-teal-950 via-emerald-950 to-slate-950',
+      borderColor: 'border-2 border-teal-400/90 shadow-2xl shadow-teal-500/40',
+      textColor: 'text-white font-black',
+      districtColor: 'text-teal-200 font-semibold',
+      examBg: 'bg-teal-900/60 text-teal-200 border border-teal-500/50',
     },
   ],
-  // Slide 4: Ranks 10 - 12
+  // Slide 4: Ranks 10 - 12 (Electric Amber, Sapphire Blue, Jade Emerald)
   [
     {
       rank: 10,
@@ -147,9 +187,13 @@ const RANKER_SLIDES: Ranker[][] = [
       score: '80 / 100',
       accuracy: '86% Accuracy',
       medal: '💎',
-      avatarBg: 'bg-gradient-to-br from-cyan-500 to-blue-600 text-white',
-      badgeBg: 'bg-cyan-600 text-white font-bold',
-      borderColor: 'border-cyan-400/80 shadow-cyan-500/20',
+      avatarBg: 'bg-gradient-to-br from-sky-400 to-blue-400 text-slate-950 shadow-md',
+      badgeBg: 'bg-gradient-to-r from-sky-500 to-blue-500 text-white font-extrabold shadow-lg shadow-sky-500/40',
+      cardBg: 'bg-gradient-to-br from-sky-950 via-blue-950 to-slate-950',
+      borderColor: 'border-2 border-sky-400/90 shadow-2xl shadow-sky-500/40',
+      textColor: 'text-white font-black',
+      districtColor: 'text-sky-200 font-semibold',
+      examBg: 'bg-sky-900/60 text-sky-200 border border-sky-500/50',
     },
     {
       rank: 11,
@@ -159,9 +203,13 @@ const RANKER_SLIDES: Ranker[][] = [
       score: '79 / 100',
       accuracy: '85% Accuracy',
       medal: '🏆',
-      avatarBg: 'bg-gradient-to-br from-amber-600 to-orange-600 text-white',
-      badgeBg: 'bg-amber-600 text-white font-bold',
-      borderColor: 'border-amber-500/80 shadow-amber-600/20',
+      avatarBg: 'bg-gradient-to-br from-amber-400 to-yellow-400 text-slate-950 shadow-md',
+      badgeBg: 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black shadow-lg shadow-amber-500/40',
+      cardBg: 'bg-gradient-to-br from-amber-950 via-orange-950 to-slate-950',
+      borderColor: 'border-2 border-amber-400/90 shadow-2xl shadow-amber-500/40',
+      textColor: 'text-white font-black',
+      districtColor: 'text-amber-200 font-semibold',
+      examBg: 'bg-amber-900/60 text-amber-200 border border-amber-500/50',
     },
     {
       rank: 12,
@@ -171,9 +219,13 @@ const RANKER_SLIDES: Ranker[][] = [
       score: '128 / 150',
       accuracy: '84% Accuracy',
       medal: '🌟',
-      avatarBg: 'bg-gradient-to-br from-emerald-600 to-teal-700 text-white',
-      badgeBg: 'bg-emerald-600 text-white font-bold',
-      borderColor: 'border-emerald-500/80 shadow-emerald-600/20',
+      avatarBg: 'bg-gradient-to-br from-emerald-400 to-teal-400 text-slate-950 shadow-md',
+      badgeBg: 'bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-extrabold shadow-lg shadow-emerald-500/40',
+      cardBg: 'bg-gradient-to-br from-emerald-950 via-teal-950 to-slate-950',
+      borderColor: 'border-2 border-emerald-400/90 shadow-2xl shadow-emerald-500/40',
+      textColor: 'text-white font-black',
+      districtColor: 'text-emerald-200 font-semibold',
+      examBg: 'bg-emerald-900/60 text-emerald-200 border border-emerald-500/50',
     },
   ],
 ];
@@ -184,11 +236,10 @@ export function RankersCarousel() {
   const touchStartX = useRef<number | null>(null);
   const totalSlides = RANKER_SLIDES.length;
 
-  // Auto-play interval every 3 seconds (3000ms) with reliable state update
   useEffect(() => {
     const timer = setInterval(() => {
       setActiveSlide((prev) => (prev + 1) % totalSlides);
-    }, 3000);
+    }, 3500);
 
     return () => clearInterval(timer);
   }, [totalSlides]);
@@ -214,61 +265,65 @@ export function RankersCarousel() {
   };
 
   return (
-    <section className="py-10">
+    <section className="py-12">
       <div className="container max-w-5xl">
         <div
-          className="p-6 md:p-10 rounded-3xl bg-slate-950 text-white shadow-2xl border border-slate-800 relative overflow-hidden"
+          className="p-6 md:p-10 rounded-3xl bg-gradient-to-br from-blue-950 via-slate-950 to-blue-900 text-white shadow-2xl border-2 border-blue-500/40 relative overflow-hidden"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          {/* Vibrant Two-Tone Dual-Color Animated Progress Bar */}
-          <div className="absolute top-0 left-0 right-0 h-2 bg-slate-900/90 overflow-hidden z-20 border-b border-amber-400/40">
+          {/* Animated Glowing Progress Bar */}
+          <div className="absolute top-0 left-0 right-0 h-1.5 bg-blue-950/90 overflow-hidden z-20 border-b border-blue-600/40">
             <div
               key={activeSlide}
-              className="h-full bg-gradient-to-r from-amber-400 via-yellow-300 via-emerald-400 to-cyan-400 shadow-[0_0_20px_rgba(250,204,21,0.95)]"
+              className="h-full bg-gradient-to-r from-amber-400 via-yellow-300 via-cyan-400 to-blue-500 shadow-[0_0_25px_rgba(250,204,21,0.95)]"
               style={{
-                animation: 'progress 3s linear infinite',
+                animation: 'progress 3.5s linear infinite',
               }}
             />
           </div>
 
           {/* Background Ambient Glows */}
-          <div className="absolute top-0 right-0 w-80 h-80 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/25 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
 
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 relative z-10 gap-4 pt-2">
             <div>
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/20 text-amber-400 font-extrabold text-xs mb-2 border border-amber-500/30 shadow-sm">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-400/20 via-amber-500/20 to-yellow-400/20 text-amber-300 font-black text-xs mb-2.5 border-2 border-amber-400/60 shadow-lg shadow-amber-500/20">
                 <span className="relative flex h-2.5 w-2.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
                 </span>
-                <span>Statewide Live Leaderboard Spotlight</span>
+                <span className="uppercase tracking-wider">Statewide Live Leaderboard Spotlight</span>
               </div>
-              <h2 className="text-2xl md:text-3xl font-black tracking-tight text-white">{t.rankers.title}</h2>
-              <p className="text-slate-400 text-xs sm:text-sm mt-0.5">{t.rankers.subtitle}</p>
+              <h2 className="text-2xl md:text-4xl font-black tracking-tight text-white flex items-center gap-2">
+                {t.rankers.title}
+                <Sparkles className="h-6 w-6 text-amber-400 animate-pulse" />
+              </h2>
+              <p className="text-blue-100/90 text-xs sm:text-sm mt-1 font-medium">{t.rankers.subtitle}</p>
             </div>
 
             {/* Navigation Arrows */}
-            <div className="flex items-center gap-2 shrink-0">
+            <div className="flex items-center gap-2.5 shrink-0">
               <Button
                 variant="outline"
                 size="icon"
                 onClick={handlePrev}
-                className="h-10 w-10 rounded-full border-slate-700 bg-slate-900/90 text-white hover:bg-amber-500 hover:text-slate-950 transition-colors shadow-md"
+                className="h-11 w-11 rounded-full border-2 border-amber-400/60 bg-slate-900/90 text-amber-400 hover:bg-amber-400 hover:text-slate-950 transition-all shadow-lg"
                 aria-label="Previous Rankers"
               >
-                <ChevronLeft className="h-5 w-5 stroke-[2.5]" />
+                <ChevronLeft className="h-6 w-6 stroke-[3]" />
               </Button>
               <Button
                 variant="outline"
                 size="icon"
                 onClick={handleNext}
-                className="h-10 w-10 rounded-full border-slate-700 bg-slate-900/90 text-white hover:bg-amber-500 hover:text-slate-950 transition-colors shadow-md"
+                className="h-11 w-11 rounded-full border-2 border-amber-400/60 bg-slate-900/90 text-amber-400 hover:bg-amber-400 hover:text-slate-950 transition-all shadow-lg"
                 aria-label="Next Rankers"
               >
-                <ChevronRight className="h-5 w-5 stroke-[2.5]" />
+                <ChevronRight className="h-6 w-6 stroke-[3]" />
               </Button>
             </div>
           </div>
@@ -280,41 +335,43 @@ export function RankersCarousel() {
               return (
                 <div
                   key={slideIdx}
-                  className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 animate-fade-in w-full"
+                  className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 animate-fade-in w-full"
                 >
                   {slideGroup.map((ranker) => (
                     <div
                       key={ranker.rank}
-                      className={`p-5 rounded-2xl bg-slate-900/95 border-2 ${ranker.borderColor} shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between relative group w-full`}
+                      className={`p-6 rounded-2xl ${ranker.cardBg} ${ranker.borderColor} shadow-2xl hover:scale-[1.03] transition-all duration-300 flex flex-col justify-between relative group w-full shimmer-card`}
                     >
-                      {/* Rank Badge */}
+                      {/* Rank Badge & Icon */}
                       <div className="flex items-center justify-between mb-4">
-                        <div className={`flex h-11 w-11 items-center justify-center rounded-2xl text-xl ${ranker.avatarBg} shadow-md`}>
+                        <div className={`flex h-12 w-12 items-center justify-center rounded-2xl text-2xl ${ranker.avatarBg} shadow-lg`}>
                           {ranker.medal}
                         </div>
-                        <span className={`text-[11px] px-3 py-1 rounded-full uppercase ${ranker.badgeBg}`}>
-                          Rank #{ranker.rank}
+                        <span className={`text-xs px-3.5 py-1.5 rounded-full uppercase tracking-wider ${ranker.badgeBg}`}>
+                          RANK #{ranker.rank}
                         </span>
                       </div>
 
                       {/* Ranker Info */}
                       <div className="mb-4">
-                        <h3 className="font-black text-lg text-white mb-0.5 tracking-tight truncate">{ranker.name}</h3>
-                        <div className="flex items-center gap-1 text-xs text-slate-400 font-semibold mb-2">
-                          <MapPin className="h-3.5 w-3.5 text-amber-400 shrink-0" />
+                        <h3 className={`font-black text-xl mb-1 tracking-tight truncate ${ranker.textColor}`}>
+                          {ranker.name}
+                        </h3>
+                        <div className={`flex items-center gap-1.5 text-xs mb-3 ${ranker.districtColor}`}>
+                          <MapPin className="h-4 w-4 shrink-0 text-amber-400" />
                           <span className="truncate">{ranker.district}</span>
                         </div>
-                        <div className="inline-block px-3 py-1 rounded-xl bg-slate-800/80 text-[11px] font-bold text-amber-300 border border-slate-700/60 truncate max-w-full">
+                        <div className={`inline-block px-3.5 py-1.5 rounded-xl text-xs font-extrabold truncate max-w-full shadow-sm ${ranker.examBg}`}>
                           {ranker.exam}
                         </div>
                       </div>
 
                       {/* Score Bar */}
-                      <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
-                        <span className="flex items-center gap-1 text-[11px] font-bold text-emerald-400">
-                          <CheckCircle2 className="h-3.5 w-3.5" /> {ranker.accuracy}
+                      <div className="pt-3.5 border-t border-slate-800/40 flex items-center justify-between gap-2">
+                        <span className={`flex items-center gap-1.5 text-xs font-black ${ranker.rank <= 3 ? 'text-slate-950 dark:text-emerald-300' : 'text-emerald-400'}`}>
+                          <CheckCircle2 className="h-4 w-4" /> {ranker.accuracy}
                         </span>
-                        <span className="px-3 py-1 rounded-full bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 text-slate-950 font-black text-xs shadow-md">
+                        <span className="px-3.5 py-1.5 rounded-full bg-slate-950 text-amber-300 border-2 border-amber-400/80 font-black text-xs shadow-lg">
                           Score: {ranker.score}
                         </span>
                       </div>
@@ -326,15 +383,15 @@ export function RankersCarousel() {
           </div>
 
           {/* Active Page Indicator Pills */}
-          <div className="flex items-center justify-center gap-2.5 mt-8 relative z-10">
+          <div className="flex items-center justify-center gap-3 mt-8 relative z-10">
             {RANKER_SLIDES.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setActiveSlide(i)}
                 className={`h-3 rounded-full transition-all duration-300 ${
                   activeSlide === i
-                    ? 'w-10 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 shadow-md shadow-amber-500/50 border border-amber-300'
-                    : 'w-3 bg-slate-800 hover:bg-slate-700 border border-slate-700'
+                    ? 'w-10 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 shadow-lg shadow-amber-500/60 border-2 border-amber-300'
+                    : 'w-3 bg-blue-900/80 hover:bg-blue-700 border border-blue-600/60'
                 }`}
                 aria-label={`Go to slide page ${i + 1}`}
               />
@@ -342,10 +399,10 @@ export function RankersCarousel() {
           </div>
 
           {/* Footer CTA */}
-          <div className="text-center mt-6 relative z-10">
-            <Button variant="outline" size="sm" className="border-slate-700 text-white hover:bg-slate-900 hover:border-amber-400 font-bold gap-2 text-xs h-9 px-5" asChild>
+          <div className="text-center mt-7 relative z-10">
+            <Button size="lg" className="bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 text-slate-950 hover:from-amber-500 hover:to-yellow-600 font-black gap-2 text-sm h-11 px-7 shadow-xl shadow-amber-500/25 border-none rounded-xl" asChild>
               <Link href="/leaderboard">
-                <Trophy className="h-4 w-4 text-amber-400" /> View Statewide Leaderboard
+                <Trophy className="h-5 w-5 stroke-[2.5]" /> View Statewide Leaderboard
               </Link>
             </Button>
           </div>

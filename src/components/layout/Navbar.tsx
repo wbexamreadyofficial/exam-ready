@@ -46,12 +46,12 @@ export function Navbar() {
       <div className="container flex h-20 items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 font-bold group">
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-400 via-yellow-400 to-amber-500 text-slate-950 shadow-md shadow-amber-500/30 group-hover:scale-105 transition-transform">
-            <BookOpen className="h-5.5 w-5.5 text-slate-950 stroke-[2.5]" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 via-blue-500 to-cyan-500 text-white shadow-md shadow-blue-500/30 group-hover:scale-105 transition-transform">
+            <BookOpen className="h-5.5 w-5.5 text-white stroke-[2.5]" />
           </div>
           <span className="text-xl md:text-2xl font-black hidden sm:block tracking-tight">
             <span className="text-slate-900 dark:text-white">Exam</span>{' '}
-            <span className="bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 bg-clip-text text-transparent">Ready</span>
+            <span className="bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 bg-clip-text text-transparent">Ready</span>
           </span>
         </Link>
 
@@ -80,8 +80,8 @@ export function Navbar() {
                 className={cn(
                   'px-3.5 py-2 rounded-lg text-base font-extrabold transition-all relative flex items-center gap-1.5',
                   isActive
-                    ? 'text-amber-600 dark:text-amber-400 font-black bg-amber-500/10 dark:bg-amber-500/20'
-                    : 'text-slate-700 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400'
+                    ? 'text-blue-600 dark:text-blue-400 font-black bg-blue-500/10 dark:bg-blue-500/20'
+                    : 'text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400'
                 )}
               >
                 {getNavTitle(item.href, item.title)}
@@ -95,14 +95,13 @@ export function Navbar() {
 
         {/* Right Actions */}
         <div className="flex items-center gap-2 sm:gap-3">
-          <LanguageSwitcher />
           <ThemeSwitcher />
 
           {isAuthenticated && user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="flex items-center gap-2 px-2 h-10">
-                  <Avatar className="h-9 w-9 border-2 border-amber-400">
+                  <Avatar className="h-9 w-9 border-2 border-blue-400">
                     <AvatarImage src={user.avatar} alt={user.name} />
                     <AvatarFallback className="text-xs font-bold">{generateInitials(user.name)}</AvatarFallback>
                   </Avatar>
@@ -135,7 +134,7 @@ export function Navbar() {
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
                       <Link href="/admin">
-                        <LayoutDashboard className="mr-2 h-4 w-4 text-amber-500" />
+                        <LayoutDashboard className="mr-2 h-4 w-4 text-blue-500" />
                         Admin Panel
                       </Link>
                     </DropdownMenuItem>
@@ -187,7 +186,7 @@ export function Navbar() {
                 className={cn(
                   'px-4 py-2.5 rounded-lg text-base font-bold transition-colors',
                   pathname === item.href
-                    ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 font-extrabold'
+                    ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 font-extrabold'
                     : 'text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)]'
                 )}
               >
