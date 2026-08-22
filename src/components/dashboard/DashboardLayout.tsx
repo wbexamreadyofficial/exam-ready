@@ -1,0 +1,67 @@
+'use client';
+
+import React, { useState } from 'react';
+import { cn } from '@/lib/utils';
+import DashboardSidebar from './DashboardSidebar';
+import DashboardHeader from './DashboardHeader';
+
+interface DashboardLayoutProps {
+  children: React.ReactNode;
+  rightSidebar?: React.ReactNode;
+}
+
+export default function DashboardLayout({ children, rightSidebar }: DashboardLayoutProps) {
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const toggleSidebar = () => setSidebarCollapsed(!sidebarCollapsed);
+  const toggleMobile = () => setMobileMenuOpen(!mobileMenuOpen);
+  const closeMobile = () => setMobileMenuOpen(false);
+
+  return (
+    <div className="fixed inset-0 z-50 flex overflow-hidden bg-[var(--color-surface-subtle)] text-[var(--color-ink-900)] font-sans">
+      {/* Mobile overlay */}
+      {mobileMenuOpen && (
+        <div 
+          onClick={closeMobile} 
+          className="fixed inset-0 z-40 bg-black/50 lg:hidden backdrop-blur-sm transition-opacity" 
+        />
+      )}
+      
+      {/* Sidebar — fixed on desktop, drawer on mobile */}
+      <aside className={cn(
+        "fixed z-50 h-screen flex-shrink-0 transition-transform duration-300 ease-in-out bg-[var(--color-surface)]",
+        "lg:relative lg:z-auto lg:translate-x-0",
+        mobileMenuOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full",
+        sidebarCollapsed ? "w-[72px]" : "w-[272px]"
+      )}>
+        <DashboardSidebar 
+          isCollapsed={sidebarCollapsed} 
+          onToggle={toggleSidebar} 
+          onClose={closeMobile} 
+        />
+      </aside>
+      
+      {/* Main area */}
+      <div className="flex flex-1 flex-col min-w-0 overflow-hidden">
+        <DashboardHeader onMenuClick={toggleMobile} />
+        
+        <div className="flex flex-1 overflow-hidden relative">
+          {/* Center content — scrollable */}
+          <main className="flex-1 overflow-y-auto p-4 sm:p-6 dashboard-scrollbar bg-[var(--color-surface-subtle)]">
+            <div className="mx-auto w-full max-w-7xl">
+              {children}
+            </div>
+          </main>
+          
+          {/* Right sidebar — visible on xl */}
+          {rightSidebar && (
+            <aside className="hidden xl:block w-[340px] flex-shrink-0 overflow-y-auto p-6 pt-0 border-l border-[var(--color-hairline)] dashboard-scrollbar bg-[var(--color-surface)]">
+              {rightSidebar}
+            </aside>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

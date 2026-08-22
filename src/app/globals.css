@@ -698,6 +698,53 @@ h1, h2, h3, h4, .font-display {
   background-image: radial-gradient(circle, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
 }
 
+/* ═══════════════════════════════════════════════
+   DASHBOARD CHART ANIMATIONS
+   ═══════════════════════════════════════════════ */
+
+/* Animated line draw — for Recharts SVG path */
+@keyframes dash-draw {
+  from { stroke-dashoffset: 1000; }
+  to   { stroke-dashoffset: 0; }
+}
+.animate-dash-draw {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: dash-draw 1.5s ease-out forwards;
+}
+
+/* Animated donut fill */
+@keyframes donut-fill {
+  from { stroke-dashoffset: 440; }
+  to   { stroke-dashoffset: 0; }
+}
+.animate-donut-fill {
+  animation: donut-fill 1.2s ease-out forwards;
+}
+
+/* Slide up and fade for stat tiles */
+@keyframes slide-up-fade {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-slide-up-fade {
+  animation: slide-up-fade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Progress bar fill */
+@keyframes bar-fill {
+  from { transform: translateX(-100%); }
+}
+.animate-bar-fill {
+  animation: bar-fill 1s ease-out forwards;
+}
+
+/* Dashboard thin scrollbar */
+.dashboard-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+.dashboard-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.dashboard-scrollbar::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 2px; }
+.dashboard-scrollbar::-webkit-scrollbar-thumb:hover { background: var(--color-muted-foreground); }
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .scroll-reveal {
