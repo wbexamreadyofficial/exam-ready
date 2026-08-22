@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, Target, Bot, FileCheck, BarChart3 } from 'lucide-react';
+import { ArrowRight, Target, Bot, FileCheck, BarChart3, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ExamIconsStrip } from '@/components/home/ExamIconsStrip';
 import { FeaturesSection } from '@/components/home/FeaturesSection';
@@ -12,11 +12,16 @@ import { CTABanner } from '@/components/home/CTABanner';
 import { BlogSection } from '@/components/home/BlogSection';
 import { HeroDashboard } from '@/components/home/HeroDashboard';
 
+/*
+  Each hero feature carries one brand color. Class-based (not inline styles)
+  so the dark-mode icon-tile rules in globals.css can normalise them —
+  inline styles would win over the stylesheet and stay light-mode blue.
+*/
 const heroFeatures = [
-  { icon: Target,    label: 'Real Exam Experience'  },
-  { icon: Bot,       label: 'AI-Powered Analysis'   },
-  { icon: FileCheck, label: 'Detailed Solutions'    },
-  { icon: BarChart3, label: 'Performance Tracking'  },
+  { icon: Target,    label: 'Real Exam Experience', tint: 'bg-blue-50 text-blue-600 ring-1 ring-blue-100' },
+  { icon: Bot,       label: 'AI-Powered Analysis',  tint: 'bg-orange-50 text-orange-600 ring-1 ring-orange-100' },
+  { icon: FileCheck, label: 'Detailed Solutions',   tint: 'bg-green-50 text-green-600 ring-1 ring-green-100' },
+  { icon: BarChart3, label: 'Performance Tracking', tint: 'bg-red-50 text-red-600 ring-1 ring-red-100' },
 ];
 
 export default function HomePage() {
@@ -29,52 +34,68 @@ export default function HomePage() {
         The laptop hinge/base and phone panel must be able
         to render fully without being clipped.
       */}
-      <section className="relative bg-gradient-to-br from-blue-50/50 via-slate-50/30 to-amber-50/20 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+      {/*
+        overflow-x: clip (not hidden) — clips horizontal poke-out from the
+        ambient glows and the device mockup WITHOUT turning the section into a
+        vertical scroll container, so the laptop base and phone still render.
+      */}
+      <section
+        className="relative isolate bg-[#FAFBFD] dark:bg-slate-950"
+        style={{ overflowX: 'clip' }}
+      >
 
-        {/* Background blobs — contained inside a clipping wrapper so they
-            don't cause horizontal scroll, but the mockup is NOT clipped */}
+        {/* ── Layered background treatment ──
+            1. fine grid, masked to fade at the edges
+            2. soft ambient color light
+            3. hairline at the section base
+            All non-interactive and clipped so they never cause overflow. */}
         <div
           className="absolute inset-0 pointer-events-none overflow-hidden"
           aria-hidden="true"
         >
-          {/* Top-left blue glow behind headline */}
-          <div className="absolute -top-20 -left-20 w-[600px] h-[600px] bg-blue-100/60 dark:bg-blue-900/20 rounded-full blur-[100px]" />
-          
-          {/* Top-right blue glow behind laptop */}
-          <div className="absolute -top-10 right-0 w-[550px] h-[550px] bg-blue-100/70 dark:bg-blue-900/20 rounded-full blur-[90px]" />
+          {/* Fine architectural grid */}
+          <div className="absolute inset-0 bg-grid-fine mask-radial-fade opacity-70" />
 
-          {/* Bottom-right golden yellow glow under mobile matching Image 1 */}
-          <div className="absolute -bottom-10 -right-10 w-[450px] h-[450px] bg-[#FFD000]/60 dark:bg-amber-500/20 rounded-full blur-[80px]" />
+          {/* Ambient blue light behind the headline */}
+          <div className="absolute -top-32 -left-32 w-[680px] h-[680px] bg-blue-200/30 dark:bg-blue-900/20 rounded-full blur-[130px]" />
+
+          {/* Ambient light behind the device mockup */}
+          <div className="absolute -top-20 right-0 w-[620px] h-[620px] bg-blue-100/50 dark:bg-blue-900/20 rounded-full blur-[120px]" />
+
+          {/* Warm accent, low opacity — keeps the palette from feeling cold */}
+          <div className="absolute bottom-0 -right-20 w-[480px] h-[480px] bg-orange-200/25 dark:bg-orange-500/10 rounded-full blur-[120px]" />
+
+          {/* Cool balance accent */}
+          <div className="absolute -bottom-32 right-[30%] w-[420px] h-[420px] bg-emerald-200/20 dark:bg-emerald-500/10 rounded-full blur-[120px]" />
         </div>
+
+        {/* Base hairline to separate hero from the next section */}
+        <div
+          className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent dark:via-slate-800"
+          aria-hidden="true"
+        />
 
         <div className="container relative">
 
-          {/* ── Mobile layout (stacked) ── */}
-          <div className="flex flex-col gap-12 py-14 lg:hidden">
-            <LeftContent />
-            <div className="flex justify-center" style={{ paddingBottom: 70 }}>
-              <div style={{ width: '100%', maxWidth: 480 }}>
-                <HeroDashboard />
-              </div>
-            </div>
-          </div>
-
-          {/* ── Desktop layout (side by side) ── */}
-          <div
-            className="hidden lg:grid items-center py-16 xl:py-20"
-            style={{ gridTemplateColumns: '45% 55%', gap: '2rem' }}
-          >
+          {/*
+            A SINGLE responsive grid — stacked below `lg`, side-by-side above.
+            Rendering one instance keeps exactly one <h1> in the document and
+            halves the hero's DOM versus duplicating the column per breakpoint.
+          */}
+          <div className="grid grid-cols-1 lg:grid-cols-[46%_54%] items-center gap-10 sm:gap-14 lg:gap-10 pt-12 pb-16 sm:pt-16 lg:py-20 xl:py-24">
             <LeftContent />
 
             {/*
-              Right column: NO overflow restrictions.
+              Device column: NO overflow restrictions.
               paddingBottom makes room for the phone that extends below the laptop.
             */}
             <div
-              className="flex justify-center lg:justify-end"
+              className="flex justify-center lg:justify-end w-full"
               style={{ paddingBottom: 70 }}
             >
-              <HeroDashboard />
+              <div className="w-full max-w-[420px] sm:max-w-[520px] lg:max-w-none">
+                <HeroDashboard />
+              </div>
             </div>
           </div>
 
@@ -100,28 +121,57 @@ function LeftContent() {
   return (
     <div className="flex flex-col">
 
+      {/* Trust pill */}
+      <div className="inline-flex items-center gap-2.5 self-start mb-7 rounded-full border border-blue-100/90 bg-white/70 backdrop-blur px-3.5 py-1.5 shadow-xs dark:border-blue-900 dark:bg-blue-950/40">
+        <span className="relative flex h-1.5 w-1.5">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75" />
+          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-green-600" />
+        </span>
+        <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-blue-700 dark:text-blue-300">
+          West Bengal&apos;s #1 Mock Test Platform
+        </span>
+      </div>
+
       {/* Headline */}
-      <h1 className="text-[1.85rem] sm:text-[2.4rem] md:text-[2.8rem] lg:text-[2.1rem] xl:text-[2.5rem] font-black leading-[1.18] tracking-tight text-slate-900 dark:text-white mb-5">
+      <h1 className="display-hero text-balance text-[2.1rem] sm:text-[2.75rem] md:text-[3.15rem] lg:text-[2.4rem] xl:text-[2.9rem] dark:text-white mb-5">
         West Bengal&apos;s Most Trusted
-        <br />Mock Test Platform
-        <br />for{' '}
-        <span className="whitespace-nowrap" style={{ color: '#F59E0B' }}>Government Exams</span>
+        <br />Mock Test Platform for{' '}
+        <span className="relative inline-block whitespace-nowrap">
+          <span className="relative z-10" style={{ color: '#EA580C' }}>Government</span>
+          {/* Hand-drawn underline accent */}
+          <svg
+            className="absolute -bottom-1 left-0 w-full"
+            height="10"
+            viewBox="0 0 200 10"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M2 7.5 C 50 2.5, 150 2.5, 198 6"
+              stroke="#FDBA74"
+              strokeWidth="4"
+              strokeLinecap="round"
+              fill="none"
+            />
+          </svg>
+        </span>{' '}
+        <span className="whitespace-nowrap" style={{ color: '#15803D' }}>Exams</span>
       </h1>
 
       {/* Subtext */}
-      <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed mb-8 max-w-lg">
+      <p className="lede text-pretty text-base sm:text-[1.0625rem] dark:text-slate-400 mb-8 max-w-[34rem]">
         Practice with real exam pattern, analyze your performance
         and improve your score with AI-powered insights.
       </p>
 
-      {/* 4-feature 2×2 grid */}
-      <div className="grid grid-cols-2 gap-x-5 gap-y-4 mb-10">
-        {heroFeatures.map(({ icon: Icon, label }) => (
-          <div key={label} className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center shrink-0 border border-blue-100 dark:border-blue-800">
-              <Icon className="w-4 w-4 text-blue-600" />
+      {/* 4-feature 2×2 grid — one brand color each */}
+      <div className="grid grid-cols-2 gap-x-6 gap-y-4 mb-9 max-w-lg">
+        {heroFeatures.map(({ icon: Icon, label, tint }) => (
+          <div key={label} className="group flex items-center gap-3">
+            <div className={`icon-tile w-9 h-9 shrink-0 ${tint}`}>
+              <Icon className="w-[17px] h-[17px]" strokeWidth={2.2} />
             </div>
-            <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 leading-tight">
+            <span className="text-[13.5px] font-semibold text-ink-800 leading-tight">
               {label}
             </span>
           </div>
@@ -129,12 +179,17 @@ function LeftContent() {
       </div>
 
       {/* CTA buttons */}
-      <div className="flex flex-wrap gap-3 mb-8">
+      <div className="flex flex-wrap gap-3.5 mb-9">
         <Button
           size="lg"
           asChild
-          style={{ background: '#0b64f4', border: 'none' }}
-          className="h-12 px-7 rounded-full font-bold text-base gap-2 text-white hover:opacity-90 shadow-lg shadow-blue-500/30"
+          style={{
+            background: '#FF700B',
+            color: 'var(--color-cta-foreground)',
+            border: 'none',
+            boxShadow: 'var(--shadow-cta)',
+          }}
+          className="btn-premium h-[52px] px-8 rounded-xl font-bold text-[15px] gap-2"
         >
           <Link href="/register">
             Start Free Mock Test
@@ -146,29 +201,36 @@ function LeftContent() {
           size="lg"
           variant="outline"
           asChild
-          className="h-12 px-7 rounded-full font-semibold text-base border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800"
+          className="btn-premium h-[52px] px-8 rounded-xl font-semibold text-[15px] border hairline bg-white text-ink-800 hover:bg-slate-50 hover:border-slate-300 dark:bg-transparent dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
         >
           <Link href="/exams">Explore Courses</Link>
         </Button>
       </div>
 
       {/* Trust badge */}
-      <div className="flex items-center gap-3">
-        <div className="flex -space-x-2">
-          {['bg-blue-400', 'bg-emerald-400', 'bg-amber-400', 'bg-purple-400'].map((bg, i) => (
+      <div className="flex items-center gap-3.5 pt-1">
+        <div className="flex -space-x-2.5">
+          {['bg-blue-600', 'bg-orange-500', 'bg-green-600', 'bg-red-600'].map((bg, i) => (
             <div
               key={i}
-              className={`w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 ${bg} flex items-center justify-center text-white text-[10px] font-bold`}
+              className={`w-9 h-9 rounded-full ring-2 ring-white dark:ring-slate-900 ${bg} flex items-center justify-center text-white text-[11px] font-bold shadow-sm`}
             >
               {String.fromCharCode(65 + i)}
             </div>
           ))}
         </div>
-        <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
-          Trusted by{' '}
-          <strong className="text-slate-800 dark:text-slate-200">50,000+</strong>{' '}
-          Aspirants Across India
-        </p>
+        <div className="flex flex-col">
+          <div className="flex items-center gap-1" aria-hidden="true">
+            {[0, 1, 2, 3, 4].map((i) => (
+              <Star key={i} className="w-3.5 h-3.5 fill-orange-400 text-orange-400" />
+            ))}
+          </div>
+          <p className="text-[13px] text-ink-500 dark:text-slate-400 font-medium mt-0.5">
+            Trusted by{' '}
+            <strong className="text-ink-900 dark:text-slate-200 font-bold tabular">50,000+</strong>{' '}
+            Aspirants Across India
+          </p>
+        </div>
       </div>
     </div>
   );

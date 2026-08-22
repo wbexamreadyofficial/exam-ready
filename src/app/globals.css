@@ -1,9 +1,38 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap");
 @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* ═══════════════════════════════════════════════
+     BRAND PALETTE — white · blue · orange · green · red
+     Each color has a fixed role. Do not mix roles.
+       blue   → primary brand, navigation, structure
+       red    → primary CTA, urgency
+       orange → accent, highlight, energy
+       green  → success, progress, positive metrics
+     ═══════════════════════════════════════════════ */
+  --color-bblue-50:  #EFF6FF;
+  --color-bblue-100: #DBEAFE;
+  --color-bblue-500: #3B82F6;
+  --color-bblue-600: #2563EB;
+  --color-bblue-700: #1D4ED8;
+
+  --color-borange-50:  #FFF7ED;
+  --color-borange-100: #FFEDD5;
+  --color-borange-500: #F97316;
+  --color-borange-600: #EA580C;
+
+  --color-bgreen-50:  #F0FDF4;
+  --color-bgreen-100: #DCFCE7;
+  --color-bgreen-500: #22C55E;
+  --color-bgreen-600: #16A34A;
+
+  --color-bred-50:  #FEF2F2;
+  --color-bred-100: #FEE2E2;
+  --color-bred-500: #EF4444;
+  --color-bred-600: #DC2626;
+
   /* Brand Colors */
   --color-brand-50: hsl(214, 100%, 97%);
   --color-brand-100: hsl(214, 95%, 93%);
@@ -29,8 +58,8 @@
   --color-secondary-foreground: hsl(222, 47%, 11%);
   --color-muted: hsl(210, 40%, 96%);
   --color-muted-foreground: hsl(215, 16%, 47%);
-  --color-accent: hsl(43, 96%, 56%);
-  --color-accent-foreground: hsl(222, 84%, 5%);
+  --color-accent: hsl(25, 95%, 53%);
+  --color-accent-foreground: hsl(0, 0%, 100%);
   --color-destructive: hsl(0, 84%, 60%);
   --color-destructive-foreground: hsl(0, 0%, 100%);
   --color-border: hsl(214, 32%, 91%);
@@ -47,22 +76,69 @@
   --color-chart-4: hsl(280, 65%, 60%);
   --color-chart-5: hsl(0, 84%, 60%);
 
-  /* Radius */
+  /* ── Ink scale — sophisticated navy-slate, never pure black ── */
+  --color-ink-900: #0B1B33;
+  --color-ink-800: #14294A;
+  --color-ink-700: #1F3A63;
+  --color-ink-600: #3D5680;
+  --color-ink-500: #64748B;
+  --color-ink-400: #94A3B8;
+
+  /* ── Surfaces — warm off-white grounds, not stark white ── */
+  --color-surface: #FFFFFF;
+  --color-surface-subtle: #FAFBFD;
+  --color-surface-muted: #F4F7FB;
+  --color-hairline: #E7EDF5;
+  --color-hairline-strong: #D4E0EF;
+
+  /* Radius — consistent scale */
   --radius: 0.5rem;
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
-  --radius-2xl: 1.5rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 0.875rem;
+  --radius-xl: 1.125rem;
+  --radius-2xl: 1.375rem;
 
-  /* Typography */
+  /* Typography — Plus Jakarta Sans for display, Inter for body */
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.05);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.05);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.05);
+  /* Shadows — refined multi-layer, soft and low-contrast */
+  --shadow-sm: 0 1px 2px 0 rgb(11 27 51 / 0.04);
+  --shadow-md: 0 2px 4px -1px rgb(11 27 51 / 0.05), 0 4px 12px -2px rgb(11 27 51 / 0.05);
+  --shadow-lg: 0 4px 8px -2px rgb(11 27 51 / 0.05), 0 12px 28px -6px rgb(11 27 51 / 0.08);
+  --shadow-xl: 0 8px 16px -4px rgb(11 27 51 / 0.06), 0 24px 48px -12px rgb(11 27 51 / 0.12);
+  --shadow-brand: 0 8px 24px -6px rgb(37 99 235 / 0.25);
+  /* ═══════════════════════════════════════════════
+     SEMANTIC DATA-VIZ ROLES
+     One meaning per colour, reused by every chart and stat.
+     These alias the existing brand scale — no new hues.
+       positive → correct / improvement / streak
+       negative → incorrect / decline
+       primary  → neutral data series, score trend
+       premium  → plan, upgrade, highlighted rows
+     ═══════════════════════════════════════════════ */
+  --color-data-positive: #16A34A;   /* = bgreen-600 */
+  --color-data-negative: #DC2626;   /* = bred-600   */
+  --color-data-primary:  #2563EB;   /* = bblue-600  */
+  --color-data-premium:  #F97316;   /* = borange-500 */
+  --color-data-neutral:  #94A3B8;   /* = ink-400    */
+  /* Subject series — primary hue plus the three semantic roles */
+  --color-series-1: #2563EB;
+  --color-series-2: #16A34A;
+  --color-series-3: #F97316;
+  --color-series-4: #8B5CF6;
+
+  /* CTA accent — rgb(255 112 11) */
+  --color-cta: #FF700B;
+  --color-cta-hover: #E85F00;
+  --shadow-cta: 0 8px 24px -6px rgb(255 112 11 / 0.42);
+  /*
+    White on #FF700B is only 2.77:1 — fails AA. Dark navy on the SAME
+    orange is 6.2:1, so the brand colour is preserved exactly and the
+    label still passes. Swap to #FFFFFF only if AA is not required.
+  */
+  --color-cta-foreground: #26150A;
 
   /* Sidebar */
   --color-sidebar-background: hsl(222, 84%, 5%);
@@ -89,8 +165,8 @@
   --color-secondary-foreground: hsl(210, 40%, 98%);
   --color-muted: hsl(222, 47%, 11%);
   --color-muted-foreground: hsl(215, 16%, 57%);
-  --color-accent: hsl(43, 96%, 56%);
-  --color-accent-foreground: hsl(222, 84%, 5%);
+  --color-accent: hsl(25, 95%, 53%);
+  --color-accent-foreground: hsl(0, 0%, 100%);
   --color-destructive: hsl(0, 63%, 50%);
   --color-destructive-foreground: hsl(0, 0%, 100%);
   --color-border: hsl(222, 47%, 14%);
@@ -105,6 +181,34 @@
   --color-chart-3: hsl(217, 91%, 65%);
   --color-chart-4: hsl(280, 65%, 65%);
   --color-chart-5: hsl(0, 84%, 65%);
+
+  /* ═══════════════════════════════════════════════════════════
+     DARK MODE — ink scale INVERTS.
+     In light mode ink-900 is the darkest ink; in dark mode it is the
+     BRIGHTEST, because these tokens mean "strongest text" not "dark".
+     Without these overrides .display-* / .lede render their light-mode
+     navy on a near-black page (~1.2:1). Those rules are unlayered, so
+     Tailwind `dark:` utilities cannot override them — the fix must
+     happen here, at the token level.
+
+     Contrast vs page #020817 / card #131A2C:
+       ink-900 #F5F7FA → 18.7:1 / 16.2:1
+       ink-600 #C4CBD4 → 12.1:1 / 10.5:1
+       ink-500 #8B93A1 →  6.5:1 /  5.6:1   (all pass AA)
+     ═══════════════════════════════════════════════════════════ */
+  --color-ink-900: #F5F7FA;  /* headlines — strongest contrast */
+  --color-ink-800: #E6EAF1;  /* strong body / emphasis */
+  --color-ink-700: #D2D8E2;
+  --color-ink-600: #C4CBD4;  /* body & lede copy */
+  --color-ink-500: #9AA2B1;  /* secondary text */
+  --color-ink-400: #8B93A1;  /* smallest captions — floor for AA */
+
+  /* Surfaces step UP from the page background in dark mode */
+  --color-surface: #131A2C;         /* cards — 2 steps lighter than page */
+  --color-surface-subtle: #0C1220;
+  --color-surface-muted: #131A2C;
+  --color-hairline: rgba(255, 255, 255, 0.10);        /* 10% white border */
+  --color-hairline-strong: rgba(255, 255, 255, 0.20); /* hover state */
 }
 
 /* Base Styles */
@@ -124,6 +228,57 @@ body {
   font-feature-settings: "rlig" 1, "calt" 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ═══════════════════════════════════════════════
+   PREMIUM TYPOGRAPHY
+   Display face + optical tracking for large sizes
+   ═══════════════════════════════════════════════ */
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display);
+  font-feature-settings: "ss01" 1, "cv11" 1;
+}
+
+/* Hero headline — tight optical tracking at display size */
+.display-hero {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.06;
+  color: var(--color-ink-900);
+}
+
+/* Section headline */
+.display-section {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  color: var(--color-ink-900);
+}
+
+/* Card / small headline */
+.display-card {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+  color: var(--color-ink-900);
+}
+
+/* Lede paragraph under a hero or section heading */
+.lede {
+  color: var(--color-ink-600);
+  line-height: 1.7;
+}
+
+/* Balance headline line breaks (modern browsers) */
+.text-balance {
+  text-wrap: balance;
+}
+.text-pretty {
+  text-wrap: pretty;
 }
 
 /* Focus visible */
@@ -231,8 +386,8 @@ body {
 }
 
 @keyframes glow-pulse {
-  0%, 100% { opacity: 0.6; filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.4)); }
-  50% { opacity: 1; filter: drop-shadow(0 0 22px rgba(245, 158, 11, 0.85)); }
+  0%, 100% { opacity: 0.6; filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.4)); }
+  50% { opacity: 1; filter: drop-shadow(0 0 22px rgba(249, 115, 22, 0.85)); }
 }
 
 @keyframes pulse-ring {
@@ -308,6 +463,33 @@ body {
   box-shadow: 0 10px 30px -5px rgba(37, 99, 235, 0.35);
 }
 
+/* ── Brand accent utilities (5-color system) ── */
+.text-gradient-accent {
+  background: linear-gradient(135deg, #F97316, #EA580C);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Section eyebrow label — small uppercase pill above headings */
+.eyebrow {
+  display: inline-block;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.8rem;
+  border-radius: 9999px;
+}
+
+/* Tricolor rule used under section headings */
+.tricolor-rule {
+  height: 3px;
+  width: 64px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #2563EB 0%, #2563EB 33%, #F97316 33%, #F97316 66%, #16A34A 66%);
+}
+
 /* ===== PREMIUM UI ENHANCEMENTS ===== */
 
 /* Scroll Reveal */
@@ -357,7 +539,7 @@ body {
   50% { background-position: 100% 50%; }
 }
 .animate-gradient-text {
-  background: linear-gradient(270deg, #2563eb, #f59e0b, #7c3aed, #06b6d4, #2563eb);
+  background: linear-gradient(270deg, #2563eb, #f97316, #16a34a, #dc2626, #2563eb);
   background-size: 300% 300%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -381,7 +563,7 @@ body {
   inset: 0;
   border-radius: inherit;
   padding: 2px;
-  background: conic-gradient(from var(--border-angle, 0deg), #f59e0b, #ef4444, #8b5cf6, #3b82f6, #f59e0b);
+  background: conic-gradient(from var(--border-angle, 0deg), #2563eb, #f97316, #16a34a, #dc2626, #2563eb);
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask-composite: exclude;
@@ -447,14 +629,14 @@ body {
   transform-style: preserve-3d;
 }
 .card-3d-inner:hover {
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 0 30px rgba(245, 158, 11, 0.1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 0 30px rgba(249, 115, 22, 0.1);
 }
 
 /* Pulse ring for step numbers */
 @keyframes step-pulse {
-  0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
-  70% { box-shadow: 0 0 0 15px rgba(245, 158, 11, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+  70% { box-shadow: 0 0 0 15px rgba(37, 99, 235, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
 }
 .animate-step-pulse {
   animation: step-pulse 2s ease-out infinite;
@@ -554,3 +736,352 @@ body {
   background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
   border: none;
 }
+
+/* ═══════════════════════════════════════════════
+   PREMIUM COMPONENT UTILITIES
+   ═══════════════════════════════════════════════ */
+
+/* ── Vertical rhythm — consistent section spacing ── */
+.section-y {
+  padding-top: 4.5rem;
+  padding-bottom: 4.5rem;
+}
+@media (min-width: 768px) {
+  .section-y { padding-top: 6rem; padding-bottom: 6rem; }
+}
+@media (min-width: 1280px) {
+  .section-y { padding-top: 7rem; padding-bottom: 7rem; }
+}
+
+.section-y-sm {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+@media (min-width: 768px) {
+  .section-y-sm { padding-top: 4rem; padding-bottom: 4rem; }
+}
+
+/*
+  Bottom-only rhythm, same scale as .section-y. For a block that is a
+  visual continuation of the section above it (the stats panel) and so
+  must not add a second top gap.
+*/
+.section-y-end {
+  padding-top: 0;
+  padding-bottom: 4.5rem;
+}
+@media (min-width: 768px) {
+  .section-y-end { padding-bottom: 6rem; }
+}
+@media (min-width: 1280px) {
+  .section-y-end { padding-bottom: 7rem; }
+}
+
+/* ── Premium card — refined hairline border + soft lift on hover ── */
+.card-premium {
+  background: var(--color-surface);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s ease;
+}
+.card-premium:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-hairline-strong);
+}
+/* Literals — see the note on the dark text block re: `@layer properties`. */
+.dark .card-premium {
+  background: #131A2C;
+  border-color: rgba(255, 255, 255, 0.10);
+}
+/*
+  Dark mode: drop shadows are invisible against a near-black page, so the
+  hover affordance becomes a border lift + a soft ambient glow instead.
+*/
+.dark .card-premium:hover {
+  border-color: rgba(255, 255, 255, 0.20);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 0 32px -8px rgba(59, 130, 246, 0.35);
+}
+
+/* ── Shared surface card — same treatment, usable directly in markup ── */
+.surface-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s ease;
+}
+.surface-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-hairline-strong);
+}
+.dark .surface-card {
+  background: #131A2C;
+  border-color: rgba(255, 255, 255, 0.10);
+  box-shadow: none;
+}
+.dark .surface-card:hover {
+  border-color: rgba(255, 255, 255, 0.20);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 0 32px -8px rgba(59, 130, 246, 0.35);
+}
+/* Hairline borders elsewhere must not stay near-white in dark mode */
+.dark .hairline { border-color: rgba(255, 255, 255, 0.10) !important; }
+
+/* ── Premium button micro-interaction ── */
+.btn-premium {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.25s ease;
+}
+.btn-premium:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+}
+.btn-premium:active {
+  transform: translateY(0);
+}
+/* Sheen sweep on hover */
+.btn-premium::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.28) 50%, transparent 65%);
+  transform: translateX(-120%);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+.btn-premium:hover::after {
+  transform: translateX(120%);
+}
+
+/* ── Icon tile — replaces flat circles with refined squircles ── */
+.icon-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-lg);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.group:hover .icon-tile {
+  transform: scale(1.06) rotate(-2deg);
+}
+
+/*
+  Dark mode icon tiles.
+  The light-mode tints (bg-blue-50 etc.) are near-white and would glare on a
+  dark page. Here every tile drops to one restrained translucent plate so the
+  set reads as an intentional system; only the glyph keeps its hue, and those
+  hues are held to a single brightness step for consistency.
+*/
+.dark .icon-tile {
+  background: rgba(255, 255, 255, 0.055) !important;
+  /* Override any light `ring-*` / inline border with one neutral edge */
+  --tw-ring-color: transparent !important;
+  border-color: rgba(255, 255, 255, 0.09) !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.09);
+}
+/* Glyph hues, normalised to one luminance band (all ≥ 4.5:1 on the plate) */
+.dark .icon-tile.text-blue-600,
+.dark .icon-tile .text-blue-600 { color: #7FB0FF !important; }
+.dark .icon-tile.text-orange-600,
+.dark .icon-tile .text-orange-600 { color: #FFA25C !important; }
+.dark .icon-tile.text-green-600,
+.dark .icon-tile .text-green-600 { color: #6FD79A !important; }
+.dark .icon-tile.text-red-600,
+.dark .icon-tile .text-red-600 { color: #FF8F8F !important; }
+
+/* ── Background treatments ── */
+/* Fine grid, used behind the hero */
+.bg-grid-fine {
+  background-image:
+    linear-gradient(to right, rgba(15, 33, 61, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 33, 61, 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+.dark .bg-grid-fine {
+  background-image:
+    linear-gradient(to right, rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
+}
+
+/* Radial fade mask so patterns dissolve at the edges */
+.mask-radial-fade {
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 40%, transparent 100%);
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 40%, transparent 100%);
+}
+
+/* Hairline rule */
+.hairline {
+  border-color: var(--color-hairline);
+}
+
+/* ── Refined eyebrow (replaces the earlier pill) ── */
+.eyebrow-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.eyebrow-line::before {
+  content: '';
+  width: 1.75rem;
+  height: 2px;
+  border-radius: 9999px;
+  background: currentColor;
+  opacity: 0.5;
+}
+
+/* ── Link with animated underline ── */
+.link-underline {
+  position: relative;
+}
+.link-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.link-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ── Image hover treatment ── */
+.img-zoom {
+  overflow: hidden;
+}
+.img-zoom img {
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.img-zoom:hover img {
+  transform: scale(1.06);
+}
+
+/* ── Numeric figures align in stat blocks ── */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ON-DARK SCOPE
+   For a dark panel sitting inside an otherwise light page
+   (CTA banner, stats bar). Required because `.display-*` and
+   `.lede` are UNLAYERED and therefore beat every layered
+   Tailwind utility — a `text-white` class on the heading loses,
+   leaving navy text on a navy panel. Anything placed on a dark
+   surface must carry `on-dark` so its text is set explicitly
+   rather than inheriting the light-mode default.
+   ═══════════════════════════════════════════════════════════ */
+.on-dark .display-hero,
+.on-dark .display-section,
+.on-dark .display-card,
+.on-dark h1,
+.on-dark h2,
+.on-dark h3,
+.on-dark h4 {
+  color: #F5F7FA;
+}
+/*
+  Only `.lede` is repainted — NOT a blanket `p` rule. A blanket rule would
+  also recolour paragraphs inside nested panels (e.g. the mock-test card on
+  the Sign Up page), overriding their deliberate colours. Paragraphs that
+  need on-dark treatment should carry `.lede` or an explicit colour class.
+*/
+.on-dark .lede {
+  color: #C4CBD4;
+}
+.on-dark .eyebrow-line {
+  color: #FF9A4D;
+}
+/* Explicit colours already set in markup still win inside the scope */
+.on-dark .text-white { color: #FFFFFF; }
+
+/* Unfilled segment of a difficulty / progress indicator */
+[data-inactive] {
+  background: var(--color-hairline);
+}
+.dark [data-inactive] {
+  background: hsl(222, 47%, 20%);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DARK MODE TEXT ENFORCEMENT
+   `@theme inline` substitutes token values into generated
+   utilities at BUILD time, so `.text-ink-*` ships hardcoded
+   light-mode hex and never sees the `.dark` variable override.
+   These rules re-point every ink surface at the live variable.
+   They are unlayered and use a `.dark` ancestor (0,2,0), so they
+   beat both the layered Tailwind utilities and the bare
+   `.display-*` / `.lede` rules.
+   ═══════════════════════════════════════════════════════════ */
+/*
+  `!important` is deliberate here. These override colours that Tailwind
+  baked into utility declarations at build time; normal cascade order
+  proved unreliable against them (identical class strings resolved
+  differently depending on DOM position). This is the one place in the
+  sheet that needs it — do not copy the pattern elsewhere.
+*/
+/*
+  LITERAL values, not var(). Tailwind v4 emits an `@layer properties` block
+  that assigns every theme token through the universal selector
+  (`*, ::before, ::after, ::backdrop`). That re-declares the LIGHT value on
+  each descendant, so `var(--color-ink-*)` resolves light on children even
+  though it resolves correctly on <html>. Literals bypass that entirely.
+  Keep these in sync with the `.dark` token block above.
+*/
+.dark .display-hero,
+.dark .display-section,
+.dark .display-card,
+.dark .text-ink-900 { color: #F5F7FA !important; }
+
+.dark .text-ink-800 { color: #E6EAF1 !important; }
+.dark .text-ink-700 { color: #D2D8E2 !important; }
+
+.dark .lede,
+.dark .text-ink-600 { color: #C4CBD4 !important; }
+
+.dark .text-ink-500 { color: #9AA2B1 !important; }
+.dark .text-ink-400 { color: #8B93A1 !important; }
+
+/* Hover/active states must still win over the enforcement above */
+.dark .hover\:text-blue-700:hover,
+.dark .dark\:hover\:text-blue-400:hover { color: #93C5FD !important; }
+
+/*
+  Exam-tile CTA. Each card exposes its hue as --exam-accent; in dark mode
+  it is mixed toward white so the label clears AA on the card surface
+  while keeping the card's identity colour.
+*/
+.dark .exam-cta {
+  color: color-mix(in srgb, var(--exam-accent, #2563EB) 50%, #FFFFFF) !important;
+}
+
+/* Headings that wrap their link keep the heading's colour */
+.dark .display-hero a,
+.dark .display-section a,
+.dark .display-card a { color: inherit; }

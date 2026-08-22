@@ -5,6 +5,7 @@ import {
   LayoutDashboard, FileText, BookOpen, BarChart3,
   Bookmark, PieChart, Settings, HelpCircle,
   RefreshCw, User, TrendingUp, Clock, CheckCircle2, Layers,
+  Trophy, Timer,
 } from 'lucide-react';
 
 /* ── Smooth bezier curve through data points ── */
@@ -47,7 +48,7 @@ const SIDEBAR = [
 /* ── Stat cards ── */
 const STATS = [
   { val: '20',   sub: 'Mock Tests\nAttempted', bg: '#EFF6FF', bd: '#BFDBFE', tc: '#2563EB', Icon: FileText    },
-  { val: '85%',  sub: 'Average\nScore',        bg: '#FFFBEB', bd: '#FDE68A', tc: '#D97706', Icon: BarChart3   },
+  { val: '85%',  sub: 'Average\nScore',        bg: '#FFF7ED', bd: '#FED7AA', tc: '#EA580C', Icon: BarChart3   },
   { val: '18',   sub: 'Tests\nQualified',      bg: '#F0FDF4', bd: '#BBF7D0', tc: '#16A34A', Icon: CheckCircle2},
   { val: '248h', sub: 'Total Study\nTime',     bg: '#FAF5FF', bd: '#DDD6FE', tc: '#7C3AED', Icon: Clock       },
 ];
@@ -55,7 +56,7 @@ const STATS = [
 /* ── Recommended cards ── */
 const RECS = [
   { label: 'Full Length Test',     sub: '100 Questions',    bg: '#DBEAFE', Icon: FileText,   tc: '#2563EB' },
-  { label: 'Topic Wise Test',      sub: '80+ Topics',       bg: '#FEF3C7', Icon: Bookmark,   tc: '#D97706' },
+  { label: 'Topic Wise Test',      sub: '80+ Topics',       bg: '#FFEDD5', Icon: Bookmark,   tc: '#EA580C' },
   { label: 'Previous Year Papers', sub: '2015 – 2023',      bg: '#EDE9FE', Icon: Layers,     tc: '#7C3AED' },
   { label: 'Daily Practice',       sub: 'Boost Your Score', bg: '#DCFCE7', Icon: TrendingUp, tc: '#16A34A' },
 ];
@@ -83,11 +84,11 @@ function PhonePanel() {
             <LogoIcon className="h-4 w-4" />
             <span style={{ fontWeight: 900, fontSize: 7.5 }}>
               <span style={{ color: '#0066FF' }}>Exam</span>
-              <span style={{ color: '#F59E0B' }}>Ready</span>
+              <span style={{ color: '#F97316' }}>Ready</span>
             </span>
           </div>
           <div style={{
-            width: 20, height: 20, borderRadius: '50%', background: '#F59E0B',
+            width: 20, height: 20, borderRadius: '50%', background: '#F97316',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
             <User style={{ width: 12, height: 12, color: '#fff' }} />
@@ -97,7 +98,7 @@ function PhonePanel() {
         {/* Body */}
         <div style={{ padding: '9px 9px 5px' }}>
           <div style={{ fontWeight: 800, fontSize: 9, color: '#1e293b', marginBottom: 1 }}>Hello, Aspirant! 👋</div>
-          <div style={{ fontSize: 6.5, color: '#94a3b8', marginBottom: 9 }}>Ready to test your preparation?</div>
+          <div style={{ fontSize: 6.5, color: '#64748B', marginBottom: 9 }}>Ready to test your preparation?</div>
 
           {/* Daily Practice card */}
           <div style={{
@@ -118,11 +119,11 @@ function PhonePanel() {
           <div style={{ marginBottom: 6 }}>
             <div style={{ fontWeight: 600, fontSize: 7.5, color: '#475569', marginBottom: 3 }}>Your Progress</div>
             <div style={{ fontWeight: 900, fontSize: 18, lineHeight: 1, color: '#1e293b' }}>85%</div>
-            <div style={{ fontSize: 6.5, color: '#94a3b8', marginBottom: 5 }}>Average Score</div>
+            <div style={{ fontSize: 6.5, color: '#64748B', marginBottom: 5 }}>Average Score</div>
             <svg viewBox="0 0 100 24" style={{ width: '100%', height: 22 }}>
               <polyline
                 points="0,20 16,16 32,18 50,10 66,12 82,6 100,3"
-                fill="none" stroke="#F59E0B" strokeWidth="2"
+                fill="none" stroke="#2563EB" strokeWidth="2.8"
                 strokeLinejoin="round" strokeLinecap="round"
               />
             </svg>
@@ -134,7 +135,7 @@ function PhonePanel() {
             paddingTop: 6, borderTop: '1px solid #f1f5f9',
           }}>
             {[LayoutDashboard, FileText, TrendingUp, BarChart3, User].map((Icon, i) => (
-              <Icon key={i} style={{ width: 14, height: 14, color: i === 0 ? '#2563EB' : '#94a3b8' }} />
+              <Icon key={i} style={{ width: 14, height: 14, color: i === 0 ? '#2563EB' : '#64748B' }} />
             ))}
           </div>
         </div>
@@ -153,8 +154,8 @@ export function HeroDashboard() {
 
       {/* Soft background glow matching design reference Image 1 */}
       <div style={{
-        position: 'absolute', inset: -60,
-        background: 'radial-gradient(circle at 65% 20%, rgba(191,219,254,0.75) 0%, transparent 55%), radial-gradient(circle at 95% 95%, rgba(255,208,0,0.85) 0%, transparent 45%)',
+        position: 'absolute', inset: -20,
+        background: 'radial-gradient(circle at 65% 20%, rgba(191,219,254,0.75) 0%, transparent 55%), radial-gradient(circle at 95% 95%, rgba(249,115,22,0.45) 0%, transparent 45%), radial-gradient(circle at 70% 100%, rgba(22,163,74,0.28) 0%, transparent 40%)',
         filter: 'blur(30px)', pointerEvents: 'none', zIndex: 0,
       }} />
 
@@ -195,7 +196,7 @@ export function HeroDashboard() {
                 <LogoIcon className="h-5 w-5" />
                 <span style={{ fontWeight: 900, fontSize: 9.5 }}>
                   <span style={{ color: '#0066FF' }}>Exam</span>
-                  <span style={{ color: '#F59E0B' }}>Ready</span>
+                  <span style={{ color: '#F97316' }}>Ready</span>
                 </span>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 1, padding: '0 6px' }}>
@@ -226,12 +227,12 @@ export function HeroDashboard() {
               }}>
                 <div>
                   <div style={{ fontWeight: 700, fontSize: 11, color: '#1e293b' }}>Welcome back, Aspirant! 👋</div>
-                  <div style={{ fontSize: 8, color: '#94a3b8' }}>Let's continue your preparation.</div>
+                  <div style={{ fontSize: 8, color: '#64748B' }}>Let&apos;s continue your preparation.</div>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <RefreshCw style={{ width: 11, height: 11, color: '#94a3b8' }} />
+                  <RefreshCw style={{ width: 11, height: 11, color: '#64748B' }} />
                   <div style={{
-                    width: 24, height: 24, borderRadius: '50%', background: '#F59E0B',
+                    width: 24, height: 24, borderRadius: '50%', background: '#F97316',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
                     <User style={{ width: 14, height: 14, color: '#fff' }} />
@@ -254,7 +255,7 @@ export function HeroDashboard() {
                     }}>
                       <Icon style={{ width: 13, height: 13, color: tc, marginBottom: 4 }} />
                       <div style={{ fontWeight: 900, fontSize: 16, lineHeight: 1, color: tc }}>{val}</div>
-                      <div style={{ fontSize: 7, color: '#94a3b8', whiteSpace: 'pre-line', marginTop: 3, lineHeight: 1.35 }}>{sub}</div>
+                      <div style={{ fontSize: 7, color: '#64748B', whiteSpace: 'pre-line', marginTop: 3, lineHeight: 1.35 }}>{sub}</div>
                     </div>
                   ))}
                 </div>
@@ -265,13 +266,13 @@ export function HeroDashboard() {
                   <div style={{ background: '#fff', borderRadius: 11, border: '1px solid #e2e8f0', padding: '9px 9px 6px', display: 'flex', flexDirection: 'column' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 7 }}>
                       <span style={{ fontWeight: 700, color: '#334155', fontSize: 9 }}>Performance Overview</span>
-                      <span style={{ fontSize: 7, color: '#94a3b8' }}>Last 8 Tests</span>
+                      <span style={{ fontSize: 7, color: '#64748B' }}>Last 8 Tests</span>
                     </div>
                     <div style={{ display: 'flex', gap: 4, flex: 1 }}>
                       {/* Y-axis */}
                       <div style={{
                         display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
-                        textAlign: 'right', fontSize: 6.5, color: '#94a3b8', paddingRight: 2, paddingBottom: 14,
+                        textAlign: 'right', fontSize: 6.5, color: '#64748B', paddingRight: 2, paddingBottom: 14,
                       }}>
                         {['100','75','50','25','0'].map(v => <span key={v}>{v}</span>)}
                       </div>
@@ -279,20 +280,21 @@ export function HeroDashboard() {
                         <svg viewBox="0 0 220 72" style={{ width: '100%', flex: 1 }} preserveAspectRatio="none">
                           <defs>
                             <linearGradient id="aG" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="0%" stopColor="#F59E0B" stopOpacity="0.22" />
-                              <stop offset="100%" stopColor="#F59E0B" stopOpacity="0.02" />
+                              <stop offset="0%" stopColor="#2563EB" stopOpacity="0.38" />
+                              <stop offset="60%" stopColor="#2563EB" stopOpacity="0.12" />
+                              <stop offset="100%" stopColor="#2563EB" stopOpacity="0" />
                             </linearGradient>
                           </defs>
                           {[0,18,36,54,72].map(y => (
                             <line key={y} x1="0" y1={y} x2="220" y2={y} stroke="#e2e8f0" strokeWidth="0.6" />
                           ))}
                           <path d={AREA_PATH} fill="url(#aG)" />
-                          <path d={LINE_PATH} fill="none" stroke="#F59E0B" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d={LINE_PATH} fill="none" stroke="#2563EB" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" />
                           {PTS.map((p, i) => (
-                            <circle key={i} cx={p.x} cy={p.y} r="3" fill="#F59E0B" stroke="#fff" strokeWidth="1.2" />
+                            <circle key={i} cx={p.x} cy={p.y} r="3.4" fill="#2563EB" stroke="#fff" strokeWidth="1.6" />
                           ))}
                         </svg>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 6, color: '#94a3b8', marginTop: 3 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 6, color: '#64748B', marginTop: 3 }}>
                           {['May 10','May 17','May 24','May 31','Jun 7','Jun 14'].map(d => <span key={d}>{d}</span>)}
                         </div>
                       </div>
@@ -304,7 +306,7 @@ export function HeroDashboard() {
                     <div style={{ fontWeight: 700, color: '#334155', fontSize: 9, marginBottom: 7 }}>Recent Test</div>
                     <div style={{ background: '#f8fafc', borderRadius: 9, border: '1px solid #e2e8f0', padding: '8px 9px' }}>
                       <div style={{ fontWeight: 700, fontSize: 8, color: '#334155', lineHeight: 1.3, marginBottom: 3 }}>SSC CGL Tier1 Mock Test</div>
-                      <div style={{ fontSize: 6.5, color: '#94a3b8', marginBottom: 9 }}>Attempted on 21 May 2024</div>
+                      <div style={{ fontSize: 6.5, color: '#64748B', marginBottom: 9 }}>Attempted on 21 May 2024</div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
                         {/* Circular progress */}
                         <div style={{ position: 'relative', width: 48, height: 48, flexShrink: 0 }}>
@@ -323,9 +325,9 @@ export function HeroDashboard() {
                           }}>72%</div>
                         </div>
                         <div>
-                          <div style={{ fontSize: 7, color: '#94a3b8', marginBottom: 5 }}>Score</div>
+                          <div style={{ fontSize: 7, color: '#64748B', marginBottom: 5 }}>Score</div>
                           <button style={{
-                            background: '#F59E0B', color: '#fff', border: 'none',
+                            background: '#2563EB', color: '#fff', border: 'none',
                             borderRadius: 7, padding: '4px 9px', fontSize: 7.5, fontWeight: 700, cursor: 'pointer',
                           }}>View Analysis</button>
                         </div>
@@ -381,6 +383,76 @@ export function HeroDashboard() {
         overflow: 'visible',
       }}>
         <PhonePanel />
+      </div>
+
+      {/*
+        ═══ FLOATING PRODUCT CHIPS ═══
+        Small satellite readouts that overlap the laptop, so the composition
+        reads as one layered product rather than a flat screenshot.
+        Hidden below `sm` where there isn't room for them to sit cleanly.
+      */}
+
+      {/* Accuracy / rank — upper left */}
+      <div className="hidden sm:flex animate-float" style={{
+        position: 'absolute', top: 42, left: -26, zIndex: 12,
+        alignItems: 'center', gap: 9,
+        background: '#fff', borderRadius: 12, padding: '9px 12px',
+        boxShadow: '0 12px 30px -8px rgba(11,27,51,0.22), 0 0 0 1px rgba(231,237,245,1)',
+      }}>
+        <div style={{
+          width: 30, height: 30, borderRadius: 9, background: '#F0FDF4',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <Trophy style={{ width: 15, height: 15, color: '#16A34A' }} />
+        </div>
+        <div>
+          <div style={{ fontSize: 13, fontWeight: 800, color: '#0B1B33', lineHeight: 1.1, fontVariantNumeric: 'tabular-nums' }}>
+            Rank 128
+          </div>
+          <div style={{ fontSize: 9.5, color: '#64748B', marginTop: 1 }}>Top 4% statewide</div>
+        </div>
+      </div>
+
+      {/* Exam timer — mid left, sits over the laptop edge */}
+      <div className="hidden lg:flex" style={{
+        position: 'absolute', top: 232, left: -40, zIndex: 12,
+        alignItems: 'center', gap: 9,
+        background: '#0B1B33', borderRadius: 12, padding: '9px 13px',
+        boxShadow: '0 14px 32px -10px rgba(11,27,51,0.5)',
+      }}>
+        <Timer style={{ width: 15, height: 15, color: '#FF9A4D' }} />
+        <div>
+          <div style={{ fontSize: 13, fontWeight: 800, color: '#fff', lineHeight: 1.1, fontVariantNumeric: 'tabular-nums' }}>
+            42:18
+          </div>
+          <div style={{ fontSize: 9.5, color: 'rgba(255,255,255,0.55)', marginTop: 1 }}>Time remaining</div>
+        </div>
+      </div>
+
+      {/* Question palette — answered / marked / unseen states */}
+      <div className="hidden sm:block animate-float" style={{
+        position: 'absolute', bottom: 96, left: -18, zIndex: 12,
+        background: '#fff', borderRadius: 12, padding: '11px 12px',
+        boxShadow: '0 12px 30px -8px rgba(11,27,51,0.22), 0 0 0 1px rgba(231,237,245,1)',
+        animationDelay: '1.2s',
+      }}>
+        <div style={{ fontSize: 9.5, fontWeight: 700, color: '#64748B', marginBottom: 7, letterSpacing: '0.06em' }}>
+          QUESTIONS
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 4 }}>
+          {[
+            '#16A34A', '#16A34A', '#16A34A', '#FF700B', '#16A34A',
+            '#16A34A', '#E7EDF5', '#FF700B', '#E7EDF5', '#E7EDF5',
+          ].map((bg, i) => (
+            <span
+              key={i}
+              style={{
+                width: 13, height: 13, borderRadius: 4, background: bg,
+                display: 'block',
+              }}
+            />
+          ))}
+        </div>
       </div>
 
     </div>

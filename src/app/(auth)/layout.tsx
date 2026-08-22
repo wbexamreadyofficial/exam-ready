@@ -1,8 +1,23 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { BookOpen } from 'lucide-react';
 import { ThemeSwitcher } from '@/components/layout/ThemeSwitcher';
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+
+  /*
+    The Sign Up and Login pages own their full-bleed 45/55 compositions, so
+    they opt out of this shell's centred `max-w-md` column. Every other auth
+    route (forgot-password, reset-password, verify-email) keeps the original
+    layout below, unchanged.
+  */
+  if (pathname === '/register' || pathname === '/login') {
+    return <>{children}</>;
+  }
+
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
       {/* Left side - Branding */}

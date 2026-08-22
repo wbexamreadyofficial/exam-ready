@@ -10,11 +10,13 @@ export function AnnouncementBar() {
   if (!isVisible) return null;
 
   return (
-    <div className="bg-gradient-to-r from-amber-400 to-yellow-500 py-2 px-4 text-slate-900 text-sm font-medium z-50 relative">
+    <div className="bg-[#0B1B33] py-2.5 px-4 text-white text-[13px] font-medium z-50 relative">
       <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
         <div className="flex items-center gap-2 text-center sm:text-left">
-          <Megaphone className="h-4 w-4 animate-pulse" />
-          <span>Special Offer: Get 30% OFF on All Mock Tests – Limited Time Only!</span>
+          <Megaphone className="h-3.5 w-3.5 text-[#FF700B]" />
+          <span className="text-white/85">
+            Special Offer: <strong className="font-bold text-[#FF9A4D]">Get 30% OFF</strong> on All Mock Tests – Limited Time Only!
+          </span>
         </div>
         
         <div className="flex items-center gap-4 flex-wrap justify-center">
@@ -32,7 +34,7 @@ export function AnnouncementBar() {
           </div>
           <button 
             onClick={() => setIsVisible(false)} 
-            className="p-1 hover:bg-slate-900/10 rounded-full transition-colors ml-2"
+            className="p-1 hover:bg-white/15 rounded-full transition-colors ml-2"
             aria-label="Close announcement"
           >
             <X className="h-4 w-4" />

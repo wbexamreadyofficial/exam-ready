@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown, LogOut, User, LayoutDashboard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -34,12 +34,31 @@ const navItems = [
 export function Navbar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { isAuthenticated, logout } = useAuth();
   const user = useAuthStore((s) => s.user);
 
+  /* Compact the header once the page has scrolled past the hero's top edge. */
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-950/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 shadow-sm">
-      <div className="container flex h-16 sm:h-20 items-center justify-between gap-4">
+    <header
+      className={cn(
+        'sticky top-0 z-40 w-full border-b dark:border-slate-800 bg-white/80 dark:bg-slate-950/85 backdrop-blur-xl supports-[backdrop-filter]:bg-white/70 transition-shadow duration-300',
+        scrolled ? 'border-slate-200/90 shadow-sm' : 'border-transparent'
+      )}
+    >
+      <div
+        className={cn(
+          'container flex items-center justify-between gap-4 transition-[height] duration-300',
+          scrolled ? 'h-16 sm:h-[64px]' : 'h-16 sm:h-[72px]'
+        )}
+      >
 
         {/* Logo */}
         <Logo href="/" size="md" showTagline={true} />
@@ -53,13 +72,17 @@ export function Navbar() {
                 key={item.title}
                 href={item.href}
                 className={cn(
-                  'px-2.5 xl:px-3 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap',
+                  'relative px-2.5 xl:px-3.5 py-2 rounded-lg text-[13.5px] font-semibold transition-colors duration-200 whitespace-nowrap',
                   isActive
-                    ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10'
-                    : 'text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'
+                    ? 'text-blue-700 dark:text-blue-400'
+                    : 'text-ink-600 dark:text-slate-300 hover:text-blue-700 dark:hover:text-blue-400'
                 )}
               >
                 {item.title}
+                {/* Active indicator — a precise underline rather than a filled pill */}
+                {isActive && (
+                  <span className="absolute left-2.5 right-2.5 xl:left-3.5 xl:right-3.5 -bottom-px h-[2.5px] rounded-full bg-blue-600 dark:bg-blue-400" />
+                )}
               </Link>
             );
           })}
@@ -129,19 +152,23 @@ export function Navbar() {
               <Button
                 variant="ghost"
                 size="default"
-                className="font-semibold text-sm text-slate-700 dark:text-slate-200 hover:text-blue-600"
+                className="font-semibold text-[13.5px] text-ink-700 dark:text-slate-200 hover:text-blue-700 hover:bg-slate-100/70 dark:hover:bg-slate-800 h-10 px-3.5 rounded-lg"
                 asChild
               >
                 <Link href="/login">
-                  <User className="h-4 w-4 mr-1" />
+                  <User className="h-4 w-4 mr-1.5" />
                   Login
                 </Link>
               </Button>
               <Button
                 size="default"
                 asChild
-                style={{ background: '#0b64f4' }}
-                className="font-bold text-sm hover:opacity-90 text-white shadow-md shadow-blue-500/20 px-5 h-9 rounded-full border-none"
+                style={{
+                  background: '#FF700B',
+                  color: 'var(--color-cta-foreground)',
+                  boxShadow: 'var(--shadow-cta)',
+                }}
+                className="btn-premium font-bold text-[13.5px] px-5 h-10 rounded-lg border-none"
               >
                 <Link href="/register">Sign Up Free</Link>
               </Button>
@@ -163,32 +190,41 @@ export function Navbar() {
 
       {/* Mobile Nav */}
       {mobileOpen && (
-        <div className="lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-4 animate-fade-in">
-          <nav className="flex flex-col gap-1 mb-4">
-            {navItems.map((item) => (
-              <Link
-                key={item.title}
-                href={item.href}
-                onClick={() => setMobileOpen(false)}
-                className={cn(
-                  'px-4 py-2.5 rounded-lg text-base font-semibold transition-colors',
-                  pathname === item.href
-                    ? 'bg-blue-50 text-blue-600 dark:text-blue-400 dark:bg-blue-500/10'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 hover:bg-slate-50'
-                )}
-              >
-                {item.title}
-              </Link>
-            ))}
+        <div className="lg:hidden border-t hairline dark:border-slate-800 bg-white dark:bg-slate-950 px-4 pb-5 pt-3 animate-fade-in shadow-lg">
+          <nav className="flex flex-col gap-0.5 mb-5">
+            {navItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.title}
+                  href={item.href}
+                  onClick={() => setMobileOpen(false)}
+                  className={cn(
+                    'flex items-center justify-between px-3.5 py-3 rounded-xl text-[15px] font-semibold transition-colors',
+                    isActive
+                      ? 'bg-blue-50 text-blue-700 dark:text-blue-400 dark:bg-blue-500/10'
+                      : 'text-ink-700 dark:text-slate-400 hover:text-ink-900 hover:bg-slate-50 dark:hover:bg-slate-800/60'
+                  )}
+                >
+                  {item.title}
+                  {isActive && <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />}
+                </Link>
+              );
+            })}
           </nav>
           {!isAuthenticated && (
-            <div className="flex flex-col gap-2 pt-3 border-t border-slate-200 dark:border-slate-800">
-              <Button variant="outline" asChild className="w-full font-semibold">
+            <div className="flex flex-col gap-2.5 pt-4 border-t hairline dark:border-slate-800">
+              <Button
+                variant="outline"
+                asChild
+                className="w-full font-semibold h-12 rounded-xl border hairline text-ink-800 dark:border-slate-700 dark:text-slate-200"
+              >
                 <Link href="/login" onClick={() => setMobileOpen(false)}>Log in</Link>
               </Button>
               <Button
                 asChild
-                className="w-full font-bold bg-[#F59E0B] hover:bg-[#D97706] text-white border-none"
+                style={{ boxShadow: 'var(--shadow-cta)', color: 'var(--color-cta-foreground)' }}
+                className="w-full font-bold h-12 rounded-xl bg-[#FF700B] hover:bg-[#E85F00] border-none"
               >
                 <Link href="/register" onClick={() => setMobileOpen(false)}>Sign Up Free</Link>
               </Button>
