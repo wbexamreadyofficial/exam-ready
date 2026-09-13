@@ -1,13 +1,13 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { testCards } from '@/lib/dashboard/mockData';
 import type { TestCardStatus } from '@/lib/dashboard/mockData';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, ChevronLeft } from 'lucide-react';
 
 const statusConfig: Record<TestCardStatus, { label: string; bg: string; text: string }> = {
   'in-progress': { label: 'In Progress', bg: 'bg-[var(--color-bblue-50)] dark:bg-blue-900/20', text: 'text-[var(--color-data-primary)]' },
@@ -23,6 +23,33 @@ function getScoreColor(score: number) {
 }
 
 export default function ContinuePreparation() {
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const updateScrollState = useCallback(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 4);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
+  }, []);
+
+  useEffect(() => {
+    updateScrollState();
+    const el = scrollerRef.current;
+    if (!el) return;
+    const onResize = () => updateScrollState();
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, [updateScrollState]);
+
+  const scrollBy = (direction: 'left' | 'right') => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const amount = Math.min(el.clientWidth * 0.85, 320);
+    el.scrollBy({ left: direction === 'left' ? -amount : amount, behavior: 'smooth' });
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -31,8 +58,52 @@ export default function ContinuePreparation() {
           See All <ChevronRight size={16} />
         </a>
       </div>
-      
-      <div className="flex gap-4 overflow-x-auto pb-4 pt-1 px-1 dashboard-scrollbar" style={{ scrollSnapType: 'x mandatory' }}>
+
+      <div className="relative">
+        {/* Edge fades hint that the row scrolls horizontally, and hide
+            once there's nothing left in that direction. */}
+        <div
+          className={cn(
+            'pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-[var(--color-surface-subtle)] to-transparent transition-opacity duration-200',
+            canScrollLeft ? 'opacity-100' : 'opacity-0'
+          )}
+        />
+        <div
+          className={cn(
+            'pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-[var(--color-surface-subtle)] to-transparent transition-opacity duration-200',
+            canScrollRight ? 'opacity-100' : 'opacity-0'
+          )}
+        />
+
+        {/* Scroll buttons — desktop only, hidden if there's nothing to scroll to. */}
+        {canScrollLeft && (
+          <button
+            type="button"
+            onClick={() => scrollBy('left')}
+            aria-label="Scroll left"
+            className="hidden sm:flex absolute left-1 top-1/2 -translate-y-1/2 z-20 h-8 w-8 items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] shadow-sm text-[var(--color-ink-900)] hover:bg-[var(--color-surface-muted)] transition-colors"
+          >
+            <ChevronLeft size={16} />
+          </button>
+        )}
+        {canScrollRight && (
+          <button
+            type="button"
+            onClick={() => scrollBy('right')}
+            aria-label="Scroll right"
+            className="hidden sm:flex absolute right-1 top-1/2 -translate-y-1/2 z-20 h-8 w-8 items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] shadow-sm text-[var(--color-ink-900)] hover:bg-[var(--color-surface-muted)] transition-colors"
+          >
+            <ChevronRight size={16} />
+          </button>
+        )}
+
+        <div
+          ref={scrollerRef}
+          onScroll={updateScrollState}
+          data-lenis-prevent
+          className="flex gap-4 overflow-x-auto pb-4 pt-1 px-1 dashboard-scrollbar scroll-smooth"
+          style={{ scrollSnapType: 'x mandatory' }}
+        >
         {testCards.map((card) => {
           const config = statusConfig[card.status];
           let ctaText = 'Start';
@@ -42,7 +113,7 @@ export default function ContinuePreparation() {
           return (
             <div 
               key={card.id} 
-              className="surface-card p-5 rounded-xl card-hover flex flex-col min-w-[280px] max-w-[300px] shrink-0 border border-[var(--color-border)]"
+              className="surface-card p-5 rounded-xl card-hover flex flex-col min-w-[82%] sm:min-w-[280px] max-w-[300px] shrink-0 border border-[var(--color-border)]"
               style={{ scrollSnapAlign: 'start' }}
             >
               <div className="flex items-center justify-between">
@@ -85,6 +156,7 @@ export default function ContinuePreparation() {
             </div>
           );
         })}
+        </div>
       </div>
     </div>
   );

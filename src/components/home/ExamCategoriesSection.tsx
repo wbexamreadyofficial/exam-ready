@@ -20,8 +20,6 @@ const exams = [
     difficulty: 2,
     icon: ShieldCheck,
     accent: '#2563EB',
-    iconBg: 'bg-blue-50 text-blue-600 ring-1 ring-blue-100',
-    buttonBg: 'bg-blue-50 text-blue-600 hover:bg-blue-100',
     href: '/exams/wb-constable',
   },
   {
@@ -33,8 +31,6 @@ const exams = [
     difficulty: 3,
     icon: Shield,
     accent: '#FF700B',
-    iconBg: 'bg-orange-50 text-orange-600 ring-1 ring-orange-100',
-    buttonBg: 'bg-orange-50 text-orange-600 hover:bg-orange-100',
     href: '/exams/wb-si',
   },
   {
@@ -46,8 +42,6 @@ const exams = [
     difficulty: 2,
     icon: Utensils,
     accent: '#16A34A',
-    iconBg: 'bg-green-50 text-green-600 ring-1 ring-green-100',
-    buttonBg: 'bg-green-50 text-green-600 hover:bg-green-100',
     href: '/exams/food-si',
   },
   {
@@ -59,8 +53,6 @@ const exams = [
     difficulty: 2,
     icon: FileText,
     accent: '#DC2626',
-    iconBg: 'bg-red-50 text-red-600 ring-1 ring-red-100',
-    buttonBg: 'bg-red-50 text-red-600 hover:bg-red-100',
     href: '/exams/psc-clerkship',
   },
   {
@@ -72,8 +64,6 @@ const exams = [
     difficulty: 3,
     icon: Briefcase,
     accent: '#2563EB',
-    iconBg: 'bg-blue-50 text-blue-600 ring-1 ring-blue-100',
-    buttonBg: 'bg-blue-50 text-blue-600 hover:bg-blue-100',
     href: '/exams/psc-miscellaneous',
   },
   {
@@ -85,8 +75,6 @@ const exams = [
     difficulty: 3,
     icon: MoreHorizontal,
     accent: '#FF700B',
-    iconBg: 'bg-orange-50 text-orange-600 ring-1 ring-orange-100',
-    buttonBg: 'bg-orange-50 text-orange-600 hover:bg-orange-100',
     href: '/exams/others',
   },
 ];
@@ -129,13 +117,16 @@ export function ExamCategoriesSection() {
               <ScrollReveal key={exam.title} delay={index * 70}>
                 <Link href={exam.href} className="block group h-full">
                   <div
-                    className="surface-card relative h-full overflow-hidden p-6"
-                    style={{ ['--exam-accent' as string]: exam.accent }}
+                    className="relative h-full overflow-hidden rounded-3xl p-6 bg-white dark:bg-slate-900 border hairline dark:border-slate-800 ring-1 ring-inset ring-white/40 dark:ring-white/[0.03] shadow-[0_12px_32px_-22px_rgba(15,23,42,0.3)] dark:shadow-[0_18px_40px_-20px_rgba(0,0,0,0.6)] transition-all duration-500 ease-out group-hover:-translate-y-1.5 group-hover:border-transparent group-hover:shadow-[0_28px_60px_-18px_var(--exam-glow)]"
+                    style={{
+                      ['--exam-accent' as string]: exam.accent,
+                      ['--exam-glow' as string]: `${exam.accent}38`,
+                    }}
                   >
 
                     {/* Accent edge — reveals on hover */}
                     <span
-                      className="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100"
+                      className="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 transition-transform duration-500 ease-out group-hover:scale-x-100"
                       style={{ background: exam.accent }}
                       aria-hidden="true"
                     />
@@ -151,7 +142,14 @@ export function ExamCategoriesSection() {
 
                     {/* Header row */}
                     <div className="relative flex items-start gap-3.5 mb-5">
-                      <div className={`icon-tile w-12 h-12 shrink-0 ${exam.iconBg}`}>
+                      <div
+                        className="relative flex items-center justify-center w-12 h-12 shrink-0 rounded-2xl ring-1 transition-transform duration-500 ease-out group-hover:scale-110 group-hover:-rotate-2"
+                        style={{
+                          background: `${exam.accent}14`,
+                          color: exam.accent,
+                          boxShadow: `inset 0 0 0 1px ${exam.accent}25`,
+                        }}
+                      >
                         <Icon className="w-[22px] h-[22px]" strokeWidth={1.9} />
                       </div>
                       <div className="min-w-0 pt-0.5">

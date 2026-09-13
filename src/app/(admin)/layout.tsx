@@ -18,7 +18,7 @@ function AdminShell({ children }: { children: React.ReactNode }) {
 }
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <ProtectedRoute requiredRole="ADMIN" redirectTo="/login">
+    <ProtectedRoute requiredRole="admin" redirectTo="/login">
       <AdminShell>{children}</AdminShell>
     </ProtectedRoute>
   );

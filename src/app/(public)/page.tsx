@@ -12,16 +12,13 @@ import { CTABanner } from '@/components/home/CTABanner';
 import { BlogSection } from '@/components/home/BlogSection';
 import { HeroDashboard } from '@/components/home/HeroDashboard';
 
-/*
-  Each hero feature carries one brand color. Class-based (not inline styles)
-  so the dark-mode icon-tile rules in globals.css can normalise them —
-  inline styles would win over the stylesheet and stay light-mode blue.
-*/
+/* Each hero feature carries one brand color, applied directly so the tint
+   reads consistently in both light and dark mode. */
 const heroFeatures = [
-  { icon: Target,    label: 'Real Exam Experience', tint: 'bg-blue-50 text-blue-600 ring-1 ring-blue-100' },
-  { icon: Bot,       label: 'AI-Powered Analysis',  tint: 'bg-orange-50 text-orange-600 ring-1 ring-orange-100' },
-  { icon: FileCheck, label: 'Detailed Solutions',   tint: 'bg-green-50 text-green-600 ring-1 ring-green-100' },
-  { icon: BarChart3, label: 'Performance Tracking', tint: 'bg-red-50 text-red-600 ring-1 ring-red-100' },
+  { icon: Target,    label: 'Real Exam Experience', color: '#2563EB' },
+  { icon: Bot,       label: 'AI-Powered Analysis',  color: '#F97316' },
+  { icon: FileCheck, label: 'Detailed Solutions',   color: '#16A34A' },
+  { icon: BarChart3, label: 'Performance Tracking', color: '#DC2626' },
 ];
 
 export default function HomePage() {
@@ -122,7 +119,7 @@ function LeftContent() {
     <div className="flex flex-col">
 
       {/* Trust pill */}
-      <div className="inline-flex items-center gap-2.5 self-start mb-7 rounded-full border border-blue-100/90 bg-white/70 backdrop-blur px-3.5 py-1.5 shadow-xs dark:border-blue-900 dark:bg-blue-950/40">
+      <div className="inline-flex items-center gap-2.5 self-start mb-7 rounded-full border border-blue-100/90 bg-white/70 backdrop-blur-md px-3.5 py-1.5 shadow-[0_4px_16px_-6px_rgba(37,99,235,0.25)] ring-1 ring-inset ring-white/60 dark:border-blue-900/60 dark:bg-blue-950/40 dark:ring-white/[0.04] dark:shadow-[0_4px_20px_-6px_rgba(37,99,235,0.2)]">
         <span className="relative flex h-1.5 w-1.5">
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75" />
           <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-green-600" />
@@ -166,12 +163,15 @@ function LeftContent() {
 
       {/* 4-feature 2×2 grid — one brand color each */}
       <div className="grid grid-cols-2 gap-x-6 gap-y-4 mb-9 max-w-lg">
-        {heroFeatures.map(({ icon: Icon, label, tint }) => (
+        {heroFeatures.map(({ icon: Icon, label, color }) => (
           <div key={label} className="group flex items-center gap-3">
-            <div className={`icon-tile w-9 h-9 shrink-0 ${tint}`}>
+            <div
+              className="flex items-center justify-center w-9 h-9 shrink-0 rounded-xl ring-1 transition-transform duration-500 ease-out group-hover:scale-110 group-hover:-rotate-2"
+              style={{ background: `${color}14`, color, boxShadow: `inset 0 0 0 1px ${color}25` }}
+            >
               <Icon className="w-[17px] h-[17px]" strokeWidth={2.2} />
             </div>
-            <span className="text-[13.5px] font-semibold text-ink-800 leading-tight">
+            <span className="text-[13.5px] font-semibold text-ink-800 dark:text-slate-200 leading-tight">
               {label}
             </span>
           </div>
@@ -191,7 +191,7 @@ function LeftContent() {
           }}
           className="btn-premium h-[52px] px-8 rounded-xl font-bold text-[15px] gap-2"
         >
-          <Link href="/register">
+          <Link href="/login">
             Start Free Mock Test
             <ArrowRight className="h-4 w-4" />
           </Link>
@@ -210,10 +210,16 @@ function LeftContent() {
       {/* Trust badge */}
       <div className="flex items-center gap-3.5 pt-1">
         <div className="flex -space-x-2.5">
-          {['bg-blue-600', 'bg-orange-500', 'bg-green-600', 'bg-red-600'].map((bg, i) => (
+          {[
+            'linear-gradient(135deg, #3B82F6, #1D4ED8)',
+            'linear-gradient(135deg, #FB923C, #EA580C)',
+            'linear-gradient(135deg, #4ADE80, #16A34A)',
+            'linear-gradient(135deg, #F87171, #DC2626)',
+          ].map((bg, i) => (
             <div
               key={i}
-              className={`w-9 h-9 rounded-full ring-2 ring-white dark:ring-slate-900 ${bg} flex items-center justify-center text-white text-[11px] font-bold shadow-sm`}
+              className="w-9 h-9 rounded-full ring-2 ring-white dark:ring-slate-900 flex items-center justify-center text-white text-[11px] font-bold shadow-[0_4px_10px_-3px_rgba(15,23,42,0.35)]"
+              style={{ background: bg }}
             >
               {String.fromCharCode(65 + i)}
             </div>

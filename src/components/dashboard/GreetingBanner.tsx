@@ -9,7 +9,7 @@ export default function GreetingBanner() {
   const hour = new Date().getHours();
   const greeting =
     hour < 12 ? 'Good Morning' : hour < 17 ? 'Good Afternoon' : 'Good Evening';
-  const name = user?.name?.split(' ')[0] ?? 'Candidate';
+  const name = user?.fullName?.split(' ')[0] ?? 'Candidate';
 
   return (
     <div className="surface-card overflow-hidden relative">

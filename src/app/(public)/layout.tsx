@@ -6,8 +6,10 @@ import { ScrollToTop } from '@/components/ui/ScrollToTop';
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col relative">
-      <AnnouncementBar />
-      <Navbar />
+      <div className="sticky top-0 z-50">
+        <AnnouncementBar />
+        <Navbar />
+      </div>
       <main className="flex-1">{children}</main>
       <Footer />
       <ScrollToTop />

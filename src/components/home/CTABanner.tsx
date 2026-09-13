@@ -75,7 +75,7 @@ export function CTABanner() {
                 <div className="flex flex-wrap items-center gap-3.5">
                   {/* Primary action */}
                   <Link
-                    href="/register"
+                    href="/login"
                     className="btn-premium inline-flex items-center justify-center gap-2 font-bold text-[14.5px] h-[52px] px-8 rounded-xl"
                     style={{
                       background: '#FF700B',

@@ -8,8 +8,5 @@ const getEnv = (key: string, fallback?: string): string => {
 
 export const env = {
   appName: getEnv('NEXT_PUBLIC_APP_NAME', 'Exam Ready'),
-  apiUrl: getEnv('NEXT_PUBLIC_API_URL', 'http://localhost:5000/api'),
-  awsRegion: getEnv('NEXT_PUBLIC_AWS_REGION', 'ap-south-1'),
-  cognitoUserPoolId: getEnv('NEXT_PUBLIC_COGNITO_USER_POOL_ID', ''),
-  cognitoClientId: getEnv('NEXT_PUBLIC_COGNITO_CLIENT_ID', ''),
+  apiUrl: getEnv('NEXT_PUBLIC_API_URL', 'https://exam-ready-node.vercel.app/api'),
 } as const;

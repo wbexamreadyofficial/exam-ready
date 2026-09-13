@@ -43,20 +43,24 @@ export default function DashboardLayout({ children, rightSidebar }: DashboardLay
       </aside>
       
       {/* Main area */}
-      <div className="flex flex-1 flex-col min-w-0 overflow-hidden">
+      <div className="flex flex-1 flex-col min-w-0 min-h-0 overflow-hidden">
         <DashboardHeader onMenuClick={toggleMobile} />
-        
-        <div className="flex flex-1 overflow-hidden relative">
-          {/* Center content — scrollable */}
-          <main className="flex-1 overflow-y-auto p-4 sm:p-6 dashboard-scrollbar bg-[var(--color-surface-subtle)]">
+
+        <div className="flex flex-1 min-h-0 overflow-hidden relative">
+          {/* Center content — scrollable. `data-lenis-prevent` opts this
+              container out of the global Lenis smooth-scroll (see
+              SmoothScrollProvider) so its native overflow scroll actually
+              receives wheel/touch events instead of Lenis swallowing them
+              while looking for document-level scroll to drive. */}
+          <main data-lenis-prevent className="flex-1 overflow-y-auto p-4 sm:p-6 dashboard-scrollbar bg-[var(--color-surface-subtle)]">
             <div className="mx-auto w-full max-w-7xl">
               {children}
             </div>
           </main>
-          
+
           {/* Right sidebar — visible on xl */}
           {rightSidebar && (
-            <aside className="hidden xl:block w-[340px] flex-shrink-0 overflow-y-auto p-6 pt-0 border-l border-[var(--color-hairline)] dashboard-scrollbar bg-[var(--color-surface)]">
+            <aside data-lenis-prevent className="hidden xl:block w-[340px] flex-shrink-0 overflow-y-auto p-6 pt-0 border-l border-[var(--color-hairline)] dashboard-scrollbar bg-[var(--color-surface)]">
               {rightSidebar}
             </aside>
           )}

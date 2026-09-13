@@ -1,53 +1,66 @@
-export type UserRole = 'STUDENT' | 'ADMIN';
+export type UserRole = 'examiner' | 'partner' | 'student' | 'admin';
 
+/** Matches the backend's `getSafeUser` shape exactly (auth.service.ts). */
 export interface AuthUser {
   id: string;
-  email: string;
-  name: string;
+  mobileNumber?: string;
+  email?: string;
+  fullName?: string;
   role: UserRole;
-  avatar?: string;
-  emailVerified: boolean;
-  createdAt: string;
+  preferredLanguage?: 'en' | 'bn';
+  isAppUser: boolean;
+  isMobileVerified: boolean;
+  isEmailVerified: boolean;
+  loginInfo: string[];
+  lastLoginAt?: string;
 }
 
-export interface LoginCredentials {
-  email: string;
-  password: string;
-}
-
-export interface RegisterCredentials {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
-export interface ForgotPasswordPayload {
-  email: string;
-}
-
-export interface ResetPasswordPayload {
-  email: string;
-  code: string;
-  password: string;
-  confirmPassword: string;
-}
-
-export interface VerifyEmailPayload {
-  email: string;
-  code: string;
-}
-
+/** Matches `createTokenPair` in the backend's token.service.ts. */
 export interface AuthTokens {
+  tokenType: 'Bearer';
   accessToken: string;
+  accessTokenExpiresIn: number;
   refreshToken: string;
-  idToken: string;
+  refreshTokenExpiresAt: string;
 }
 
-export interface AuthState {
-  user: AuthUser | null;
-  tokens: AuthTokens | null;
-  isLoading: boolean;
-  isAuthenticated: boolean;
-  error: string | null;
+export interface LoginResult {
+  user: AuthUser;
+  tokens: AuthTokens;
 }
+
+/** POST /api/auth/app/register response `data` — new account, OTP issued. */
+export interface OtpRequestedResult {
+  mobileNumber: string;
+  expiresIn: number;
+  devOtp?: string;
+  isRegistered: false;
+}
+
+/** POST /api/auth/app/register response `data` — account already verified. */
+export interface AlreadyRegisteredResult {
+  mobileNumber: string;
+  isRegistered: true;
+}
+
+export type RegisterOtpResult = OtpRequestedResult | AlreadyRegisteredResult;
+
+/** Role selectable via the web (email) signup flow — "admin" is never
+ *  self-serve, it can only be assigned internally. */
+export type WebSignupRole = 'examiner' | 'partner' | 'student';
+
+/** POST /api/auth/web/register response `data` — new account, OTP issued. */
+export interface EmailOtpRequestedResult {
+  email: string;
+  expiresIn: number;
+  devOtp?: string;
+  isRegistered: false;
+}
+
+/** POST /api/auth/web/register response `data` — account already verified. */
+export interface EmailAlreadyRegisteredResult {
+  email: string;
+  isRegistered: true;
+}
+
+export type WebRegisterOtpResult = EmailOtpRequestedResult | EmailAlreadyRegisteredResult;

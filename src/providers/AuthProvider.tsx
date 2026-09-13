@@ -1,65 +1,42 @@
 'use client';
 
 import { useEffect } from 'react';
-import { configureAmplify } from '@/lib/auth/amplify';
-import { cognitoAuth } from '@/lib/auth/cognito';
-import { authApi } from '@/lib/api/auth';
-import { setAuthTokens, getStoredToken } from '@/lib/api/client';
+import { getStoredToken } from '@/lib/api/client';
+import { setSessionRoleCookie, clearSessionRoleCookie } from '@/lib/auth/sessionCookie';
 import { useAuthStore } from '@/store/authStore';
 
-configureAmplify();
-
+/**
+ * The backend has no `/me` endpoint — the user object returned at
+ * login/verify-otp time is persisted directly (see `authStore`'s zustand
+ * `persist` middleware). This provider reconciles that persisted state with
+ * whether an access token is still on hand (so a manually cleared
+ * localStorage doesn't leave a "logged in" user with no token to call the
+ * API with), and keeps `middleware.ts`'s role cookie in sync with it.
+ *
+ * It must wait for `hasHydrated` — zustand's `persist` rehydration from
+ * localStorage resolves asynchronously, so on a hard reload `user` reads as
+ * `null` for the first render tick even when a session exists. Running this
+ * reconciliation before rehydration finishes would treat that as "logged
+ * out" and clear both the store and the role cookie out from under the
+ * session that's about to be restored.
+ */
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const { setUser, setLoading } = useAuthStore();
+  const { user, hasHydrated, setUser, setLoading, logout } = useAuthStore();
 
   useEffect(() => {
-    const restoreSession = async () => {
-      try {
-        setLoading(true);
-        const token = getStoredToken();
-        if (!token) {
-          // Provide demo student fallback for testing/demo
-          setUser({
-            id: 'demo-student-1',
-            email: 'anindya@examready.in',
-            name: 'Anindya Sarkar',
-            role: 'STUDENT',
-            emailVerified: true,
-            createdAt: new Date().toISOString(),
-          });
-          return;
-        }
-        const session = await cognitoAuth.getSession();
-        if (session) {
-          setAuthTokens(session.accessToken, '');
-          const user = await authApi.getMe();
-          setUser(user);
-        } else {
-          setUser({
-            id: 'demo-student-1',
-            email: 'anindya@examready.in',
-            name: 'Anindya Sarkar',
-            role: 'STUDENT',
-            emailVerified: true,
-            createdAt: new Date().toISOString(),
-          });
-        }
-      } catch {
-        setUser({
-          id: 'demo-student-1',
-          email: 'anindya@examready.in',
-          name: 'Anindya Sarkar',
-          role: 'STUDENT',
-          emailVerified: true,
-          createdAt: new Date().toISOString(),
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (!hasHydrated) return;
 
-    restoreSession();
-  }, []);
+    if (user && !getStoredToken()) {
+      logout();
+      clearSessionRoleCookie();
+    } else if (!user) {
+      setUser(null);
+      clearSessionRoleCookie();
+    } else {
+      setSessionRoleCookie(user.role);
+    }
+    setLoading(false);
+  }, [hasHydrated, user, setUser, setLoading, logout]);
 
   return <>{children}</>;
 }

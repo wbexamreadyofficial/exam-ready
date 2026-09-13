@@ -3,6 +3,7 @@ import './globals.css';
 import { QueryProvider } from '@/providers/QueryProvider';
 import { ThemeProvider } from '@/providers/ThemeProvider';
 import { AuthProvider } from '@/providers/AuthProvider';
+import { SmoothScrollProvider } from '@/providers/SmoothScrollProvider';
 import { Toaster } from 'sonner';
 
 export const metadata: Metadata = {
@@ -66,9 +67,11 @@ export default function RootLayout({
         <ThemeProvider>
           <QueryProvider>
             <AuthProvider>
-              {children}
+              <SmoothScrollProvider>
+                {children}
+              </SmoothScrollProvider>
               <Toaster
-                position="top-right"
+                position="bottom-right"
                 toastOptions={{
                   duration: 4000,
                   style: {

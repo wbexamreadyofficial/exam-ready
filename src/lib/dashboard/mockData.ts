@@ -315,6 +315,12 @@ export interface NavGroup {
 
 export const sidebarNavGroups: NavGroup[] = [
   {
+    title: '',
+    items: [
+      { label: 'Dashboard', icon: 'LayoutDashboard', href: '/dashboard', active: true },
+    ],
+  },
+  {
     title: 'Practice',
     items: [
       { label: 'Mock Tests', icon: 'FileText', href: '/exams' },
@@ -333,7 +339,6 @@ export const sidebarNavGroups: NavGroup[] = [
   {
     title: 'Analytics',
     items: [
-      { label: 'Dashboard', icon: 'LayoutDashboard', href: '/dashboard', active: true },
       { label: 'Progress Report', icon: 'TrendingUp', href: '/progress' },
       { label: 'Leaderboard', icon: 'Medal', href: '/leaderboard' },
     ],
@@ -342,7 +347,6 @@ export const sidebarNavGroups: NavGroup[] = [
     title: 'Account',
     items: [
       { label: 'Profile', icon: 'User', href: '/profile' },
-      { label: 'Settings', icon: 'Settings', href: '/settings' },
       { label: 'Help', icon: 'HelpCircle', href: '/help' },
     ],
   },

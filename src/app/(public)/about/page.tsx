@@ -451,7 +451,7 @@ export default function AboutPage() {
                 </div>
 
                 <Button className="w-full font-extrabold bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 hover:from-amber-500 hover:to-yellow-600 text-slate-950 shadow-md shadow-amber-500/20 border-none gap-2 mt-4" asChild>
-                  <Link href="/register">
+                  <Link href="/login">
                     Switch to Smart Practice Free <ArrowRight className="h-4 w-4" />
                   </Link>
                 </Button>
@@ -502,7 +502,7 @@ export default function AboutPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button size="lg" className="font-black bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 hover:from-amber-500 hover:to-yellow-600 text-slate-950 gap-2 shadow-lg shadow-amber-500/20 border-none" asChild>
-              <Link href="/register">
+              <Link href="/login">
                 Start Free Practice Now <ArrowRight className="h-4 w-4 stroke-[2.5]" />
               </Link>
             </Button>

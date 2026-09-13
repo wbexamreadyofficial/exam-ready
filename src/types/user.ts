@@ -1,39 +1,60 @@
 import type { UserRole } from './auth';
 
+export interface ProfileAddress {
+  houseNoStreet: string;
+  area: string;
+  city: string;
+  district: string;
+  pinCode: string;
+}
+
+/** Matches the backend's `getUserDetailsById` projection (auth fields plus
+ *  the user-editable profile fields) — GET /api/users/me, PATCH /api/users/update. */
 export interface UserProfile {
   id: string;
-  name: string;
-  email: string;
-  phone?: string;
+  fullName?: string;
+  profilePhoto?: string;
+  /** ISO date string, e.g. "1998-04-12". */
+  dob?: string;
+  address?: ProfileAddress;
+  mobileNumber?: string;
+  email?: string;
+  referralCode?: string;
+  preferredLanguage?: 'en' | 'bn';
   role: UserRole;
-  avatar?: string;
-  bio?: string;
-  district?: string;
-  state?: string;
-  targetExams?: string[];
-  emailVerified: boolean;
-  isActive: boolean;
+  isAppUser: boolean;
+  isMobileVerified: boolean;
+  isEmailVerified: boolean;
+  lastLoginAt?: string;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface StudentStats {
-  totalExams: number;
-  totalQuizzes: number;
-  averageScore: number;
-  bestScore: number;
-  accuracy: number;
-  rank?: number;
-  streak: number;
-  totalTimeSpent: number;
+/** Matches the backend's `updateUserSchema` — `mobileNumber` is deliberately
+ *  not editable from this endpoint. */
+export interface UpdateProfileInput {
+  fullName?: string;
+  profilePhoto?: string | null;
+  /** ISO date string. */
+  dob?: string;
+  address?: ProfileAddress;
+  email?: string;
+  referralCode?: string | null;
+  preferredLanguage?: 'en' | 'bn';
 }
 
-export interface UserListItem {
-  id: string;
-  name: string;
-  email: string;
-  role: UserRole;
-  isActive: boolean;
-  createdAt: string;
-  totalExams: number;
+export interface ProfileCompletionField {
+  field: string;
+  label: string;
+}
+
+/** GET /api/users/profile-completion. */
+export interface ProfileCompletion {
+  completionPercentage: number;
+  completedSteps: number;
+  totalSteps: number;
+  remainingSteps: number;
+  isComplete: boolean;
+  missingFields: ProfileCompletionField[];
+  bannerText: string;
 }
