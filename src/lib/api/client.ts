@@ -83,9 +83,11 @@ function refreshAccessToken(): Promise<string | null> {
 
 export const apiClient = createApiClient();
 
-/** Which backend auth flow issued the tokens currently in storage — 'app'
- *  (phone/OTP, student-only) or 'web' (email/OTP, examiner/partner/student).
- *  Needed because the two flows have separate refresh/logout endpoints. */
+/** Which backend auth flow issued the tokens currently in storage. This
+ *  frontend only ever uses 'web' (email-identified, covers student/
+ *  examiner/partner alike — see lib/api/auth.ts) — 'app' is kept only
+ *  because the backend also exposes that flow and old sessions from before
+ *  this frontend standardized on 'web' may still have it stored. */
 export type AuthFlow = 'app' | 'web';
 
 export function setAuthTokens(accessToken: string, refreshToken: string, flow: AuthFlow) {
@@ -106,9 +108,9 @@ export function clearAuthTokens() {
 
 export function getAuthFlow(): AuthFlow {
   if (typeof window !== 'undefined') {
-    return localStorage.getItem('authFlow') === 'web' ? 'web' : 'app';
+    return localStorage.getItem('authFlow') === 'app' ? 'app' : 'web';
   }
-  return 'app';
+  return 'web';
 }
 
 export function getStoredToken(): string | null {

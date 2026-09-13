@@ -8,7 +8,7 @@ import { clearAuthTokens } from '@/lib/api/client';
 import { getErrorMessage } from '@/lib/api/errors';
 import { getRoleHome } from '@/lib/auth/roleHome';
 import { setSessionRoleCookie, clearSessionRoleCookie } from '@/lib/auth/sessionCookie';
-import type { AuthUser, RegisterOtpResult, WebRegisterOtpResult, WebSignupRole } from '@/types/auth';
+import type { AuthUser, WebRegisterOtpResult, WebSignupRole } from '@/types/auth';
 
 /** Reads `?next=` (set by ProtectedRoute / middleware) and, if it's a safe
  *  same-origin path, returns it — otherwise routes by role. */
@@ -25,16 +25,15 @@ export function useAuth() {
   const { user, isLoading, isAuthenticated, error, setUser, setLoading, setError, logout: storeLogout } = useAuthStore();
 
   /**
-   * Step 1 — submit the mobile number. Returns the raw result so the login
-   * page can decide whether to show the OTP step or, for an
-   * already-verified account, fall straight through to `login`.
+   * Step 1 of the web signup flow — used by students/examiners/partners to
+   * sign up with a mobile number and role.
    */
-  const requestOtp = useCallback(
-    async (mobileNumber: string): Promise<RegisterOtpResult> => {
+  const registerWeb = useCallback(
+    async (mobileNumber: string, role: WebSignupRole): Promise<WebRegisterOtpResult> => {
       setLoading(true);
       setError(null);
       try {
-        return await authApi.register(mobileNumber);
+        return await authApi.registerWeb(mobileNumber, role);
       } catch (err) {
         const message = getErrorMessage(err, 'Could not send the code. Please try again.');
         setError(message);
@@ -47,12 +46,12 @@ export function useAuth() {
   );
 
   /** Step 2 — verify the OTP just sent to `mobileNumber` and log in. */
-  const verifyOtp = useCallback(
+  const verifyWebOtp = useCallback(
     async (mobileNumber: string, otp: string): Promise<void> => {
       setLoading(true);
       setError(null);
       try {
-        const { user } = await authApi.verifyOtp(mobileNumber, otp);
+        const { user } = await authApi.verifyWebOtp(mobileNumber, otp);
         setUser(user);
         setSessionRoleCookie(user.role);
         router.push(getPostLoginDestination(user));
@@ -67,13 +66,13 @@ export function useAuth() {
     [setLoading, setError, setUser, router]
   );
 
-  /** Returning, already-verified user — logs in with just the mobile number. */
-  const login = useCallback(
+  /** Returning, already-verified account — logs in with just the mobile number. */
+  const loginWeb = useCallback(
     async (mobileNumber: string): Promise<void> => {
       setLoading(true);
       setError(null);
       try {
-        const { user } = await authApi.login(mobileNumber);
+        const { user } = await authApi.loginWeb(mobileNumber);
         setUser(user);
         setSessionRoleCookie(user.role);
         router.push(getPostLoginDestination(user));
@@ -89,36 +88,43 @@ export function useAuth() {
   );
 
   /**
-   * Step 1 of the web (email) signup flow — used by examiners/partners
-   * (and optionally students) to sign up with email + mobile + role.
+   * Silent pre-check used by the login page: /auth/web/login matches any
+   * verified mobile number regardless of whether it was originally verified
+   * via the app or the web flow, so this can just be tried directly. A 404
+   * here just means "brand-new number" — not a real error, so it's
+   * swallowed rather than surfaced, and the caller falls through to the
+   * registration/OTP flow instead.
    */
-  const registerWeb = useCallback(
-    async (email: string, mobileNumber: string, role: WebSignupRole): Promise<WebRegisterOtpResult> => {
+  const tryWebLogin = useCallback(
+    async (mobileNumber: string): Promise<boolean> => {
       setLoading(true);
-      setError(null);
       try {
-        return await authApi.registerWeb(email, mobileNumber, role);
-      } catch (err) {
-        const message = getErrorMessage(err, 'Could not send the code. Please try again.');
-        setError(message);
-        throw new Error(message);
+        const { user } = await authApi.loginWeb(mobileNumber);
+        setUser(user);
+        setSessionRoleCookie(user.role);
+        router.push(getPostLoginDestination(user));
+        return true;
+      } catch {
+        return false;
       } finally {
         setLoading(false);
       }
     },
-    [setLoading, setError]
+    [setLoading, setUser, router]
   );
 
-  /** Step 2 — verify the OTP just sent to `email` and log in. */
-  const verifyWebOtp = useCallback(
-    async (email: string, otp: string): Promise<void> => {
+  /**
+   * Verifies the OTP from the register page's flow but deliberately does
+   * NOT log the user in — the register page redirects to /login afterward
+   * (with the mobile number pre-filled) so the actual sign-in always
+   * happens from the one login page, via `tryWebLogin` above.
+   */
+  const verifyWebRegistration = useCallback(
+    async (mobileNumber: string, otp: string): Promise<void> => {
       setLoading(true);
       setError(null);
       try {
-        const { user } = await authApi.verifyWebOtp(email, otp);
-        setUser(user);
-        setSessionRoleCookie(user.role);
-        router.push(getPostLoginDestination(user));
+        await authApi.verifyWebOtpOnly(mobileNumber, otp);
       } catch (err) {
         const message = getErrorMessage(err, 'That code didn’t work. Please try again.');
         setError(message);
@@ -127,28 +133,7 @@ export function useAuth() {
         setLoading(false);
       }
     },
-    [setLoading, setError, setUser, router]
-  );
-
-  /** Returning, already-verified web account — logs in with just the email. */
-  const loginWeb = useCallback(
-    async (email: string): Promise<void> => {
-      setLoading(true);
-      setError(null);
-      try {
-        const { user } = await authApi.loginWeb(email);
-        setUser(user);
-        setSessionRoleCookie(user.role);
-        router.push(getPostLoginDestination(user));
-      } catch (err) {
-        const message = getErrorMessage(err, 'Could not log you in. Please try again.');
-        setError(message);
-        throw new Error(message);
-      } finally {
-        setLoading(false);
-      }
-    },
-    [setLoading, setError, setUser, router]
+    [setLoading, setError]
   );
 
   const logout = useCallback(async (): Promise<void> => {
@@ -174,12 +159,11 @@ export function useAuth() {
     error,
     isAdmin,
     isStudent,
-    requestOtp,
-    verifyOtp,
-    login,
     registerWeb,
     verifyWebOtp,
     loginWeb,
+    tryWebLogin,
+    verifyWebRegistration,
     logout,
     clearError,
   };

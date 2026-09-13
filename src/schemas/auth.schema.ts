@@ -19,9 +19,10 @@ export const otpSchema = z.object({
 export type MobileInput = z.infer<typeof mobileSchema>;
 export type OtpInput = z.infer<typeof otpSchema>;
 
-/** Web (email) signup — matches the backend's webRegisterSchema. */
-export const webRegisterSchema = z.object({
-  email: z.string().min(1, 'Email is required').email('Enter a valid email address'),
+/** Register page's form — web signup keyed on mobile number + role, matches
+ *  the backend's webRegisterSchema (mobile-number-identified; no email
+ *  involved anywhere in the web flow). */
+export const registerMobileRoleSchema = z.object({
   mobileNumber: z
     .string()
     .min(1, 'Mobile number is required')
@@ -31,10 +32,4 @@ export const webRegisterSchema = z.object({
   }),
 });
 
-/** Web login — matches the backend's webEmailSchema. */
-export const webEmailSchema = z.object({
-  email: z.string().min(1, 'Email is required').email('Enter a valid email address'),
-});
-
-export type WebRegisterInput = z.infer<typeof webRegisterSchema>;
-export type WebEmailInput = z.infer<typeof webEmailSchema>;
+export type RegisterMobileRoleInput = z.infer<typeof registerMobileRoleSchema>;

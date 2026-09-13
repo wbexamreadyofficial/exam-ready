@@ -3,6 +3,7 @@
 import React from 'react';
 
 // Main content
+import { ProfileCompletionBanner } from '@/components/dashboard/ProfileCompletionBanner';
 import GreetingBanner from '@/components/dashboard/GreetingBanner';
 import StatTiles from '@/components/dashboard/StatTiles';
 import PlanBanner from '@/components/dashboard/PlanBanner';
@@ -23,6 +24,9 @@ import TopExams from '@/components/dashboard/TopExams';
 export default function DashboardPage() {
   return (
     <div className="space-y-6">
+      {/* Profile completion nudge */}
+      <ProfileCompletionBanner />
+
       {/* 1. Greeting */}
       <GreetingBanner />
 

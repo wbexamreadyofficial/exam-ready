@@ -30,22 +30,33 @@ const RESEND_COOLDOWN_SECONDS = 30;
 type Step = 'mobile' | 'otp';
 
 export default function LoginPage() {
-  const { requestOtp, verifyOtp, login, isLoading, error, clearError } = useAuth();
+  const { registerWeb, verifyWebOtp, tryWebLogin, isLoading, error, clearError } = useAuth();
 
   const [step, setStep] = useState<Step>('mobile');
   const [pendingMobile, setPendingMobile] = useState('');
   const [otp, setOtp] = useState('');
   const [devOtp, setDevOtp] = useState<string | undefined>();
   const [resendIn, setResendIn] = useState(0);
-  const [signingIn, setSigningIn] = useState(false);
 
   const {
     register,
     handleSubmit,
+    setValue,
+    setFocus,
     formState: { errors },
   } = useForm<MobileInput>({
     resolver: zodResolver(mobileSchema),
   });
+
+  // Pre-fill the number when arriving from the register page's
+  // "verify, then finish signing in here" handoff (?mobile=...).
+  useEffect(() => {
+    const mobileFromQuery = new URLSearchParams(window.location.search).get('mobile');
+    if (mobileFromQuery) {
+      setValue('mobileNumber', mobileFromQuery);
+      setFocus('mobileNumber');
+    }
+  }, [setValue, setFocus]);
 
   // Resend cooldown ticker
   useEffect(() => {
@@ -62,16 +73,21 @@ export default function LoginPage() {
   const onMobileSubmit = async (data: MobileInput) => {
     clearError();
     try {
-      const result = await requestOtp(data.mobileNumber);
+      // Every account (student, examiner, or partner) lives behind the web
+      // flow now — see lib/api/auth.ts. /auth/web/login matches any
+      // verified mobile number, so try logging straight in first; a miss
+      // here is expected/silent for a brand-new number, not an error (see
+      // `tryWebLogin`).
+      const loggedIn = await tryWebLogin(data.mobileNumber);
+      if (loggedIn) return;
+
+      const result = await registerWeb(data.mobileNumber, 'student');
 
       if (result.isRegistered) {
-        // Already a verified account — no OTP needed, log straight in.
-        setSigningIn(true);
-        try {
-          await login(data.mobileNumber);
-        } finally {
-          setSigningIn(false);
-        }
+        // Became verified between the check above and now (rare race) —
+        // just try logging in again.
+        const loggedInNow = await tryWebLogin(data.mobileNumber);
+        if (!loggedInNow) toast.error('Could not log you in. Please try again.');
         return;
       }
 
@@ -89,7 +105,7 @@ export default function LoginPage() {
     if (code.length !== 6) return;
     clearError();
     try {
-      await verifyOtp(pendingMobile, code);
+      await verifyWebOtp(pendingMobile, code);
     } catch {
       setOtp('');
     }
@@ -99,7 +115,7 @@ export default function LoginPage() {
     if (resendIn > 0) return;
     clearError();
     try {
-      const result = await requestOtp(pendingMobile);
+      const result = await registerWeb(pendingMobile, 'student');
       if (!result.isRegistered) {
         setDevOtp(result.devOtp);
         setOtp('');
@@ -158,7 +174,6 @@ export default function LoginPage() {
                     register={register}
                     errors={errors}
                     isLoading={isLoading}
-                    signingIn={signingIn}
                   />
                 ) : (
                   <OtpStep
@@ -175,9 +190,9 @@ export default function LoginPage() {
                   />
                 )}
 
-                <p className="mt-7 flex items-center justify-center gap-1.5 text-center text-[12px] text-ink-500">
-                  <ShieldCheck className="h-3.5 w-3.5 shrink-0" strokeWidth={2} />
-                  Your account and personal information are securely protected.
+                <p className="mt-7 flex items-start justify-center gap-1.5 text-[12px] text-ink-500">
+                  <ShieldCheck className="h-3.5 w-3.5 shrink-0 mt-0.5" strokeWidth={2} />
+                  <span className="text-left">Your account and personal information are securely protected.</span>
                 </p>
               </div>
             </div>
@@ -224,13 +239,11 @@ function MobileStep({
   register,
   errors,
   isLoading,
-  signingIn,
 }: {
   onSubmit: React.FormEventHandler<HTMLFormElement>;
   register: ReturnType<typeof useForm<MobileInput>>['register'];
   errors: ReturnType<typeof useForm<MobileInput>>['formState']['errors'];
   isLoading: boolean;
-  signingIn: boolean;
 }) {
   return (
     <>
@@ -287,7 +300,7 @@ function MobileStep({
           style={{ background: '#FF700B', color: 'var(--color-cta-foreground)', boxShadow: 'var(--shadow-cta)' }}
           className="btn-premium group h-[56px] w-full rounded-xl border-none text-[15.5px] font-bold"
         >
-          {signingIn ? 'Welcome back — signing you in…' : 'Continue'}
+          Continue
           <ArrowRight className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
         </Button>
       </form>

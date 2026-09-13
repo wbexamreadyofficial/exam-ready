@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { getStoredToken } from '@/lib/api/client';
 import { setSessionRoleCookie, clearSessionRoleCookie } from '@/lib/auth/sessionCookie';
 import { useAuthStore } from '@/store/authStore';
+import { CompleteProfileModal } from '@/components/auth/CompleteProfileModal';
 
 /**
  * The backend has no `/me` endpoint — the user object returned at
@@ -38,5 +39,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setLoading(false);
   }, [hasHydrated, user, setUser, setLoading, logout]);
 
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      {hasHydrated && <CompleteProfileModal />}
+    </>
+  );
 }

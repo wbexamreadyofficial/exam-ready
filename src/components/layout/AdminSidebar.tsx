@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -14,13 +15,17 @@ import {
   FolderOpen,
   Settings,
   ChevronLeft,
-  BookOpenCheck,
+  ChevronRight,
+  LogOut,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useUIStore } from '@/store/uiStore';
+import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
+import { LogoIcon } from '@/components/ui/Logo';
+import { LogoutConfirmDialog } from '@/components/auth/LogoutConfirmDialog';
 
 const navItems = [
   { title: 'Dashboard', href: '/admin', icon: LayoutDashboard, exact: true },
@@ -38,6 +43,8 @@ const navItems = [
 export function AdminSidebar() {
   const pathname = usePathname();
   const { sidebarOpen, toggleSidebar } = useUIStore();
+  const { logout } = useAuth();
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -49,18 +56,43 @@ export function AdminSidebar() {
         aria-label="Admin sidebar"
       >
         {/* Logo area */}
-        <div className="flex h-16 items-center px-4 border-b border-[var(--color-sidebar-border)]">
-          <Link href="/admin" className="flex items-center gap-2 overflow-hidden">
-            <div className="flex h-8 w-8 min-w-[2rem] items-center justify-center rounded-lg bg-[var(--color-sidebar-primary)]">
-              <BookOpenCheck className="h-4 w-4 text-[var(--color-sidebar-primary-foreground)]" />
-            </div>
+        <div className="flex h-16 items-center justify-between gap-1.5 px-4 border-b border-[var(--color-sidebar-border)]">
+          <Link href="/admin" className="flex items-center gap-2 overflow-hidden min-w-0">
+            <LogoIcon className="h-8 w-8 shrink-0" />
             {sidebarOpen && (
-              <span className="font-bold text-sm whitespace-nowrap text-[var(--color-sidebar-foreground)]">
-                Exam Ready
+              <span className="font-black tracking-tight text-lg whitespace-nowrap">
+                <span className="bg-gradient-to-r from-[#0052FF] via-[#0066FF] to-[#0088FF] bg-clip-text text-transparent">Exam</span>
+                <span className="bg-gradient-to-r from-[#F97316] to-[#EA580C] bg-clip-text text-transparent">Ready</span>
               </span>
             )}
           </Link>
+
+          {sidebarOpen && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleSidebar}
+              aria-label="Collapse sidebar"
+              className="h-7 w-7 shrink-0 text-[var(--color-sidebar-foreground)] hover:bg-[var(--color-sidebar-accent)] hover:text-[var(--color-sidebar-accent-foreground)]"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+          )}
         </div>
+
+        {!sidebarOpen && (
+          <div className="flex justify-center py-2 border-b border-[var(--color-sidebar-border)]">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleSidebar}
+              aria-label="Expand sidebar"
+              className="h-7 w-7 text-[var(--color-sidebar-foreground)] hover:bg-[var(--color-sidebar-accent)] hover:text-[var(--color-sidebar-accent-foreground)]"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
 
         {/* Nav items */}
         <ScrollArea className="flex-1 py-4">
@@ -101,23 +133,41 @@ export function AdminSidebar() {
           </nav>
         </ScrollArea>
 
-        {/* Collapse toggle */}
+        {/* Logout */}
         <div className="p-2 border-t border-[var(--color-sidebar-border)]">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleSidebar}
-            className={cn(
-              'w-full text-[var(--color-sidebar-foreground)] hover:bg-[var(--color-sidebar-accent)] hover:text-[var(--color-sidebar-accent-foreground)]',
-              sidebarOpen ? 'justify-start px-3' : 'justify-center'
-            )}
-            aria-label={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
-          >
-            <ChevronLeft className={cn('h-4 w-4 transition-transform duration-300', !sidebarOpen && 'rotate-180')} />
-            {sidebarOpen && <span className="ml-2 text-sm">Collapse</span>}
-          </Button>
+          {sidebarOpen ? (
+            <Button
+              variant="ghost"
+              onClick={() => setLogoutDialogOpen(true)}
+              className="w-full justify-start px-3 text-red-500 hover:bg-red-500/10 hover:text-red-500"
+            >
+              <LogOut className="h-4 w-4" />
+              <span className="ml-2 text-sm">Log out</span>
+            </Button>
+          ) : (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setLogoutDialogOpen(true)}
+                  aria-label="Log out"
+                  className="w-full text-red-500 hover:bg-red-500/10 hover:text-red-500"
+                >
+                  <LogOut className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right">Log out</TooltipContent>
+            </Tooltip>
+          )}
         </div>
       </aside>
+
+      <LogoutConfirmDialog
+        open={logoutDialogOpen}
+        onOpenChange={setLogoutDialogOpen}
+        onConfirm={() => logout()}
+      />
     </TooltipProvider>
   );
 }

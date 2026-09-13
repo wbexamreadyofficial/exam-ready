@@ -3,8 +3,16 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ChevronDown, GraduationCap, ClipboardCheck, Users, ShieldAlert } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { ThemeSwitcher } from './ThemeSwitcher';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/ui/Logo';
@@ -19,6 +27,15 @@ const navItems = [
   { title: 'Blog',            href: '/contact' },
   { title: 'Contact',         href: '/contact' },
 ];
+
+/** Self-serve signup roles — matches the backend's web signup role enum.
+ *  "Admin" is deliberately not one of these (never self-serve, see the
+ *  disabled menu item below); it's still shown so visitors see it exists. */
+const SIGNUP_ROLES = [
+  { value: 'student', label: 'Student', icon: GraduationCap },
+  { value: 'examiner', label: 'Examiner', icon: ClipboardCheck },
+  { value: 'partner', label: 'Partner', icon: Users },
+] as const;
 
 export function Navbar() {
   const pathname = usePathname();
@@ -84,18 +101,43 @@ export function Navbar() {
             >
               <Link href="/login">Login</Link>
             </Button>
-            <Button
-              size="default"
-              asChild
-              style={{
-                background: 'linear-gradient(135deg, #FF8A2B 0%, #FF700B 55%, #F05F00 100%)',
-                color: 'var(--color-cta-foreground)',
-                boxShadow: '0 1px 2px rgba(0,0,0,0.05), 0 6px 16px -6px rgba(255,112,11,0.55)',
-              }}
-              className="btn-premium font-bold text-[13px] px-4 h-9 rounded-full border-none"
-            >
-              <Link href="/register">Sign Up Free</Link>
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  size="default"
+                  style={{
+                    background: 'linear-gradient(135deg, #FF8A2B 0%, #FF700B 55%, #F05F00 100%)',
+                    color: 'var(--color-cta-foreground)',
+                    boxShadow: '0 1px 2px rgba(0,0,0,0.05), 0 6px 16px -6px rgba(255,112,11,0.55)',
+                  }}
+                  className="btn-premium font-bold text-[13px] px-4 h-9 rounded-full border-none gap-1"
+                >
+                  Sign Up Free
+                  <ChevronDown className="h-3.5 w-3.5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>Sign up as</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {SIGNUP_ROLES.map((role) => {
+                  const Icon = role.icon;
+                  return (
+                    <DropdownMenuItem key={role.value} asChild className="cursor-pointer">
+                      <Link href={`/register?role=${role.value}`} className="flex items-center gap-2">
+                        <Icon className="h-4 w-4 text-ink-500 dark:text-slate-400" />
+                        {role.label}
+                      </Link>
+                    </DropdownMenuItem>
+                  );
+                })}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem disabled className="flex items-center gap-2">
+                  <ShieldAlert className="h-4 w-4" />
+                  <span className="flex-1">Admin</span>
+                  <span className="text-[10px] font-semibold uppercase tracking-wide text-ink-500 dark:text-slate-400">Invite only</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           {/* Mobile hamburger */}
@@ -143,13 +185,27 @@ export function Navbar() {
             >
               <Link href="/login" onClick={() => setMobileOpen(false)}>Log in</Link>
             </Button>
-            <Button
-              asChild
-              style={{ boxShadow: 'var(--shadow-cta)', color: 'var(--color-cta-foreground)' }}
-              className="w-full font-bold h-12 rounded-xl bg-[#FF700B] hover:bg-[#E85F00] border-none"
-            >
-              <Link href="/register" onClick={() => setMobileOpen(false)}>Sign Up Free</Link>
-            </Button>
+            <div className="space-y-1.5">
+              <p className="px-1 text-[11px] font-semibold uppercase tracking-wide text-ink-500 dark:text-slate-500">
+                Sign up as
+              </p>
+              <div className="grid grid-cols-3 gap-1.5">
+                {SIGNUP_ROLES.map((role) => {
+                  const Icon = role.icon;
+                  return (
+                    <Link
+                      key={role.value}
+                      href={`/register?role=${role.value}`}
+                      onClick={() => setMobileOpen(false)}
+                      className="flex flex-col items-center gap-1 rounded-xl border hairline dark:border-slate-700 py-3 text-ink-700 dark:text-slate-200 hover:border-blue-300 hover:text-blue-700 dark:hover:text-blue-400 transition-colors"
+                    >
+                      <Icon className="h-4 w-4" />
+                      <span className="text-[12px] font-semibold">{role.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
       )}

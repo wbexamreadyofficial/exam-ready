@@ -1,53 +1,24 @@
-import { apiClient, setAuthTokens, clearAuthTokens, getStoredRefreshToken, getAuthFlow } from './client';
+import { apiClient, setAuthTokens, clearAuthTokens, getStoredRefreshToken } from './client';
 import type { ApiResponse } from '@/types/api';
-import type { LoginResult, RegisterOtpResult, WebRegisterOtpResult, WebSignupRole } from '@/types/auth';
+import type { LoginResult, WebRegisterOtpResult, WebSignupRole } from '@/types/auth';
+
+// Note: the backend also exposes an App (phone-only, always-student) auth
+// flow at /auth/app/* — but this frontend exclusively uses the Web flow
+// below for every account (student/examiner/partner alike). The backend's
+// web flow is itself mobile-number-identified (no email involved at all),
+// and /auth/web/login matches any verified mobile number regardless of
+// whether it was originally verified via the app or web flow — so an
+// app-registered number can log in here too.
 
 export const authApi = {
   /**
-   * Step 1 of the app (phone) flow. Creates the account (or re-issues an OTP
-   * for an unverified one) and returns `isRegistered: false` with an OTP in
-   * flight, or `isRegistered: true` if this number is already a verified
-   * account — in which case the caller should fall through to `login`.
+   * Step 1 of the web flow — used to sign up as an examiner, partner, or
+   * student. Creates the account with the chosen role and sends an OTP to
+   * the mobile number; or returns `isRegistered: true` if this number is
+   * already a verified account.
    */
-  register: async (mobileNumber: string): Promise<RegisterOtpResult> => {
-    const { data } = await apiClient.post<ApiResponse<RegisterOtpResult>>('/auth/app/register', {
-      mobileNumber,
-    });
-    return data.data;
-  },
-
-  /** Step 2 — verifies the OTP and logs the (now-verified) user in. */
-  verifyOtp: async (mobileNumber: string, otp: string): Promise<LoginResult> => {
-    const { data } = await apiClient.post<ApiResponse<LoginResult>>(
-      '/auth/app/register/verify-otp',
-      { mobileNumber, otp }
-    );
-    setAuthTokens(data.data.tokens.accessToken, data.data.tokens.refreshToken, 'app');
-    return data.data;
-  },
-
-  /** Logs in an already-verified account by mobile number alone — no OTP needed. */
-  login: async (mobileNumber: string): Promise<LoginResult> => {
-    const { data } = await apiClient.post<ApiResponse<LoginResult>>('/auth/app/login', {
-      mobileNumber,
-    });
-    setAuthTokens(data.data.tokens.accessToken, data.data.tokens.refreshToken, 'app');
-    return data.data;
-  },
-
-  /**
-   * Step 1 of the web (email) flow — used to sign up as an examiner or
-   * partner (or student). Creates the account with the chosen role and
-   * mobile number, and sends an OTP to the email; or returns
-   * `isRegistered: true` if this email is already a verified account.
-   */
-  registerWeb: async (
-    email: string,
-    mobileNumber: string,
-    role: WebSignupRole
-  ): Promise<WebRegisterOtpResult> => {
+  registerWeb: async (mobileNumber: string, role: WebSignupRole): Promise<WebRegisterOtpResult> => {
     const { data } = await apiClient.post<ApiResponse<WebRegisterOtpResult>>('/auth/web/register', {
-      email,
       mobileNumber,
       role,
     });
@@ -55,19 +26,33 @@ export const authApi = {
   },
 
   /** Step 2 — verifies the web OTP and logs the (now-verified) user in. */
-  verifyWebOtp: async (email: string, otp: string): Promise<LoginResult> => {
+  verifyWebOtp: async (mobileNumber: string, otp: string): Promise<LoginResult> => {
     const { data } = await apiClient.post<ApiResponse<LoginResult>>(
       '/auth/web/register/verify-otp',
-      { email, otp }
+      { mobileNumber, otp }
     );
     setAuthTokens(data.data.tokens.accessToken, data.data.tokens.refreshToken, 'web');
     return data.data;
   },
 
-  /** Logs in an already-verified web account by email alone — no OTP needed. */
-  loginWeb: async (email: string): Promise<LoginResult> => {
+  /**
+   * Same endpoint as `verifyWebOtp`, but for the register page's flow of
+   * "verify, then finish signing in from the login page" — the tokens this
+   * call returns are deliberately discarded rather than persisted, since
+   * the register page redirects to /login for the actual sign-in step.
+   */
+  verifyWebOtpOnly: async (mobileNumber: string, otp: string): Promise<void> => {
+    await apiClient.post('/auth/web/register/verify-otp', { mobileNumber, otp });
+  },
+
+  /**
+   * Logs in an already-verified account by mobile number alone — no OTP
+   * needed. Works whether the number was verified via the web flow or the
+   * app flow.
+   */
+  loginWeb: async (mobileNumber: string): Promise<LoginResult> => {
     const { data } = await apiClient.post<ApiResponse<LoginResult>>('/auth/web/login', {
-      email,
+      mobileNumber,
     });
     setAuthTokens(data.data.tokens.accessToken, data.data.tokens.refreshToken, 'web');
     return data.data;
@@ -75,10 +60,9 @@ export const authApi = {
 
   logout: async (): Promise<void> => {
     const refreshToken = getStoredRefreshToken();
-    const flow = getAuthFlow();
     try {
       if (refreshToken) {
-        await apiClient.post(`/auth/${flow}/logout`, { refreshToken });
+        await apiClient.post('/auth/web/logout', { refreshToken });
       }
     } finally {
       clearAuthTokens();

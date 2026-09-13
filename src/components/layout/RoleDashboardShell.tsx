@@ -8,6 +8,7 @@ import { Logo } from '@/components/ui/Logo';
 import { ThemeSwitcher } from './ThemeSwitcher';
 import { useAuth } from '@/hooks/useAuth';
 import { LogoutConfirmDialog } from '@/components/auth/LogoutConfirmDialog';
+import { ProfileCompletionBanner } from '@/components/dashboard/ProfileCompletionBanner';
 
 interface RoleDashboardShellProps {
   roleLabel: string;
@@ -59,8 +60,10 @@ export function RoleDashboardShell({ roleLabel, roleBadgeColor, children }: Role
         onConfirm={() => logout()}
       />
 
-      <main className="container py-8 sm:py-10">
-        <div className="mb-8">
+      <main className="container py-8 sm:py-10 space-y-6">
+        <ProfileCompletionBanner />
+
+        <div>
           <h1 className="display-section text-[1.625rem] sm:text-[1.875rem] dark:text-white">
             Welcome{user?.fullName ? `, ${user.fullName.split(' ')[0]}` : ''}
           </h1>

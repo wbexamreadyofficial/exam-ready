@@ -53,7 +53,13 @@ export default function DashboardLayout({ children, rightSidebar }: DashboardLay
               receives wheel/touch events instead of Lenis swallowing them
               while looking for document-level scroll to drive. */}
           <main data-lenis-prevent className="flex-1 overflow-y-auto p-4 sm:p-6 dashboard-scrollbar bg-[var(--color-surface-subtle)]">
-            <div className="mx-auto w-full max-w-7xl">
+            {/* Pages with a right sidebar (e.g. the analytics dashboard) keep
+                a centered 7xl column since that sidebar already uses the
+                remaining width. Pages without one (e.g. profile) would
+                otherwise get large, wasted left/right gutters on wide
+                screens from this centering alone — so they just fill the
+                available width instead. */}
+            <div className={cn('mx-auto w-full', rightSidebar && 'max-w-7xl')}>
               {children}
             </div>
           </main>

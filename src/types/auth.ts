@@ -29,38 +29,22 @@ export interface LoginResult {
   tokens: AuthTokens;
 }
 
-/** POST /api/auth/app/register response `data` — new account, OTP issued. */
-export interface OtpRequestedResult {
-  mobileNumber: string;
-  expiresIn: number;
-  devOtp?: string;
-  isRegistered: false;
-}
-
-/** POST /api/auth/app/register response `data` — account already verified. */
-export interface AlreadyRegisteredResult {
-  mobileNumber: string;
-  isRegistered: true;
-}
-
-export type RegisterOtpResult = OtpRequestedResult | AlreadyRegisteredResult;
-
-/** Role selectable via the web (email) signup flow — "admin" is never
+/** Role selectable via the web (role-picker) signup flow — "admin" is never
  *  self-serve, it can only be assigned internally. */
 export type WebSignupRole = 'examiner' | 'partner' | 'student';
 
 /** POST /api/auth/web/register response `data` — new account, OTP issued. */
-export interface EmailOtpRequestedResult {
-  email: string;
+export interface MobileOtpRequestedResult {
+  mobileNumber: string;
   expiresIn: number;
   devOtp?: string;
   isRegistered: false;
 }
 
 /** POST /api/auth/web/register response `data` — account already verified. */
-export interface EmailAlreadyRegisteredResult {
-  email: string;
+export interface MobileAlreadyRegisteredResult {
+  mobileNumber: string;
   isRegistered: true;
 }
 
-export type WebRegisterOtpResult = EmailOtpRequestedResult | EmailAlreadyRegisteredResult;
+export type WebRegisterOtpResult = MobileOtpRequestedResult | MobileAlreadyRegisteredResult;

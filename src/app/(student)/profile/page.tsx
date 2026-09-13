@@ -251,12 +251,12 @@ export default function ProfilePage() {
         <div className="px-5 sm:px-8 pb-6">
           <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
             <div className="relative shrink-0 -mt-14 sm:-mt-16">
-              <div className="h-28 w-28 sm:h-32 sm:w-32 rounded-full ring-4 ring-[var(--color-surface)] bg-[var(--color-primary)]/10 overflow-hidden flex items-center justify-center">
+              <div className="h-28 w-28 sm:h-32 sm:w-32 rounded-full ring-4 ring-[var(--color-surface)] bg-gradient-to-br from-blue-500 to-blue-700 overflow-hidden flex items-center justify-center shadow-[0_16px_32px_-12px_rgba(37,99,235,0.55)]">
                 {profile.profilePhoto ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={profile.profilePhoto} alt={profile.fullName || 'Profile photo'} className="h-full w-full object-cover" />
                 ) : (
-                  <span className="text-3xl font-bold text-[var(--color-primary)]">{initials}</span>
+                  <span className="text-3xl font-bold text-white">{initials}</span>
                 )}
                 {isUploadingPhoto && (
                   <div className="absolute inset-0 flex items-center justify-center bg-black/40">
