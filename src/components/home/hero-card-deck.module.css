@@ -1,0 +1,291 @@
+.deck {
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+  width: 100%;
+  max-width: 560px;
+  padding: 96px 16px 165px 55px;
+  margin-inline: auto;
+}
+.rings {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  inset: -7% -17%;
+  background: repeating-radial-gradient(
+    circle at 50% 43%,
+    transparent 0 49px,
+    #c9894520 50px,
+    transparent 51px 92px
+  );
+  mask-image: radial-gradient(ellipse, #000 35%, transparent 70%);
+}
+.card {
+  background: var(--home-bg);
+  border: 1px solid var(--home-line);
+  border-radius: 15px;
+  box-shadow:
+    0 22px 50px -25px #27394b40,
+    0 3px 8px #27394b08;
+}
+/* Bottom card: always in FRONT of the main card. Decorative, so it never blocks clicks on what it overlaps. */
+.progressPosition {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  bottom: 0;
+  right: -15px;
+  width: 255px;
+  transform: rotate(11deg);
+}
+.progressCard {
+  padding: 19px 21px 15px;
+}
+.cardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--home-muted);
+  font-size: 8px;
+  font-weight: 650;
+  letter-spacing: 0.1em;
+}
+.cardTop svg {
+  color: var(--home-orange);
+}
+.progressCard h2 {
+  font-size: 22px;
+  font-weight: 650;
+  letter-spacing: -0.035em;
+  line-height: 1.3;
+  margin-top: 12px;
+}
+.progressCard h2 span {
+  color: var(--home-orange);
+}
+.chart {
+  display: flex;
+  align-items: end;
+  gap: 9px;
+  height: 59px;
+  margin-top: 15px;
+  border-bottom: 1px solid var(--home-line);
+}
+.chart i {
+  flex: 1;
+  border-radius: 3px 3px 0 0;
+  background: #b6cbd3;
+}
+.chart i:nth-last-child(-n + 3) {
+  background: #688c9e;
+}
+.chart i:last-child {
+  background: #cd8955;
+}
+.chartCaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+  margin-top: 8px;
+  color: var(--home-muted);
+  font-size: 7px;
+}
+.practicePosition {
+  position: relative;
+  z-index: 2;
+  transform: rotate(3deg);
+  backface-visibility: hidden;
+}
+/* Top card: always BEHIND the main card. */
+.goalPosition {
+  position: absolute;
+  z-index: 1;
+  left: -14px;
+  top: 0;
+  width: 224px;
+  transform: rotate(-10deg);
+}
+.goalCard {
+  padding: 17px;
+}
+.goalHeading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+.goalIcon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: #378164;
+  background: #37816414;
+  flex-shrink: 0;
+}
+.goalHeading h2 {
+  font-size: 15px;
+  letter-spacing: -0.04em;
+  font-weight: 650;
+  line-height: 1.4;
+}
+.goalSteps {
+  display: grid;
+  gap: 9px;
+  margin-top: 17px;
+  color: var(--home-muted);
+  font-size: 9px;
+}
+.goalSteps span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.goalSteps svg {
+  color: #378164;
+}
+.goalFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border-top: 1px solid var(--home-line);
+  padding-top: 12px;
+  margin-top: 13px;
+  font-size: 8px;
+  color: var(--home-orange);
+}
+.deckCaption {
+  position: absolute;
+  left: 6px;
+  bottom: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--home-muted);
+  font-size: 7px;
+  letter-spacing: 0.14em;
+}
+.motionToggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: fit-content;
+  min-height: 30px;
+  font-size: 9px;
+  letter-spacing: 0;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.motionToggle:hover {
+  color: var(--home-orange);
+}
+@media (max-width: 1100px) and (min-width: 851px) {
+  .deck {
+    padding-left: 15px;
+    padding-right: 0;
+  }
+  .progressPosition {
+    right: -16px;
+    width: 220px;
+  }
+  .goalPosition {
+    left: -10px;
+    width: 200px;
+  }
+  .deckCaption {
+    left: 0;
+    font-size: 6px;
+  }
+}
+@media (max-width: 850px) {
+  .deck {
+    max-width: 510px;
+    margin-top: 5px;
+  }
+}
+@media (max-width: 540px) {
+  .deck {
+    padding: 190px 4px 139px;
+    margin-top: 10px;
+  }
+  .progressPosition {
+    width: 205px;
+    right: 8px;
+    bottom: 0;
+    transform: rotate(8deg);
+  }
+  .progressCard {
+    padding: 15px 17px 12px;
+  }
+  .progressCard h2 {
+    font-size: 18px;
+  }
+  .chart {
+    height: 48px;
+    margin-top: 12px;
+    gap: 7px;
+  }
+  .chartCaption {
+    font-size: 6px;
+  }
+  .practicePosition {
+    transform: rotate(1.5deg);
+  }
+  .goalPosition {
+    width: 191px;
+    left: 5px;
+    top: 0;
+    transform: rotate(-7deg);
+  }
+  .goalCard {
+    padding: 14px;
+  }
+  .goalHeading {
+    margin-top: 12px;
+    gap: 8px;
+  }
+  .goalHeading h2 {
+    font-size: 13px;
+  }
+  .goalIcon {
+    width: 30px;
+    height: 30px;
+  }
+  .goalSteps {
+    font-size: 8px;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .goalFooter {
+    font-size: 7px;
+    padding-top: 10px;
+    margin-top: 10px;
+  }
+  .cardTop {
+    font-size: 7px;
+  }
+  .deckCaption {
+    left: 3px;
+    bottom: 0;
+    font-size: 6px;
+    max-width: 110px;
+    line-height: 1.8;
+  }
+}
+@media (max-width: 360px) {
+  .deckCaption {
+    bottom: -38px;
+    max-width: none;
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .motionToggle {
+    display: none;
+  }
+}
