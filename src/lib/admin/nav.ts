@@ -42,6 +42,12 @@ export const adminNavGroups: AdminNavGroup[] = [
       { labelKey: 'questions', href: '/admin/questions', icon: 'HelpCircle' },
     ],
   },
+  {
+    titleKey: 'system',
+    items: [
+      { labelKey: 'notifications', href: '/admin/notifications', icon: 'Bell' },
+    ],
+  },
 ];
 
 const ALL_HREFS = adminNavGroups.flatMap((g) => g.items.map((i) => i.href));

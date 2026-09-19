@@ -29,6 +29,9 @@ export const adminCopy = {
       uploadPdf: 'Upload Question PDF',
       uploadHistory: 'Upload History',
       uploadGuide: 'PDF Format Guide',
+
+      system: 'System',
+      notifications: 'Notifications',
     },
 
     common: {
@@ -240,6 +243,9 @@ export const adminCopy = {
       uploadPdf: 'প্রশ্নের PDF আপলোড',
       uploadHistory: 'আপলোডের ইতিহাস',
       uploadGuide: 'PDF ফরম্যাট গাইড',
+
+      system: 'সিস্টেম',
+      notifications: 'বিজ্ঞপ্তি',
     },
 
     common: {

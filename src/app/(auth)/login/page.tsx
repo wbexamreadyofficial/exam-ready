@@ -11,7 +11,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Logo } from '@/components/ui/Logo';
 import { ThemeSwitcher } from '@/components/layout/ThemeSwitcher';
 import { OtpInput } from '@/components/auth/OtpInput';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth, type TryWebLoginResult } from '@/hooks/useAuth';
 import { mobileSchema, type MobileInput } from '@/schemas/auth.schema';
 import { cn } from '@/lib/utils';
 
@@ -37,6 +37,8 @@ export default function LoginPage() {
   const [otp, setOtp] = useState('');
   const [devOtp, setDevOtp] = useState<string | undefined>();
   const [resendIn, setResendIn] = useState(0);
+  /** True when the OTP step was triggered by an admin sign-in (not registration). */
+  const [isAdminChallenge, setIsAdminChallenge] = useState(false);
 
   const {
     register,
@@ -70,6 +72,21 @@ export default function LoginPage() {
     if (error) toast.error(error);
   }, [error]);
 
+  /** Returns true when the login attempt was fully handled (signed in, or moved to the OTP step). */
+  const applyLoginOutcome = (outcome: TryWebLoginResult, mobileNumber: string): boolean => {
+    if (outcome === 'logged-in') return true;
+    if (outcome === 'no-account') return false;
+
+    // Admin account: a code was issued — continue on the OTP step.
+    setPendingMobile(mobileNumber);
+    setDevOtp(outcome.devOtp);
+    setOtp('');
+    setResendIn(RESEND_COOLDOWN_SECONDS);
+    setIsAdminChallenge(true);
+    setStep('otp');
+    return true;
+  };
+
   const onMobileSubmit = async (data: MobileInput) => {
     clearError();
     try {
@@ -78,16 +95,18 @@ export default function LoginPage() {
       // verified mobile number, so try logging straight in first; a miss
       // here is expected/silent for a brand-new number, not an error (see
       // `tryWebLogin`).
-      const loggedIn = await tryWebLogin(data.mobileNumber);
-      if (loggedIn) return;
+      const outcome = await tryWebLogin(data.mobileNumber);
+      if (applyLoginOutcome(outcome, data.mobileNumber)) return;
 
       const result = await registerWeb(data.mobileNumber, 'student');
 
       if (result.isRegistered) {
         // Became verified between the check above and now (rare race) —
         // just try logging in again.
-        const loggedInNow = await tryWebLogin(data.mobileNumber);
-        if (!loggedInNow) toast.error('Could not log you in. Please try again.');
+        const outcomeNow = await tryWebLogin(data.mobileNumber);
+        if (!applyLoginOutcome(outcomeNow, data.mobileNumber)) {
+          toast.error('Could not log you in. Please try again.');
+        }
         return;
       }
 
@@ -115,6 +134,17 @@ export default function LoginPage() {
     if (resendIn > 0) return;
     clearError();
     try {
+      if (isAdminChallenge) {
+        // Admins re-request their code through the login endpoint.
+        const outcome = await tryWebLogin(pendingMobile);
+        if (typeof outcome === 'object') {
+          setDevOtp(outcome.devOtp);
+          setOtp('');
+          setResendIn(RESEND_COOLDOWN_SECONDS);
+        }
+        return;
+      }
+
       const result = await registerWeb(pendingMobile, 'student');
       if (!result.isRegistered) {
         setDevOtp(result.devOtp);
@@ -129,6 +159,7 @@ export default function LoginPage() {
   const goBack = () => {
     clearError();
     setOtp('');
+    setIsAdminChallenge(false);
     setStep('mobile');
   };
 

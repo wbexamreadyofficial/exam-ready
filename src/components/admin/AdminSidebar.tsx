@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard, FileUp, History, BookOpen, LayoutGrid,
-  Library, FileText, ListChecks, HelpCircle,
+  Library, FileText, ListChecks, HelpCircle, Bell,
   ChevronLeft, ChevronRight, ArrowLeft,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -13,10 +13,11 @@ import { LogoIcon } from '@/components/ui/Logo';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { adminNavGroups, activeNavHref } from '@/lib/admin/nav';
 import { useAdminT } from '@/lib/admin/i18n';
+import { useUnreadCount } from '@/hooks/useNotifications';
 
 const iconMap: Record<string, React.ElementType> = {
   LayoutDashboard, FileUp, History, BookOpen, LayoutGrid,
-  Library, FileText, ListChecks, HelpCircle,
+  Library, FileText, ListChecks, HelpCircle, Bell,
 };
 
 interface AdminSidebarProps {
@@ -31,6 +32,7 @@ export function AdminSidebar({ isCollapsed, onToggle, onClose }: AdminSidebarPro
   const pathname = usePathname();
   const { t } = useAdminT();
   const active = activeNavHref(pathname);
+  const { data: unreadCount = 0 } = useUnreadCount();
 
   return (
     <div
@@ -111,6 +113,14 @@ export function AdminSidebar({ isCollapsed, onToggle, onClose }: AdminSidebarPro
                     >
                       <Icon size={18} className="shrink-0" />
                       {!isCollapsed && <span className="truncate">{t.nav[item.labelKey]}</span>}
+                      {item.href === '/admin/notifications' && unreadCount > 0 && (
+                        <span className={cn(
+                          'ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-[var(--color-cta)] px-1.5 text-[10px] font-bold leading-none text-white',
+                          isCollapsed && 'absolute right-1 top-1 h-2.5 min-w-0 w-2.5 px-0 text-[0px]'
+                        )}>
+                          {unreadCount > 99 ? '99+' : unreadCount}
+                        </span>
+                      )}
                       {isActive && isCollapsed && (
                         <span className="absolute left-0 h-5 w-1 rounded-r-md bg-[var(--color-primary)]" />
                       )}

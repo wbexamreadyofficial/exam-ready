@@ -72,3 +72,13 @@ export const EXAM_CATEGORIES = [
 ] as const;
 
 export const WB_EXAM_CATEGORIES = EXAM_CATEGORIES;
+
+/** Soft, wide, blue-tinted layered shadow so cards read as floating. */
+export const ELEVATED_CARD =
+  'shadow-[0_1px_2px_rgba(30,64,110,0.05),0_6px_16px_-2px_rgba(30,64,110,0.08),0_16px_40px_-8px_rgba(30,64,110,0.16)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.4),0_10px_24px_-4px_rgba(0,0,0,0.6),0_20px_40px_-8px_rgba(0,0,0,0.5)]';
+
+/** Same soft blue-tinted shadow as ELEVATED_CARD, cast toward the content from a fixed edge. */
+export const ELEVATED_EDGE_RIGHT =
+  'shadow-[6px_0_24px_-6px_rgba(30,64,110,0.16),2px_0_6px_rgba(30,64,110,0.05)] dark:shadow-[8px_0_24px_-6px_rgba(0,0,0,0.6)]';
+export const ELEVATED_EDGE_BOTTOM =
+  'shadow-[0_6px_24px_-6px_rgba(30,64,110,0.16),0_2px_6px_rgba(30,64,110,0.05)] dark:shadow-[0_8px_24px_-6px_rgba(0,0,0,0.6)]';

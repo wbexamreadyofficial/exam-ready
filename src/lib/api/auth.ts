@@ -1,6 +1,6 @@
 import { apiClient, setAuthTokens, clearAuthTokens, getStoredRefreshToken } from './client';
 import type { ApiResponse } from '@/types/api';
-import type { LoginResult, WebRegisterOtpResult, WebSignupRole } from '@/types/auth';
+import type { LoginResult, WebLoginResult, WebRegisterOtpResult, WebSignupRole } from '@/types/auth';
 
 // Note: the backend also exposes an App (phone-only, always-student) auth
 // flow at /auth/app/* — but this frontend exclusively uses the Web flow
@@ -50,10 +50,14 @@ export const authApi = {
    * needed. Works whether the number was verified via the web flow or the
    * app flow.
    */
-  loginWeb: async (mobileNumber: string): Promise<LoginResult> => {
-    const { data } = await apiClient.post<ApiResponse<LoginResult>>('/auth/web/login', {
+  loginWeb: async (mobileNumber: string): Promise<WebLoginResult> => {
+    const { data } = await apiClient.post<ApiResponse<WebLoginResult>>('/auth/web/login', {
       mobileNumber,
     });
+
+    // Admin accounts get an OTP challenge instead of tokens — finish via verifyWebOtp.
+    if ('otpRequired' in data.data) return data.data;
+
     setAuthTokens(data.data.tokens.accessToken, data.data.tokens.refreshToken, 'web');
     return data.data;
   },

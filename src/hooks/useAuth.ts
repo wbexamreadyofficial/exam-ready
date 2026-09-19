@@ -6,6 +6,7 @@ import { useAuthStore } from '@/store/authStore';
 import { authApi } from '@/lib/api/auth';
 import { clearAuthTokens } from '@/lib/api/client';
 import { getErrorMessage } from '@/lib/api/errors';
+import { AxiosError } from 'axios';
 import { getRoleHome } from '@/lib/auth/roleHome';
 import { setSessionRoleCookie, clearSessionRoleCookie } from '@/lib/auth/sessionCookie';
 import type { AuthUser, WebRegisterOtpResult, WebSignupRole } from '@/types/auth';
@@ -19,6 +20,11 @@ function getPostLoginDestination(user: AuthUser): string {
   }
   return getRoleHome(user.role);
 }
+
+export type TryWebLoginResult =
+  | 'logged-in'
+  | 'no-account'
+  | { otpRequired: true; devOtp?: string };
 
 export function useAuth() {
   const router = useRouter();
@@ -72,10 +78,13 @@ export function useAuth() {
       setLoading(true);
       setError(null);
       try {
-        const { user } = await authApi.loginWeb(mobileNumber);
-        setUser(user);
-        setSessionRoleCookie(user.role);
-        router.push(getPostLoginDestination(user));
+        const result = await authApi.loginWeb(mobileNumber);
+        if ('otpRequired' in result) {
+          throw new Error('A verification code is required for this account.');
+        }
+        setUser(result.user);
+        setSessionRoleCookie(result.user.role);
+        router.push(getPostLoginDestination(result.user));
       } catch (err) {
         const message = getErrorMessage(err, 'Could not log you in. Please try again.');
         setError(message);
@@ -88,29 +97,44 @@ export function useAuth() {
   );
 
   /**
-   * Silent pre-check used by the login page: /auth/web/login matches any
-   * verified mobile number regardless of whether it was originally verified
-   * via the app or the web flow, so this can just be tried directly. A 404
-   * here just means "brand-new number" — not a real error, so it's
-   * swallowed rather than surfaced, and the caller falls through to the
-   * registration/OTP flow instead.
+   * First step of the login page: /auth/web/login matches any verified mobile
+   * number, so try it directly. Outcomes:
+   *  - 'logged-in'     — signed in and navigating away.
+   *  - { otpRequired } — admin account: a code was issued, the caller must show
+   *                      the OTP step and finish with `verifyWebOtp`.
+   *  - 'no-account'    — 404, i.e. a brand-new number; the caller falls through
+   *                      to registration. Not an error.
+   * Any other failure (deactivated account, rate limit, network…) is surfaced
+   * as a real error instead of being mistaken for a new number.
    */
   const tryWebLogin = useCallback(
-    async (mobileNumber: string): Promise<boolean> => {
+    async (mobileNumber: string): Promise<TryWebLoginResult> => {
       setLoading(true);
+      setError(null);
       try {
-        const { user } = await authApi.loginWeb(mobileNumber);
-        setUser(user);
-        setSessionRoleCookie(user.role);
-        router.push(getPostLoginDestination(user));
-        return true;
-      } catch {
-        return false;
+        const result = await authApi.loginWeb(mobileNumber);
+
+        if ('otpRequired' in result) {
+          return { otpRequired: true, devOtp: result.devOtp };
+        }
+
+        setUser(result.user);
+        setSessionRoleCookie(result.user.role);
+        router.push(getPostLoginDestination(result.user));
+        return 'logged-in';
+      } catch (err) {
+        if (err instanceof AxiosError && err.response?.status === 404) {
+          return 'no-account';
+        }
+
+        const message = getErrorMessage(err, 'Could not log you in. Please try again.');
+        setError(message);
+        throw new Error(message);
       } finally {
         setLoading(false);
       }
     },
-    [setLoading, setUser, router]
+    [setLoading, setError, setUser, router]
   );
 
   /**

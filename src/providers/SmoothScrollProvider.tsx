@@ -14,6 +14,12 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
       duration: 1.1,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
+      // Popovers with their own scroll area (Select/menu/dialog content, autocomplete lists)
+      // must scroll natively; otherwise Lenis routes the wheel to the page behind them.
+      prevent: (node) =>
+        !!node.closest(
+          '[role="listbox"], [role="menu"], [role="dialog"], [data-radix-popper-content-wrapper]'
+        ),
     });
 
     let rafId: number;
