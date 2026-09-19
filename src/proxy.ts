@@ -7,7 +7,7 @@ import type { UserRole } from '@/types/auth';
  * Role-gated route prefixes. Keyed by the prefix, valued by the one role
  * allowed in it — kept separate from `ROLE_HOME` (which is "where does this
  * role land after login") since in principle more than one prefix could
- * belong to a role later.
+ * belong to a role later
  */
 const ROLE_PREFIXES: Record<string, UserRole> = {
   '/dashboard': 'student',
