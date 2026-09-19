@@ -1,0 +1,37 @@
+<svg viewBox="-15 -29 170 170" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="capTopGrad" x1="10" y1="10" x2="110" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#3B82F6" />
+      <stop offset="100%" stop-color="#1D4ED8" />
+    </linearGradient>
+    <linearGradient id="capBaseGrad" x1="30" y1="40" x2="90" y2="80" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1D4ED8" />
+      <stop offset="100%" stop-color="#1E3A8A" />
+    </linearGradient>
+    <linearGradient id="bookGrad" x1="0" y1="40" x2="140" y2="110" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FB923C" />
+      <stop offset="100%" stop-color="#EA580C" />
+    </linearGradient>
+    <linearGradient id="tasselGrad" x1="60" y1="30" x2="105" y2="90" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FB923C" />
+      <stop offset="100%" stop-color="#EA580C" />
+    </linearGradient>
+  </defs>
+
+  <!-- White tile so the mark stays readable on dark browser tabs -->
+  <rect x="-15" y="-29" width="170" height="170" rx="38" fill="#FFFFFF" />
+
+  <!-- Open book -->
+  <g stroke="url(#bookGrad)" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M 70 102 C 42 86 18 96 6 102 V 64 C 18 58 42 48 70 64 C 98 48 122 58 134 64 V 102 C 122 96 98 86 70 102 Z" stroke-width="6" fill="#FFF7ED" />
+    <path d="M 70 95 C 44 81 22 89 12 94 V 68 C 22 63 44 55 70 68 C 96 55 118 63 128 68 V 94 C 118 89 96 81 70 95 Z" stroke-width="4" />
+    <line x1="70" y1="64" x2="70" y2="104" stroke-width="5" />
+  </g>
+
+  <!-- Graduation cap -->
+  <path d="M 36 46 V 64 C 36 74 104 74 104 64 V 46 Z" fill="url(#capBaseGrad)" />
+  <path d="M 70 8 L 132 34 L 70 58 L 8 34 Z" fill="url(#capTopGrad)" stroke="#1D4ED8" stroke-width="2" />
+  <circle cx="70" cy="33" r="4.5" fill="#F97316" stroke="#EA580C" stroke-width="1.5" />
+  <path d="M 70 33 Q 92 36 102 54 L 104 84" fill="none" stroke="url(#tasselGrad)" stroke-width="5" stroke-linecap="round" />
+  <path d="M 101 77 L 97 96 M 104 77 L 104 98 M 107 77 L 111 96" stroke="url(#tasselGrad)" stroke-width="3.5" stroke-linecap="round" />
+</svg>
