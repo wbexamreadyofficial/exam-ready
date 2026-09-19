@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { PageHeader } from '@/components/layout/PageHeader';
 
 const MOCK_ALL_RESULTS = [
   { id: 'r1', candidate: 'Sourav Ganguly', exam: 'WBCS Preliminary 2026', score: 148, total: 200, pct: 74.0, date: '2026-08-10' },
@@ -16,10 +17,7 @@ const MOCK_ALL_RESULTS = [
 export default function ResultsAdminPage() {
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-black">Exam Submissions & Results</h1>
-        <p className="text-sm text-[var(--color-muted-foreground)]">View candidate attempt logs, scores, and performance distribution</p>
-      </div>
+      <PageHeader title="Exam Submissions & Results" description="View candidate attempt logs, scores, and performance distribution" />
 
       <Card>
         <CardContent className="p-6">

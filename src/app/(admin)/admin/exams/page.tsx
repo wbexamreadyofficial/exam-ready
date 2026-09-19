@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
+import { PageHeader } from '@/components/layout/PageHeader';
 
 const MOCK_EXAMS_ADMIN = [
   { id: 'ex1', title: 'WBCS Preliminary 2026 Full Mock Test', category: 'WBCS', questions: 200, duration: 150, status: 'PUBLISHED', isPaid: false, attempts: 12543 },
@@ -27,15 +28,15 @@ export default function ExamsAdminPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-black">Exam Management</h1>
-          <p className="text-sm text-[var(--color-muted-foreground)]">Create, configure, and publish competitive mock tests</p>
-        </div>
-        <Button className="font-bold gap-2">
+      <PageHeader
+        title="Exam Management"
+        description="Create, configure, and publish competitive mock tests"
+        actions={
+          <Button className="font-bold gap-2">
           <Plus className="h-4 w-4" /> Create New Exam
         </Button>
-      </div>
+        }
+      />
 
       <Card>
         <CardContent className="p-6">

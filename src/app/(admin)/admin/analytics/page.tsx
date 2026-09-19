@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, PieChart, Pie, Cell } from 'recharts';
+import { PageHeader } from '@/components/layout/PageHeader';
 
 const mockCategoryData = [
   { name: 'WBCS', count: 4200 },
@@ -16,10 +17,7 @@ const COLORS = ['hsl(43,96%,46%)', 'hsl(142,71%,45%)', 'hsl(217,91%,60%)', 'hsl(
 export default function AnalyticsAdminPage() {
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-black">Platform Analytics</h1>
-        <p className="text-sm text-[var(--color-muted-foreground)]">Category engagement, exam completion rates, and demographic metrics</p>
-      </div>
+      <PageHeader title="Platform Analytics" description="Category engagement, exam completion rates, and demographic metrics" />
 
       <div className="grid lg:grid-cols-2 gap-6">
         <Card>

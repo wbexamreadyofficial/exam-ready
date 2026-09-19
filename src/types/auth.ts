@@ -48,3 +48,13 @@ export interface MobileAlreadyRegisteredResult {
 }
 
 export type WebRegisterOtpResult = MobileOtpRequestedResult | MobileAlreadyRegisteredResult;
+
+/** POST /api/auth/web/login for an admin account: no tokens yet, an OTP must be verified first. */
+export interface WebLoginOtpRequiredResult {
+  otpRequired: true;
+  mobileNumber: string;
+  expiresIn: number;
+  devOtp?: string;
+}
+
+export type WebLoginResult = LoginResult | WebLoginOtpRequiredResult;

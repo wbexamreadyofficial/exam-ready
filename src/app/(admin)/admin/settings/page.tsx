@@ -6,14 +6,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { PageHeader } from '@/components/layout/PageHeader';
 
 export default function SettingsAdminPage() {
   return (
     <div className="space-y-6 max-w-4xl">
-      <div>
-        <h1 className="text-2xl font-black">System Settings</h1>
-        <p className="text-sm text-[var(--color-muted-foreground)]">Global configuration, backend API integration & feature flags</p>
-      </div>
+      <PageHeader title="System Settings" description="Global configuration, backend API integration & feature flags" />
 
       <Card>
         <CardHeader>

@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { PageHeader } from '@/components/layout/PageHeader';
 
 const MOCK_QUESTIONS = [
   { id: 'q1', text: 'Which committee recommended the inclusion of Fundamental Duties?', subject: 'Polity', difficulty: 'MEDIUM', marks: 1 },
@@ -31,15 +32,15 @@ export default function QuestionsAdminPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-black">Question Bank & AI/OCR Import</h1>
-          <p className="text-sm text-[var(--color-muted-foreground)]">Manage MCQs, bulk import, and extract questions from PDFs via AI/OCR</p>
-        </div>
-        <Button className="font-bold gap-2">
+      <PageHeader
+        title="Question Bank & AI/OCR Import"
+        description="Manage MCQs, bulk import, and extract questions from PDFs via AI/OCR"
+        actions={
+          <Button className="font-bold gap-2">
           <Plus className="h-4 w-4" /> Add Single MCQ
         </Button>
-      </div>
+        }
+      />
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="mb-6">

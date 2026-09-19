@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
+import { PageHeader } from '@/components/layout/PageHeader';
 
 const MOCK_FILES = [
   { id: 'f1', name: 'wbcs_2025_prelims_question_paper.pdf', type: 'PDF', category: 'media/pdfs/', size: '4.2 MB', uploadedAt: '2026-08-01' },
@@ -15,15 +16,15 @@ const MOCK_FILES = [
 export default function ContentAdminPage() {
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-black">Media & Content Repository (S3)</h1>
-          <p className="text-sm text-[var(--color-muted-foreground)]">Manage uploaded study materials, question diagrams, and video lectures stored securely in Amazon S3</p>
-        </div>
-        <Button className="font-bold gap-2">
+      <PageHeader
+        title="Media & Content Repository (S3)"
+        description="Manage uploaded study materials, question diagrams, and video lectures stored securely in Amazon S3"
+        actions={
+          <Button className="font-bold gap-2">
           <Upload className="h-4 w-4" /> Upload New File
         </Button>
-      </div>
+        }
+      />
 
       <Card>
         <CardContent className="p-6">

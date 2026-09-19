@@ -1,12 +1,7 @@
-const getEnv = (key: string, fallback?: string): string => {
-  const value = process.env[key] ?? fallback;
-  if (value === undefined) {
-    throw new Error(`Missing required environment variable: ${key}`);
-  }
-  return value;
-};
-
+// NEXT_PUBLIC_* values are only inlined into the browser bundle when accessed
+// as a literal `process.env.NEXT_PUBLIC_X` — dynamic `process.env[key]` reads
+// are always undefined client-side, so each variable is read explicitly.
 export const env = {
-  appName: getEnv('NEXT_PUBLIC_APP_NAME', 'Exam Ready'),
-  apiUrl: getEnv('NEXT_PUBLIC_API_URL', 'https://exam-ready-node.vercel.app/api'),
+  appName: process.env.NEXT_PUBLIC_APP_NAME ?? 'Exam Ready',
+  apiUrl: (process.env.NEXT_PUBLIC_API_URL ?? 'https://exam-ready-node.vercel.app/api').trim(),
 } as const;

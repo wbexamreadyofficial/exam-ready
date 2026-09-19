@@ -5,6 +5,7 @@ import { Plus, BookOpen, Trash2, Edit } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
+import { PageHeader } from '@/components/layout/PageHeader';
 
 const MOCK_SUBJECTS = [
   { id: 's1', name: 'Indian History & National Movement', questionCount: 2450, examCount: 45 },
@@ -20,15 +21,15 @@ export default function SubjectsAdminPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-black">Subject Modules</h1>
-          <p className="text-sm text-[var(--color-muted-foreground)]">Organize question bank & syllabus structure into subjects and topics</p>
-        </div>
-        <Button className="font-bold gap-2">
+      <PageHeader
+        title="Subject Modules"
+        description="Organize question bank & syllabus structure into subjects and topics"
+        actions={
+          <Button className="font-bold gap-2">
           <Plus className="h-4 w-4" /> Add Subject
         </Button>
-      </div>
+        }
+      />
 
       <Card>
         <CardContent className="p-6">

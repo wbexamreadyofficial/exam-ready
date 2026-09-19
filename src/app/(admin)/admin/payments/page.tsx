@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { PageHeader } from '@/components/layout/PageHeader';
 
 const MOCK_PAYMENTS = [
   { id: 'pay_101', candidate: 'Sourav Ganguly', plan: 'WB Exam Pass (6M)', amount: 499, status: 'SUCCESS', method: 'UPI', date: '2026-08-10' },
@@ -17,15 +18,15 @@ const MOCK_PAYMENTS = [
 export default function PaymentsAdminPage() {
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-black">Transactions & Payments</h1>
-          <p className="text-sm text-[var(--color-muted-foreground)]">Track student subscription revenue, payment history & invoices</p>
-        </div>
-        <Button variant="outline" className="gap-2">
+      <PageHeader
+        title="Transactions & Payments"
+        description="Track student subscription revenue, payment history & invoices"
+        actions={
+          <Button variant="outline" className="gap-2">
           <Download className="h-4 w-4" /> Export CSV
         </Button>
-      </div>
+        }
+      />
 
       <Card>
         <CardContent className="p-6">

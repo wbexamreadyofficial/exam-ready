@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
-import { Bell, LogOut, User } from 'lucide-react';
+import { Bell, LogOut, Menu, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu,DropdownMenuContent,DropdownMenuItem,DropdownMenuLabel,DropdownMenuSeparator,DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -13,11 +13,13 @@ import { useAuthStore } from '@/store/authStore';
 import { useUIStore } from '@/store/uiStore';
 import { generateInitials } from '@/lib/utils';
 import { LogoutConfirmDialog } from '@/components/auth/LogoutConfirmDialog';
+import { cn } from '@/lib/utils';
+import { ELEVATED_EDGE_BOTTOM } from '@/lib/constants';
 
 export function AdminTopbar() {
   const { logout } = useAuth();
   const user = useAuthStore((s) => s.user);
-  const { sidebarOpen } = useUIStore();
+  const { sidebarOpen, setMobileSidebarOpen } = useUIStore();
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 
   // Shares the ['profile'] cache with the profile page — AuthUser (from the
@@ -30,7 +32,8 @@ export function AdminTopbar() {
     staleTime: 60_000,
   });
   return (
-    <header className="fixed top-0 right-0 z-20 h-16 border-b border-[var(--color-border)] bg-[var(--color-background)]/95 backdrop-blur flex items-center px-4 gap-4 transition-all duration-300" style={{ left: sidebarOpen ? '15rem' : '4rem' }}>
+    <header className={cn('fixed top-0 right-0 left-0 z-20 h-16 border-b border-[var(--color-border)] bg-[var(--color-background)]/95 backdrop-blur flex items-center px-4 gap-4 transition-all duration-300', sidebarOpen ? 'lg:left-60' : 'lg:left-16', ELEVATED_EDGE_BOTTOM)}>
+      <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Open menu" onClick={() => setMobileSidebarOpen(true)}><Menu className="h-5 w-5" /></Button>
       <div className="flex-1" />
       <ThemeSwitcher />
       <Button variant="ghost" size="icon" aria-label="Notifications"><Bell className="h-4 w-4" /></Button>
