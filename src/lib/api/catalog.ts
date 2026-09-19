@@ -224,6 +224,44 @@ export interface QuestionEdit {
   rejectionReason?: string;
 }
 
+/** What the approval dialog shows about a question set before anything is changed. */
+export interface QuestionSetApprovalInfo {
+  id: string;
+  title: { en: string; bn?: string };
+  description: string | null;
+  status: SetStatus;
+  category: string | null;
+  exam: string | null;
+  source: 'PDF_UPLOAD' | 'MANUAL' | 'SYSTEM_GENERATED';
+  authorName: string | null;
+  addedBy: string | null;
+  addedAt: string;
+  publishedAt: string | null;
+  upload: {
+    fileName: string | null;
+    uploaderName: string | null;
+    uploadedBy: string | null;
+    uploadedAt: string | null;
+    committedAt: string | null;
+  } | null;
+  questions: {
+    total: number;
+    approved: number;
+    pending: number;
+    rejected: number;
+    /** Cannot be approved yet — missing an answer or any text. */
+    blocked: number;
+    /** How many "approve all" would actually change. */
+    approvable: number;
+  };
+}
+
+export interface ApproveSetResult {
+  approved: number;
+  skipped: number;
+  details: { questionNumber: number | null; reason: string }[];
+}
+
 export const catalogApi = {
   categories: (params?: CatalogListParams) => list<CategoryRow>('/categories', params),
   subjects: (params?: CatalogListParams) => list<SubjectRow>('/subjects', params),
@@ -266,5 +304,20 @@ export const catalogApi = {
   },
   updateQuestion: async (id: string, payload: QuestionEdit) => {
     await apiClient.patch(`${BASE}/questions/${id}`, payload);
+  },
+
+  questionSetApprovalInfo: async (setId: string): Promise<QuestionSetApprovalInfo> => {
+    const { data } = await apiClient.get<ApiResponse<{ info: QuestionSetApprovalInfo }>>(
+      `${BASE}/question-sets/${setId}/approval-info`
+    );
+    return data.data.info;
+  },
+
+  /** Approves every question in the set that is ready; the rest are reported back. */
+  approveQuestionSet: async (setId: string): Promise<ApproveSetResult> => {
+    const { data } = await apiClient.post<ApiResponse<ApproveSetResult>>(
+      `${BASE}/question-sets/${setId}/approve-questions`
+    );
+    return data.data;
   },
 };

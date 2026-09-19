@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronRight, Eye, HelpCircle, ListChecks, Pencil } from 'lucide-react';
+import { CheckCircle2, ChevronRight, Eye, HelpCircle, ListChecks, Pencil } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -187,11 +187,22 @@ interface QuestionsTableProps {
   /** Show the "Belongs to" column (Category › Exam › Set). */
   showParents?: boolean;
   showSubject?: boolean;
+  /** Rows before this page, so the serial number keeps counting across pages. */
+  startIndex?: number;
   onView?: (question: QuestionRow) => void;
   onEdit?: (question: QuestionRow) => void;
+  onApprove?: (question: QuestionRow) => void;
 }
 
-export function QuestionsTable({ items, showParents = true, showSubject = true, onView, onEdit }: QuestionsTableProps) {
+export function QuestionsTable({
+  items,
+  showParents = true,
+  showSubject = true,
+  startIndex = 0,
+  onView,
+  onEdit,
+  onApprove,
+}: QuestionsTableProps) {
   return (
     <Table>
       <TableHeader>
@@ -205,9 +216,11 @@ export function QuestionsTable({ items, showParents = true, showSubject = true, 
         </TableRow>
       </TableHeader>
       <TableBody>
-        {items.map((question) => (
+        {items.map((question, index) => (
           <TableRow key={question._id}>
-            <TableCell className="text-xs text-[var(--color-muted-foreground)]">{question.questionNumber ?? '—'}</TableCell>
+            <TableCell className="text-sm font-medium text-[var(--color-muted-foreground)]">
+              {startIndex + index + 1}
+            </TableCell>
             <TableCell className="max-w-md">
               <p className="line-clamp-2 text-sm">{question.questionText.en || question.questionText.bn || '(no text)'}</p>
               {question.questionText.en && question.questionText.bn && (
@@ -231,7 +244,17 @@ export function QuestionsTable({ items, showParents = true, showSubject = true, 
               </div>
             </TableCell>
             <TableCell>
-              <div className="flex justify-end gap-1.5">
+              <div className="flex flex-wrap justify-end gap-1.5">
+                {onApprove && question.status !== 'approved' && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 gap-1.5 border-green-600/40 text-green-700 hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-900/20"
+                    onClick={() => onApprove(question)}
+                  >
+                    <CheckCircle2 className="h-3.5 w-3.5" /> Approve
+                  </Button>
+                )}
                 {onView && (
                   <Button variant="outline" size="sm" className="h-8 gap-1.5" onClick={() => onView(question)}>
                     <Eye className="h-3.5 w-3.5" /> View

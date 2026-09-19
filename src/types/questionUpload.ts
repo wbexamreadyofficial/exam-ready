@@ -149,6 +149,9 @@ export interface QuestionUpload {
   setName?: string;
   setNameConfirmed: boolean;
 
+  /** Step 8 — the marking scheme the operator accepted. */
+  pattern?: UploadPattern;
+
   // ── IDs created at commit time ──────────────────────────────────────────────
 
   /** categories._id this upload resolved to. */
@@ -173,11 +176,51 @@ export interface NameMatch {
   exact: boolean;
 }
 
+/** The marking scheme stored on an upload once step 8 is answered. */
+export interface UploadPattern {
+  durationMinutes?: number;
+  marksPerQuestion?: number;
+  negativeMarksPerQuestion?: number;
+  totalMarks?: number;
+  passingMarks?: number | null;
+  confirmed?: boolean;
+}
+
+/**
+ * What step 8 should show. `requiredQuestions` is derived server-side as
+ * `totalMarks / marksPerQuestion` — the number the set must reach to publish.
+ */
+export interface PatternDraft extends Required<Omit<UploadPattern, 'passingMarks'>> {
+  passingMarks: number | null;
+  requiredQuestions: number;
+  includedQuestions: number;
+}
+
+export interface PatternInput {
+  durationMinutes: number;
+  marksPerQuestion: number;
+  negativeMarksPerQuestion: number;
+  totalMarks: number;
+  passingMarks?: number;
+}
+
+export interface NewQuestionInput {
+  text: string;
+  textBn?: string;
+  options: ParsedOption[];
+  answerKey: string;
+  subject?: string;
+  difficulty?: 'EASY' | 'MEDIUM' | 'HARD';
+  explanation?: string;
+  explanationBn?: string;
+}
+
 export interface StepOptions {
   upload: QuestionUpload;
   categoryMatches: NameMatch[];
   examMatches: NameMatch[];
   subjectMatches: { parsedName: string; matches: NameMatch[] }[];
+  pattern: PatternDraft;
 }
 
 export interface NameCheckResult {

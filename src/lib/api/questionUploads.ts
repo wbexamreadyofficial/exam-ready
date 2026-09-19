@@ -5,6 +5,8 @@ import type {
   ApiFailure,
   CommitPayload,
   NameCheckResult,
+  NewQuestionInput,
+  PatternInput,
   QuestionEditInput,
   QuestionUpload,
   ResolveInput,
@@ -148,6 +150,24 @@ export const questionUploadsApi = {
     const { data } = await apiClient.post<ApiResponse<{ upload: QuestionUpload }>>(
       `/question-uploads/${uploadId}/name`,
       { name, createdBy }
+    );
+    return data.data.upload;
+  },
+
+  /** Step 8 — accept the marking scheme; this fixes how many questions are needed. */
+  confirmPattern: async (uploadId: string, input: PatternInput): Promise<QuestionUpload> => {
+    const { data } = await apiClient.post<ApiResponse<{ upload: QuestionUpload }>>(
+      `/question-uploads/${uploadId}/pattern`,
+      input
+    );
+    return data.data.upload;
+  },
+
+  /** Step 9 — write a question the file did not contain. */
+  addQuestion: async (uploadId: string, input: NewQuestionInput): Promise<QuestionUpload> => {
+    const { data } = await apiClient.post<ApiResponse<{ upload: QuestionUpload }>>(
+      `/question-uploads/${uploadId}/questions`,
+      input
     );
     return data.data.upload;
   },

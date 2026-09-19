@@ -15,6 +15,7 @@ import {
   type View,
 } from '@/lib/api/catalog';
 import { cn } from '@/lib/utils';
+import { ApproveDialog } from './ApproveDialog';
 import { QuestionEditDialog } from './EditDialogs';
 import { QuestionDetailDialog } from './QuestionDetailDialog';
 import { ExamsTable, QuestionSetsTable, QuestionsTable } from './tables';
@@ -238,6 +239,7 @@ function ViewPanel({ scope, id, view, preset, onJump, onEditQuestion }: ViewPane
     subject: ALL,
   });
   const [viewingQuestion, setViewingQuestion] = useState<string | null>(null);
+  const [approvingQuestion, setApprovingQuestion] = useState<QuestionRow | null>(null);
 
   const { filters } = state;
   // Dropdowns only show what makes sense here: an exam's own dialog needs no "pick an exam".
@@ -364,11 +366,21 @@ function ViewPanel({ scope, id, view, preset, onJump, onEditQuestion }: ViewPane
               items={items as QuestionRow[]}
               showParents={scope !== 'question-sets'}
               showSubject={scope !== 'subjects'}
+              startIndex={((query.data?.pagination.page ?? 1) - 1) * state.pageSize}
               onView={(question) => setViewingQuestion(question._id)}
+              onApprove={setApprovingQuestion}
             />
           )
         }
       </ListPanel>
+
+      {approvingQuestion && (
+        <ApproveDialog
+          key={approvingQuestion._id}
+          question={approvingQuestion}
+          onClose={() => setApprovingQuestion(null)}
+        />
+      )}
 
       <QuestionDetailDialog
         questionId={viewingQuestion}

@@ -12,12 +12,14 @@ import { QuestionDetailDialog } from '@/components/admin/catalog/QuestionDetailD
 import { QuestionsTable } from '@/components/admin/catalog/tables';
 import { FilterBar, FilterSelect, ListPanel, QUESTION_STATUS_OPTIONS, useOptions } from '@/components/admin/catalog/ui';
 import { ALL, useListState } from '@/components/admin/catalog/useListState';
-import { catalogApi } from '@/lib/api/catalog';
+import { ApproveDialog } from '@/components/admin/catalog/ApproveDialog';
+import { catalogApi, type QuestionRow } from '@/lib/api/catalog';
 import { ELEVATED_CARD } from '@/lib/constants';
 
 export default function QuestionsAdminPage() {
   const [viewing, setViewing] = useState<string | null>(null);
   const [editing, setEditing] = useState<string | null>(null);
+  const [approving, setApproving] = useState<QuestionRow | null>(null);
 
   const state = useListState({ category: ALL, exam: ALL, questionSet: ALL, subject: ALL, status: ALL });
   const { filters } = state;
@@ -98,7 +100,15 @@ export default function QuestionsAdminPage() {
         columns={['No.', 'Question', 'Belongs to', 'Subject', 'Status', 'Actions']}
         empty={{ icon: HelpCircle, title: 'No questions yet', description: 'Upload a question paper to fill the question bank.' }}
       >
-        {(questions) => <QuestionsTable items={questions} onView={(question) => setViewing(question._id)} onEdit={(question) => setEditing(question._id)} />}
+        {(questions) => (
+          <QuestionsTable
+            items={questions}
+            startIndex={((query.data?.pagination.page ?? 1) - 1) * state.pageSize}
+            onView={(question) => setViewing(question._id)}
+            onEdit={(question) => setEditing(question._id)}
+            onApprove={setApproving}
+          />
+        )}
       </ListPanel>
 
       <QuestionDetailDialog
@@ -110,6 +120,7 @@ export default function QuestionsAdminPage() {
         }}
       />
       {editing && <QuestionEditDialog questionId={editing} onClose={() => setEditing(null)} />}
+      {approving && <ApproveDialog key={approving._id} question={approving} onClose={() => setApproving(null)} />}
     </div>
   );
 }
