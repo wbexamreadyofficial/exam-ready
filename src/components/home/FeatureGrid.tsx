@@ -49,7 +49,7 @@ export function FeatureGrid({ children }: { children: ReactNode }) {
           }
           ScrollTrigger.create({
             trigger: target,
-            start: 'top 86%',
+            start: 'top 88%',
             once: true,
             onEnter: () => timeline.play(),
           });
@@ -71,22 +71,20 @@ export function FeatureGrid({ children }: { children: ReactNode }) {
             .from(
               lead,
               {
-                y: 80,
+                y: 48,
                 opacity: 0,
-                rotationX: -10,
-                scale: 0.96,
-                transformPerspective: 1300,
-                transformOrigin: '50% 100%',
-                duration: 1.15,
+                duration: 1.2,
+                ease: 'power2.out',
+                force3D: true,
                 ...cleared,
               },
               0
             )
-            .from(q('[data-lead-item]'), { y: 26, opacity: 0, stagger: 0.09, duration: 0.8, clearProps: 'transform,opacity' }, 0.3)
+            .from(q('[data-lead-item]'), { y: 18, opacity: 0, stagger: 0.08, duration: 0.9, ease: 'power2.out', clearProps: 'transform,opacity' }, 0.25)
             .from(
               q('[data-bar]'),
-              { scaleY: 0, transformOrigin: '50% 100%', stagger: 0.08, duration: 1, clearProps: 'transform,transformOrigin' },
-              0.85
+              { scaleY: 0, transformOrigin: '50% 100%', stagger: 0.07, duration: 1.1, ease: 'power2.out', clearProps: 'transform,transformOrigin' },
+              0.7
             )
             .fromTo(
               q('[data-trend]'),
@@ -129,20 +127,18 @@ export function FeatureGrid({ children }: { children: ReactNode }) {
             .from(
               card,
               {
-                y: 60,
-                x: 40,
+                y: 40,
                 opacity: 0,
-                rotationX: -8,
-                transformPerspective: 1200,
-                transformOrigin: '50% 100%',
-                duration: 1,
+                duration: 1.1,
+                ease: 'power2.out',
+                force3D: true,
                 ...cleared,
               },
               0
             )
-            .from(q('[data-feature-icon]'), { scale: 0.4, rotation: -30, opacity: 0, transition: 'none', duration: 0.8, ease: 'back.out(2.2)', clearProps: 'transform,opacity,transition' }, 0.25)
-            .from(q('[data-feature-text]'), { y: 16, opacity: 0, stagger: 0.08, duration: 0.7, clearProps: 'transform,opacity' }, 0.32)
-            .from(q('[data-feature-visual]'), { y: 16, opacity: 0, duration: 0.7, clearProps: 'transform,opacity' }, 0.6);
+            .from(q('[data-feature-icon]'), { scale: 0.85, opacity: 0, transition: 'none', duration: 0.9, ease: 'power2.out', clearProps: 'transform,opacity,transition' }, 0.25)
+            .from(q('[data-feature-text]'), { y: 12, opacity: 0, stagger: 0.08, duration: 0.9, ease: 'power2.out', clearProps: 'transform,opacity' }, 0.32)
+            .from(q('[data-feature-visual]'), { y: 12, opacity: 0, duration: 0.9, ease: 'power2.out', clearProps: 'transform,opacity' }, 0.55);
 
           // Each card has only one of these two decorations.
           if (q('[data-meter]').length) {
@@ -152,7 +148,7 @@ export function FeatureGrid({ children }: { children: ReactNode }) {
             timeline.fromTo(q('[data-shine]'), { xPercent: -120 }, { xPercent: 260, duration: 1.3, ease: 'power2.inOut', clearProps: 'transform' }, 0.95);
           }
 
-          playWhenReached(card, timeline, index === 0 ? 0.25 : 0.1);
+          playWhenReached(card, timeline, index === 0 ? 0.15 : 0.3);
         });
       },
       element

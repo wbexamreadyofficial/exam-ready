@@ -23,7 +23,7 @@ export default function SubjectDonutChart() {
   };
 
   return (
-    <Card className="surface-card border-none shadow-sm h-full flex flex-col">
+    <Card className="surface-card h-full flex flex-col">
       <CardHeader className="pb-2">
         <CardTitle className="display-card text-lg font-semibold text-[var(--color-ink-900)]">
           Subject Performance

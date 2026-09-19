@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard, FileUp, History, BookOpen, LayoutGrid,
-  Library, FileText, ListChecks, HelpCircle, Bell,
-  ChevronLeft, ChevronRight, ArrowLeft,
+  Library, FileText, ListChecks, HelpCircle, Bell, Users,
+  ChevronLeft, ChevronRight, LogOut,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { LogoIcon } from '@/components/ui/Logo';
@@ -14,10 +14,12 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { adminNavGroups, activeNavHref } from '@/lib/admin/nav';
 import { useAdminT } from '@/lib/admin/i18n';
 import { useUnreadCount } from '@/hooks/useNotifications';
+import { useAuth } from '@/hooks/useAuth';
+import { ConfirmDialog } from './ConfirmDialog';
 
 const iconMap: Record<string, React.ElementType> = {
   LayoutDashboard, FileUp, History, BookOpen, LayoutGrid,
-  Library, FileText, ListChecks, HelpCircle, Bell,
+  Library, FileText, ListChecks, HelpCircle, Bell, Users,
 };
 
 interface AdminSidebarProps {
@@ -33,17 +35,32 @@ export function AdminSidebar({ isCollapsed, onToggle, onClose }: AdminSidebarPro
   const { t } = useAdminT();
   const active = activeNavHref(pathname);
   const { data: unreadCount = 0 } = useUnreadCount();
+  const { logout } = useAuth();
+  const [loggingOut, setLoggingOut] = React.useState(false);
+  const [confirmOpen, setConfirmOpen] = React.useState(false);
+
+  const handleLogout = async () => {
+    setLoggingOut(true);
+    try {
+      await logout();
+    } finally {
+      setLoggingOut(false);
+      setConfirmOpen(false);
+      onClose?.();
+    }
+  };
 
   return (
     <div
       className={cn(
         'flex h-full min-h-0 flex-col border-r border-[var(--color-hairline)]',
-        'bg-[var(--color-sidebar-background,var(--color-card))] transition-all duration-300 ease-in-out',
+        'bg-[linear-gradient(180deg,#fff4e8_0%,var(--color-card)_26%)] shadow-[4px_0_32px_-18px_rgba(201,88,23,0.35)] transition-all duration-300 ease-in-out',
+        'dark:bg-[linear-gradient(180deg,rgba(244,149,63,0.08)_0%,var(--color-card)_30%)] dark:shadow-none',
         isCollapsed ? 'w-[72px]' : 'w-[264px]'
       )}
     >
       {/* Header — logo + desktop collapse toggle */}
-      <div className="flex h-14 shrink-0 items-center justify-between gap-1.5 border-b border-[var(--color-hairline)] px-3">
+      <div className="flex h-[72px] shrink-0 items-center justify-between gap-1.5 border-b border-[var(--color-hairline)] px-3">
         <Link href="/admin" onClick={onClose} className="flex min-w-0 items-center gap-2 overflow-hidden">
           <LogoIcon className="h-8 w-8 shrink-0" />
           {!isCollapsed && (
@@ -86,7 +103,8 @@ export function AdminSidebar({ isCollapsed, onToggle, onClose }: AdminSidebarPro
           {adminNavGroups.map((group) => (
             <div key={group.titleKey} className="px-3">
               {!isCollapsed && (
-                <div className="mb-1.5 px-3 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-muted-foreground)]">
+                <div className="mb-2 flex items-center gap-2 px-3 text-[10.5px] font-bold uppercase tracking-[0.14em] text-[var(--color-muted-foreground)]">
+                  <span className="h-px w-3 bg-orange-400/70" />
                   {t.nav[group.titleKey]}
                 </div>
               )}
@@ -102,16 +120,16 @@ export function AdminSidebar({ isCollapsed, onToggle, onClose }: AdminSidebarPro
                       onClick={onClose}
                       aria-current={isActive ? 'page' : undefined}
                       className={cn(
-                        'relative flex items-center gap-3 rounded-md px-3 py-2 text-[13.5px] transition-colors',
+                        'group/nav relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-[13.5px] transition-all duration-200',
                         isActive
-                          ? 'border-l-[3px] border-[var(--color-primary)] bg-[var(--color-bblue-50)] font-semibold text-[var(--color-primary)] dark:bg-[var(--color-bblue-700)]/15'
+                          ? 'bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] font-semibold text-white shadow-md shadow-orange-600/30 ring-1 ring-inset ring-white/20'
                           : item.highlight
                             ? 'font-semibold text-[var(--color-accent)] hover:bg-[var(--color-borange-50)] dark:hover:bg-[var(--color-borange-500)]/10'
-                            : 'text-[var(--color-muted-foreground)] hover:bg-[var(--color-muted)] hover:text-[var(--color-foreground)]',
-                        isCollapsed && 'mx-auto h-9 w-9 justify-center border-l-0 px-0'
+                            : 'text-[var(--color-muted-foreground)] hover:bg-orange-50 hover:text-[#c95817] dark:hover:bg-orange-500/10 dark:hover:text-orange-300',
+                        isCollapsed && 'mx-auto h-9 w-9 justify-center px-0'
                       )}
                     >
-                      <Icon size={18} className="shrink-0" />
+                      <Icon size={18} className="shrink-0 transition-transform duration-200 group-hover/nav:scale-110" />
                       {!isCollapsed && <span className="truncate">{t.nav[item.labelKey]}</span>}
                       {item.href === '/admin/notifications' && unreadCount > 0 && (
                         <span className={cn(
@@ -142,20 +160,33 @@ export function AdminSidebar({ isCollapsed, onToggle, onClose }: AdminSidebarPro
         </TooltipProvider>
       </nav>
 
-      {/* Footer — escape hatch back to the public site */}
+      {/* Footer — ends the session through the API, then returns to the login page */}
       <div className="shrink-0 border-t border-[var(--color-hairline)] p-3">
-        <Link
-          href="/"
-          onClick={onClose}
+        <button
+          type="button"
+          onClick={() => setConfirmOpen(true)}
+          aria-label={t.logout}
+          title={isCollapsed ? t.logout : undefined}
           className={cn(
-            'flex items-center gap-2 rounded-md px-3 py-2 text-[13px] text-[var(--color-muted-foreground)] transition-colors hover:bg-[var(--color-muted)] hover:text-[var(--color-foreground)]',
+            'flex w-full items-center gap-2 rounded-md px-3 py-2 text-[13.5px] font-semibold text-red-600 transition-colors hover:bg-red-50 disabled:opacity-60 dark:text-red-400 dark:hover:bg-red-500/10',
             isCollapsed && 'mx-auto h-9 w-9 justify-center px-0'
           )}
         >
-          <ArrowLeft size={16} className="shrink-0" />
-          {!isCollapsed && <span className="truncate">{t.backToSite}</span>}
-        </Link>
+          <LogOut size={16} className="shrink-0" />
+          {!isCollapsed && <span className="truncate">{t.logout}</span>}
+        </button>
       </div>
+
+      <ConfirmDialog
+        open={confirmOpen}
+        onOpenChange={(open) => !loggingOut && setConfirmOpen(open)}
+        title={t.logoutTitle}
+        description={t.logoutDescription}
+        confirmLabel={loggingOut ? t.loggingOut : t.logout}
+        destructive
+        pending={loggingOut}
+        onConfirm={handleLogout}
+      />
     </div>
   );
 }

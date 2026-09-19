@@ -244,7 +244,7 @@ export default function ProfilePage() {
   return (
     <div className="w-full space-y-6">
       {/* Cover + avatar */}
-      <div className="rounded-2xl border border-[var(--color-hairline)] bg-[var(--color-surface)] overflow-hidden shadow-sm">
+      <div className="rounded-2xl border border-[var(--color-hairline)] bg-[var(--color-surface)] overflow-hidden shadow-elevated">
         <div className="h-32 sm:h-40 bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-500 relative">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.18),transparent_45%)]" />
         </div>
@@ -328,7 +328,7 @@ export default function ProfilePage() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Personal details */}
-        <section className="rounded-2xl border border-[var(--color-hairline)] bg-[var(--color-surface)] p-5 sm:p-6 shadow-sm">
+        <section className="rounded-2xl border border-[var(--color-hairline)] bg-[var(--color-surface)] p-5 sm:p-6 shadow-elevated">
           <h2 className="text-[15px] font-bold text-[var(--color-ink-900)] mb-4">Personal Details</h2>
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
@@ -410,7 +410,7 @@ export default function ProfilePage() {
         </section>
 
         {/* Address */}
-        <section className="rounded-2xl border border-[var(--color-hairline)] bg-[var(--color-surface)] p-5 sm:p-6 shadow-sm">
+        <section className="rounded-2xl border border-[var(--color-hairline)] bg-[var(--color-surface)] p-5 sm:p-6 shadow-elevated">
           <h2 className="text-[15px] font-bold text-[var(--color-ink-900)] mb-1 flex items-center gap-2">
             <MapPin size={16} className="text-[var(--color-muted-foreground)]" />
             Address
@@ -461,7 +461,7 @@ export default function ProfilePage() {
         </section>
 
         {/* Account info (read-only) */}
-        <section className="rounded-2xl border border-[var(--color-hairline)] bg-[var(--color-surface)] p-5 sm:p-6 shadow-sm">
+        <section className="rounded-2xl border border-[var(--color-hairline)] bg-[var(--color-surface)] p-5 sm:p-6 shadow-elevated">
           <h2 className="text-[15px] font-bold text-[var(--color-ink-900)] mb-4 flex items-center gap-2">
             <ShieldCheck size={16} className="text-[var(--color-muted-foreground)]" />
             Account

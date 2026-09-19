@@ -134,7 +134,7 @@ export default function ExamResultPage({ params }: { params: Promise<{ examId: s
 
       <div className="flex flex-col sm:flex-row gap-4 justify-center">
         <Button variant="outline" asChild size="lg">
-          <Link href="/dashboard">Return to Dashboard</Link>
+          <Link href="/student/dashboard">Return to Dashboard</Link>
         </Button>
         <Button asChild size="lg" className="font-bold gap-2">
           <Link href={`/exams`}>Attempt Another Exam <ArrowRight className="h-4 w-4" /></Link>

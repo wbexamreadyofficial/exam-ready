@@ -14,8 +14,8 @@ export function PageHeader({ title, description, actions, className }: PageHeade
     <header
       className={cn(
         'flex flex-col gap-3 rounded-xl border border-[var(--color-border)] px-5 py-3.5 sm:flex-row sm:items-center sm:justify-between',
-        'bg-gradient-to-r from-white via-[#EEF4FF] to-[#FFF0E3]',
-        'dark:from-[#0B1220] dark:via-[#0E1A33] dark:to-[#2A1708]',
+        'bg-gradient-to-r from-white via-[#FFF6EC] to-[#FFE4CC]',
+        'dark:from-[#0B1220] dark:via-[#1A1410] dark:to-[#3A1D08]',
         ELEVATED_CARD,
         className
       )}

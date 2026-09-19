@@ -31,7 +31,7 @@ export function useStartExam() {
     mutationFn: (examId: string) => examsApi.startExam(examId),
     onSuccess: (session, examId) => {
       initSession(session.sessionId, examId, session.serverDuration);
-      router.push(`/exam/${examId}`);
+      router.push(`/student/exam/${examId}`);
     },
     onError: () => {
       toast.error('Failed to start exam. Please try again.');
@@ -55,7 +55,7 @@ export function useSubmitExam() {
     }) => examsApi.submitExam(examId, sessionId, answers),
     onSuccess: ({ resultId }, { examId }) => {
       resetSession();
-      router.push(`/exam/${examId}/result?resultId=${resultId}`);
+      router.push(`/student/exam/${examId}/result?resultId=${resultId}`);
     },
     onError: () => {
       toast.error('Submission failed. Please try again.');

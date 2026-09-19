@@ -80,8 +80,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {/* Content column */}
       <div className={cn('transition-all duration-300 print-reset-layout', collapsed ? 'lg:ml-[72px]' : 'lg:ml-[264px]')}>
-        <div className="no-print"><AdminTopbar onOpenMenu={() => setMobileOpen(true)} /></div>
-        <main className="mx-auto w-full max-w-[1400px] p-4 sm:p-6 print-reset-layout">{children}</main>
+        <div className="no-print sticky top-0 z-30"><AdminTopbar onOpenMenu={() => setMobileOpen(true)} /></div>
+        <main className="w-full p-4 sm:p-6 print-reset-layout">{children}</main>
       </div>
     </div>
   );

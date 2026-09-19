@@ -17,7 +17,7 @@ export default function LeaderboardWidget() {
           className={cn(
             "flex items-center gap-3 py-2.5 px-3 rounded-lg transition-colors",
             entry.isCurrentUser 
-              ? "bg-[var(--color-bblue-50)] dark:bg-blue-900/15 border border-[var(--color-data-primary)]/20" 
+              ? "bg-[var(--color-bblue-50)] dark:bg-orange-900/15 border border-[var(--color-data-primary)]/20" 
               : "hover:bg-[var(--color-surface-muted)]"
           )}
         >

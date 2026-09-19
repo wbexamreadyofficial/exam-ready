@@ -36,7 +36,7 @@ export function AdminLangToggle() {
             className={cn(
               'h-7 rounded px-2.5 text-xs font-semibold transition-colors',
               isActive
-                ? 'bg-[var(--color-primary)] text-[var(--color-primary-foreground)]'
+                ? 'bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] text-white shadow-md shadow-orange-600/30 ring-1 ring-inset ring-white/25'
                 : 'text-[var(--color-muted-foreground)] hover:bg-[var(--color-muted)] hover:text-[var(--color-foreground)]'
             )}
           >

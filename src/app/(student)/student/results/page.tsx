@@ -60,7 +60,7 @@ export default function ResultsPage() {
                     {result.percentage >= 60 ? 'Passed' : 'Failed'}
                   </Badge>
                   <Button size="icon" variant="ghost" asChild>
-                    <Link href={`/exam/${result.id}/result`} aria-label="View result details">
+                    <Link href={`/student/exam/${result.id}/result`} aria-label="View result details">
                       <ArrowRight className="h-4 w-4" />
                     </Link>
                   </Button>

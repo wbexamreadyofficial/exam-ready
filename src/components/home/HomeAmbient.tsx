@@ -63,7 +63,7 @@ export function HomeAmbient() {
             particleOpacity={0.75}
             orbitOpacity={0.3}
             haloOpacity={0.15}
-            hue={240}
+            hue={30}
           />
         </AmbientFallback>
       )}

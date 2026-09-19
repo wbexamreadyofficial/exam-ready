@@ -10,7 +10,7 @@ export default function PlanBanner() {
   const progressValue = (planData.testsUsed / planData.testsTotal) * 100;
 
   return (
-    <div className="bg-gradient-to-r from-[var(--color-borange-50)] to-amber-50 dark:from-amber-900/10 dark:to-amber-800/5 rounded-xl border border-amber-200/60 dark:border-amber-700/20 p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+    <div className="shadow-[0_1px_2px_rgba(30,64,110,0.05),0_6px_16px_-2px_rgba(30,64,110,0.08),0_16px_40px_-8px_rgba(30,64,110,0.16)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.4),0_10px_24px_-4px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[var(--color-borange-50)] to-amber-50 dark:from-amber-900/10 dark:to-amber-800/5 rounded-xl border border-amber-200/60 dark:border-amber-700/20 p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full md:w-auto">
         <div className="flex items-center gap-3">
           <Zap className="text-amber-500" size={24} />

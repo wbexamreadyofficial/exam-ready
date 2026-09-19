@@ -11,7 +11,6 @@ import ContinuePreparation from '@/components/dashboard/ContinuePreparation';
 import ScoreTrendChart from '@/components/dashboard/ScoreTrendChart';
 import SubjectDonutChart from '@/components/dashboard/SubjectDonutChart';
 import PreparationStats from '@/components/dashboard/PreparationStats';
-import RecommendedTopics from '@/components/dashboard/RecommendedTopics';
 import UpgradeCTA from '@/components/dashboard/UpgradeCTA';
 
 // Right sidebar (shown inline on smaller screens)
@@ -50,9 +49,6 @@ export default function DashboardPage() {
         </div>
         <PreparationStats />
       </div>
-
-      {/* 6. Recommended For You */}
-      <RecommendedTopics />
 
       {/* 7. Upgrade CTA */}
       <UpgradeCTA />

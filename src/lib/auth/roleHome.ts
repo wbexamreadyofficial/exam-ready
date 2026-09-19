@@ -5,12 +5,12 @@ import type { UserRole } from '@/types/auth';
  *  `middleware.ts` (edge-level role routing) so the two never drift apart. */
 export const ROLE_HOME: Record<UserRole, string> = {
   admin: '/admin',
-  student: '/dashboard',
-  examiner: '/examiner',
-  partner: '/partner',
+  student: '/student/dashboard',
+  examiner: '/examiner/dashboard',
+  partner: '/partner/dashboard',
 };
 
 export function getRoleHome(role: UserRole | string | undefined): string {
   if (role && role in ROLE_HOME) return ROLE_HOME[role as UserRole];
-  return '/dashboard';
+  return '/student/dashboard';
 }

@@ -19,7 +19,7 @@ export default function DashboardLayout({ children, rightSidebar }: DashboardLay
   const closeMobile = () => setMobileMenuOpen(false);
 
   return (
-    <div className="fixed inset-0 z-50 flex overflow-hidden bg-[var(--color-surface-subtle)] text-[var(--color-ink-900)] font-sans">
+    <div className="orange-theme fixed inset-0 z-50 flex overflow-hidden bg-[var(--color-surface-subtle)] text-[var(--color-ink-900)] font-sans">
       {/* Mobile overlay */}
       {mobileMenuOpen && (
         <div 

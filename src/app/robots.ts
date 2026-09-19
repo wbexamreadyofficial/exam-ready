@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/admin/', '/dashboard/', '/exam/', '/profile/', '/results/'],
+      disallow: ['/admin/', '/student/', '/examiner/', '/partner/'],
     },
     sitemap: 'https://examready.in/sitemap.xml',
   };

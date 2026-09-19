@@ -13,6 +13,11 @@ export const adminCopy = {
   EN: {
     brand: 'Admin Panel',
     backToSite: 'Back to site',
+    profile: 'Profile',
+    logout: 'Log out',
+    loggingOut: 'Logging out…',
+    logoutTitle: 'Log out of the admin panel?',
+    logoutDescription: 'You will be signed out on this device and taken to the login page.',
 
     nav: {
       overview: 'Overview',
@@ -31,6 +36,7 @@ export const adminCopy = {
       uploadGuide: 'PDF Format Guide',
 
       system: 'System',
+      users: 'Users',
       notifications: 'Notifications',
     },
 
@@ -252,6 +258,11 @@ export const adminCopy = {
   BN: {
     brand: 'অ্যাডমিন প্যানেল',
     backToSite: 'সাইটে ফিরে যান',
+    profile: 'প্রোফাইল',
+    logout: 'লগ আউট',
+    loggingOut: 'লগ আউট হচ্ছে…',
+    logoutTitle: 'অ্যাডমিন প্যানেল থেকে লগ আউট করবেন?',
+    logoutDescription: 'এই ডিভাইসে আপনি সাইন আউট হয়ে যাবেন এবং লগইন পেজে নিয়ে যাওয়া হবে।',
 
     nav: {
       overview: 'সারসংক্ষেপ',
@@ -270,6 +281,7 @@ export const adminCopy = {
       uploadGuide: 'PDF ফরম্যাট গাইড',
 
       system: 'সিস্টেম',
+      users: 'ব্যবহারকারী',
       notifications: 'বিজ্ঞপ্তি',
     },
 
