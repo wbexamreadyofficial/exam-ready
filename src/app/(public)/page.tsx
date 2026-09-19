@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, Target, Bot, FileCheck, BarChart3, Star } from 'lucide-react';
+import { ArrowRight, Target, Bot, FileCheck, BarChart3, Star, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ExamIconsStrip } from '@/components/home/ExamIconsStrip';
 import { FeaturesSection } from '@/components/home/FeaturesSection';
@@ -204,6 +204,21 @@ function LeftContent() {
           className="btn-premium h-[52px] px-8 rounded-xl font-semibold text-[15px] border hairline bg-white text-ink-800 hover:bg-slate-50 hover:border-slate-300 dark:bg-transparent dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
         >
           <Link href="/exams">Explore Courses</Link>
+        </Button>
+
+        {/* TEMPORARY: direct, unauthenticated way into the admin panel while it
+            is being built. Remove this once `/admin` is behind ProtectedRoute
+            again — see the note in src/app/(admin)/layout.tsx. */}
+        <Button
+          size="lg"
+          variant="outline"
+          asChild
+          className="btn-premium h-[52px] px-8 rounded-xl font-semibold text-[15px] border-dashed border-2 border-slate-300 bg-transparent text-ink-700 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-800 gap-2"
+        >
+          <Link href="/admin">
+            <ShieldCheck className="h-4 w-4" />
+            Access Admin Panel
+          </Link>
         </Button>
       </div>
 

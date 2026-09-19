@@ -1,0 +1,450 @@
+'use client';
+
+import { useLanguageStore } from '@/store/languageStore';
+
+/**
+ * Admin-panel copy, Bengali + English only.
+ *
+ * The public site's dictionary (`lib/i18n.ts`) also carries Hindi, but the
+ * admin panel is used by our own staff and by WB teachers, so it ships BN/EN
+ * and falls back to EN for any other app language.
+ */
+export const adminCopy = {
+  EN: {
+    brand: 'Admin Panel',
+    backToSite: 'Back to site',
+
+    nav: {
+      overview: 'Overview',
+      dashboard: 'Dashboard',
+
+      content: 'Content',
+      categories: 'Exam Categories',
+      subjects: 'Subjects',
+      exams: 'Exams',
+      questionSets: 'Question Sets',
+      questions: 'Question Bank',
+
+      uploads: 'Uploads',
+      uploadPdf: 'Upload Question PDF',
+      uploadHistory: 'Upload History',
+      uploadGuide: 'PDF Format Guide',
+
+      system: 'System',
+      notifications: 'Notifications',
+    },
+
+    common: {
+      search: 'Search',
+      create: 'Create',
+      edit: 'Edit',
+      update: 'Update',
+      cancel: 'Cancel',
+      save: 'Save',
+      saving: 'Saving…',
+      delete: 'Delete',
+      active: 'Active',
+      inactive: 'Inactive',
+      status: 'Status',
+      actions: 'Actions',
+      name: 'Name',
+      slug: 'Slug',
+      description: 'Description',
+      order: 'Order',
+      createdAt: 'Created',
+      noResults: 'Nothing here yet',
+      loading: 'Loading…',
+      required: 'Required',
+      optional: 'Optional',
+      back: 'Back',
+      next: 'Next',
+      step: 'Step',
+      of: 'of',
+    },
+
+    dashboard: {
+      title: 'Admin Dashboard',
+      subtitle: 'Manage exam content, question sets and PDF imports',
+      quickActions: 'Quick actions',
+      uploadCta: 'Upload a question PDF',
+      uploadCtaDesc: 'Import a full question set from a teacher’s PDF file',
+      guideCta: 'Read the PDF format guide',
+      guideCtaDesc: 'The exact format teachers must follow before uploading',
+    },
+
+    steps: {
+      title: 'How to upload a new question set',
+      subtitle: 'Nine steps, start to finish. We walk you through each one on screen.',
+      shortTitle: 'Uploading a question set',
+
+      s1Title: 'Prepare the file',
+      s1Body: 'Write the paper in Word or Google Docs using the format below, then File → Save as PDF. Never scan or photograph a printed page.',
+      s2Title: 'Open the upload page',
+      s2Body: 'Go to Uploads → Upload Question PDF and drop your file in. PDF only, up to 20 MB.',
+      s3Title: 'We check the file first',
+      s3Body: 'Before anything is saved we test whether the file is blank, whether text can be read from it, and whether the format is right. If it fails, we stop here and tell you exactly what is wrong — nothing is created.',
+      s4Title: 'Match the exam category',
+      s4Body: 'We look for the category named in your file. If we have it, we use it. If we do not, we ask before creating it — or you pick an existing one from the list.',
+      s5Title: 'Match the subjects',
+      s5Body: 'Same again for every subject found in your questions. Existing subjects are reused; new ones are only created once you say yes.',
+      s6Title: 'Match the exam',
+      s6Body: 'And again for the exam itself, so the set lands under the right paper.',
+      s7Title: 'Name the set',
+      s7Body: 'We check that no other set under this exam already carries the same name. If one does, you rename it right there before moving on.',
+      s8Title: 'Questions are saved',
+      s8Body: 'Each question is stored and linked to its subject, exam and set. You watch the count climb as it goes.',
+      s9Title: 'Fix what failed, then publish',
+      s9Body: 'Anything we could not read is listed at the end. Edit it on the spot, drop it from the set, or cancel the whole upload. Once no blocking errors remain, publish.',
+
+      noteTitle: 'Nothing is created until the end',
+      noteBody: 'You can leave at any step and nothing will have been added. Categories, subjects and the set itself are all created together in the final step.',
+    },
+
+    wizard: {
+      title: 'Upload a question paper',
+      subtitle: 'We read the file, match it against what we already have, and only create anything at the very end.',
+
+      uploaderName: 'Your name',
+      uploaderNamePlaceholder: 'e.g. Sujit Das',
+      dropTitle: 'Drop the question paper here',
+      dropHint: 'or click to choose a file',
+      dropFormats: '.docx preferred · .pdf and .txt accepted · up to 20 MB',
+      chooseFile: 'Choose file',
+      removeFile: 'Remove',
+      startUpload: 'Read this file',
+      reading: 'Reading the file…',
+      docxNotice: 'Upload the Word (.docx) file, not a PDF. Bengali text cannot be read reliably from a PDF — the letters come out in the wrong order.',
+      viewGuide: 'Format guide',
+
+      rejectedTitle: 'This file cannot be used',
+      rejectedHelp: 'Nothing was created. Fix the file and upload it again.',
+      tryAgain: 'Try another file',
+
+      parsedTitle: 'File read successfully',
+      questionsFound: 'questions found',
+      sectionsFound: 'sections',
+      subjectsFound: 'subjects',
+
+      chooseExisting: 'Use one we already have',
+      createNew: 'Create it',
+      pickPlaceholder: 'Choose from the list…',
+      newNameLabel: 'Name for the new one',
+      foundInFile: 'Found in your file',
+      nothingInFile: 'Your file does not name one, so please choose.',
+      weHaveThis: 'We already have this',
+      weDoNotHaveThis: 'We do not have this yet',
+      didYouMean: 'Did you mean one of these?',
+      continue: 'Continue',
+
+      categoryStepTitle: 'Which exam category?',
+      subjectStepTitle: 'The subjects in your questions',
+      subjectStepHelp: 'Each subject below came from a SUB: line. Existing ones are reused.',
+      examStepTitle: 'Which exam?',
+
+      nameStepTitle: 'Name this question set',
+      nameStepHelp: 'Students will see this name. It must be different from every other set under this exam.',
+      nameLabel: 'Set name',
+      nameChecking: 'Checking…',
+      nameFree: 'This name is free',
+      useSuggestion: 'Use',
+      confirmName: 'Confirm name',
+
+      reviewTitle: 'Check the questions, then publish',
+      reviewHelp: 'Fix anything marked below, or leave it out of the set.',
+      clean: 'ready',
+      needsReview: 'to check',
+      blocking: 'must be fixed',
+      allIncluded: 'questions will be published',
+      skipped: 'skipped',
+      showAll: 'All',
+      showProblems: 'Needs attention',
+      skipQuestion: 'Leave out',
+      includeQuestion: 'Put back',
+      editQuestion: 'Fix',
+      saveQuestion: 'Save',
+      correctAnswer: 'Correct answer',
+      explanationLabel: 'Explanation',
+      publish: 'Publish question set',
+      publishing: 'Publishing…',
+      cancelUpload: 'Cancel this upload',
+      cancelConfirm: 'Cancel this upload? Nothing has been created, so nothing will be lost.',
+
+      doneTitle: 'Question set created',
+      doneBody: 'It has been saved as a draft. Publish it from the question sets section when you are ready.',
+      viewUploads: 'Back to uploads',
+      uploadAnother: 'Upload another',
+    },
+
+    guide: {
+      title: 'Question PDF — Format Guide',
+      subtitle: 'The exact format a teacher must follow. Share this page with contributors.',
+      printBtn: 'Print / Save as PDF',
+
+      introTitle: 'How it works',
+      introBody:
+        'A question paper is submitted as a single PDF. The file begins with a metadata block that tells us the duration, question count and marking scheme, followed by the questions themselves in a fixed format. We read all of it automatically — you do not fill in any of it by hand.',
+
+      rulesTitle: 'Five rules',
+      rule1Title: 'Write it in Word or Google Docs',
+      rule1Body: 'Then use File → Save as PDF. Never scan a printed page or photograph it — we cannot read text from an image.',
+      rule2Title: 'Every marker starts its own line',
+      rule2Body: 'Q1., A), ANS: and the rest must each begin a new line. Do not put them in the middle of a sentence.',
+      rule3Title: 'The #META block comes first',
+      rule3Body: 'It must be the very first thing in the file, before any question.',
+      rule4Title: 'No tables, columns or text boxes',
+      rule4Body: 'Write in plain paragraphs. Multi-column layouts scramble the reading order.',
+      rule5Title: 'Number questions 1, 2, 3 … with no gaps',
+      rule5Body: 'A missing or repeated number will stop the upload.',
+
+      metaTitle: 'Part 1 — the #META block',
+      metaBody: 'Copy this to the top of your document and fill in your values.',
+
+      questionTitle: 'Part 2 — the questions',
+      questionBody: 'After #END_META, write each question like this.',
+
+      bilingualTitle: 'Bilingual papers',
+      bilingualBody:
+        'If your paper carries both English and Bengali, set LANGUAGE: BILINGUAL and separate the two with three pipes on the same line.',
+
+      fieldsTitle: 'Field reference',
+      colField: 'Field',
+      colRequired: 'Required',
+      colNotes: 'Notes',
+      yes: 'Yes',
+      no: 'Optional',
+
+      errorsTitle: 'What stops an upload',
+      warningsTitle: 'What we only warn about',
+
+      downloadTitle: 'Templates',
+      downloadBody: 'Start from the template — it is much harder to get the format wrong that way.',
+      downloadDocx: 'Word template (.docx)',
+      downloadSample: 'Sample — 10 questions (.pdf)',
+      downloadSampleDocx: 'Sample — 10 questions (.docx)',
+    },
+  },
+
+  BN: {
+    brand: 'অ্যাডমিন প্যানেল',
+    backToSite: 'সাইটে ফিরে যান',
+
+    nav: {
+      overview: 'সারসংক্ষেপ',
+      dashboard: 'ড্যাশবোর্ড',
+
+      content: 'কনটেন্ট',
+      categories: 'পরীক্ষার ক্যাটাগরি',
+      subjects: 'বিষয়',
+      exams: 'পরীক্ষা',
+      questionSets: 'প্রশ্নসেট',
+      questions: 'প্রশ্নব্যাংক',
+
+      uploads: 'আপলোড',
+      uploadPdf: 'প্রশ্নের PDF আপলোড',
+      uploadHistory: 'আপলোডের ইতিহাস',
+      uploadGuide: 'PDF ফরম্যাট গাইড',
+
+      system: 'সিস্টেম',
+      notifications: 'বিজ্ঞপ্তি',
+    },
+
+    common: {
+      search: 'খুঁজুন',
+      create: 'নতুন তৈরি',
+      edit: 'এডিট',
+      update: 'আপডেট',
+      cancel: 'বাতিল',
+      save: 'সেভ',
+      saving: 'সেভ হচ্ছে…',
+      delete: 'মুছুন',
+      active: 'সক্রিয়',
+      inactive: 'নিষ্ক্রিয়',
+      status: 'অবস্থা',
+      actions: 'কাজ',
+      name: 'নাম',
+      slug: 'স্লাগ',
+      description: 'বিবরণ',
+      order: 'ক্রম',
+      createdAt: 'তৈরি হয়েছে',
+      noResults: 'এখনও কিছু নেই',
+      loading: 'লোড হচ্ছে…',
+      required: 'আবশ্যক',
+      optional: 'ঐচ্ছিক',
+      back: 'পিছনে',
+      next: 'পরবর্তী',
+      step: 'ধাপ',
+      of: '/',
+    },
+
+    dashboard: {
+      title: 'অ্যাডমিন ড্যাশবোর্ড',
+      subtitle: 'পরীক্ষার কনটেন্ট, প্রশ্নসেট ও PDF ইম্পোর্ট পরিচালনা করুন',
+      quickActions: 'দ্রুত কাজ',
+      uploadCta: 'প্রশ্নের PDF আপলোড করুন',
+      uploadCtaDesc: 'শিক্ষকের PDF থেকে পুরো একটি প্রশ্নসেট ইম্পোর্ট করুন',
+      guideCta: 'PDF ফরম্যাট গাইড পড়ুন',
+      guideCtaDesc: 'আপলোডের আগে শিক্ষকদের যে ফরম্যাট মানতে হবে',
+    },
+
+    steps: {
+      title: 'নতুন প্রশ্নসেট কীভাবে আপলোড করবেন',
+      subtitle: 'শুরু থেকে শেষ — নয়টি ধাপ। প্রতিটি ধাপে স্ক্রিনেই আমরা আপনাকে পথ দেখিয়ে নিয়ে যাব।',
+      shortTitle: 'প্রশ্নসেট আপলোড',
+
+      s1Title: 'ফাইল তৈরি করুন',
+      s1Body: 'নিচের ফরম্যাট অনুযায়ী Word বা Google Docs-এ প্রশ্নপত্র লিখুন, তারপর File → Save as PDF করুন। ছাপা কাগজ স্ক্যান বা ছবি তুলে দেবেন না।',
+      s2Title: 'আপলোড পাতা খুলুন',
+      s2Body: 'আপলোড → প্রশ্নের PDF আপলোড-এ গিয়ে ফাইলটি ছেড়ে দিন। শুধু PDF, সর্বোচ্চ ২০ MB।',
+      s3Title: 'আমরা আগে ফাইলটা পরীক্ষা করি',
+      s3Body: 'কিছু সেভ হওয়ার আগেই দেখে নিই — ফাইলটি ফাঁকা কিনা, লেখা পড়া যাচ্ছে কিনা, আর ফরম্যাট ঠিক আছে কিনা। ভুল থাকলে এখানেই থেমে যাই এবং ঠিক কী সমস্যা তা বলে দিই — কিছুই তৈরি হয় না।',
+      s4Title: 'পরীক্ষার ক্যাটাগরি মেলানো',
+      s4Body: 'আপনার ফাইলে লেখা ক্যাটাগরিটি আমরা খুঁজি। আমাদের কাছে থাকলে সেটাই নিই। না থাকলে আপনার অনুমতি নিয়ে তৈরি করি — অথবা আপনি তালিকা থেকে বেছে নেন।',
+      s5Title: 'বিষয় মেলানো',
+      s5Body: 'প্রশ্নগুলোতে পাওয়া প্রতিটি বিষয়ের ক্ষেত্রেও একই নিয়ম। পুরনো বিষয় আবার ব্যবহার হয়; নতুন বিষয় আপনি হ্যাঁ বললে তবেই তৈরি হয়।',
+      s6Title: 'পরীক্ষা মেলানো',
+      s6Body: 'পরীক্ষার ক্ষেত্রেও তাই — যাতে সেটটি ঠিক জায়গায় গিয়ে বসে।',
+      s7Title: 'সেটের নাম ঠিক করা',
+      s7Body: 'এই পরীক্ষার অধীনে একই নামে আগে থেকে কোনো সেট আছে কিনা দেখে নিই। থাকলে তখনই নাম বদলে নিতে পারবেন।',
+      s8Title: 'প্রশ্ন জমা হতে থাকে',
+      s8Body: 'প্রতিটি প্রশ্ন জমা হয় এবং তার বিষয়, পরীক্ষা ও সেটের সাথে জুড়ে যায়। সংখ্যা বাড়তে থাকা আপনি চোখের সামনেই দেখবেন।',
+      s9Title: 'বাকিগুলো ঠিক করে পাবলিশ',
+      s9Body: 'যেগুলো পড়া যায়নি সেগুলো শেষে আলাদা করে দেখানো হয়। সেখানেই ঠিক করে নিন, বা সেট থেকে বাদ দিন, বা পুরো আপলোড বাতিল করুন। কোনো লাল ভুল না থাকলে পাবলিশ করুন।',
+
+      noteTitle: 'শেষ ধাপের আগে কিছুই তৈরি হয় না',
+      noteBody: 'যেকোনো ধাপে ছেড়ে দিলে কিছুই যোগ হবে না। ক্যাটাগরি, বিষয় ও প্রশ্নসেট — সবই শেষ ধাপে একসাথে তৈরি হয়।',
+    },
+
+    wizard: {
+      title: 'প্রশ্নপত্র আপলোড',
+      subtitle: 'আমরা ফাইলটি পড়ি, আমাদের কাছে যা আছে তার সাথে মিলিয়ে নিই, আর একদম শেষে গিয়ে তবেই কিছু তৈরি করি।',
+
+      uploaderName: 'আপনার নাম',
+      uploaderNamePlaceholder: 'যেমন: সুজিত দাস',
+      dropTitle: 'প্রশ্নপত্রটি এখানে ছেড়ে দিন',
+      dropHint: 'বা ক্লিক করে ফাইল বেছে নিন',
+      dropFormats: '.docx সবচেয়ে ভালো · .pdf ও .txt চলবে · সর্বোচ্চ ২০ MB',
+      chooseFile: 'ফাইল বেছে নিন',
+      removeFile: 'সরান',
+      startUpload: 'এই ফাইলটি পড়ুন',
+      reading: 'ফাইল পড়া হচ্ছে…',
+      docxNotice: 'PDF নয়, Word (.docx) ফাইলটি আপলোড করুন। PDF থেকে বাংলা নির্ভরযোগ্যভাবে পড়া যায় না — অক্ষরগুলো এলোমেলো হয়ে যায়।',
+      viewGuide: 'ফরম্যাট গাইড',
+
+      rejectedTitle: 'এই ফাইলটি ব্যবহার করা যাবে না',
+      rejectedHelp: 'কিছুই তৈরি হয়নি। ফাইলটি ঠিক করে আবার আপলোড করুন।',
+      tryAgain: 'অন্য ফাইল দিন',
+
+      parsedTitle: 'ফাইল সফলভাবে পড়া হয়েছে',
+      questionsFound: 'টি প্রশ্ন পাওয়া গেছে',
+      sectionsFound: 'টি সেকশন',
+      subjectsFound: 'টি বিষয়',
+
+      chooseExisting: 'আগে থেকে আছে এমন একটি নিন',
+      createNew: 'নতুন তৈরি করুন',
+      pickPlaceholder: 'তালিকা থেকে বেছে নিন…',
+      newNameLabel: 'নতুনটির নাম',
+      foundInFile: 'আপনার ফাইলে পাওয়া গেছে',
+      nothingInFile: 'আপনার ফাইলে এর নাম নেই, তাই বেছে নিন।',
+      weHaveThis: 'এটি আমাদের কাছে আছে',
+      weDoNotHaveThis: 'এটি এখনও আমাদের কাছে নেই',
+      didYouMean: 'আপনি কি এগুলোর কোনোটি বোঝাতে চেয়েছেন?',
+      continue: 'এগিয়ে যান',
+
+      categoryStepTitle: 'কোন পরীক্ষার ক্যাটাগরি?',
+      subjectStepTitle: 'আপনার প্রশ্নে যে বিষয়গুলো আছে',
+      subjectStepHelp: 'নিচের প্রতিটি বিষয় SUB: লাইন থেকে এসেছে। আগে থেকে থাকলে সেটাই ব্যবহার হবে।',
+      examStepTitle: 'কোন পরীক্ষা?',
+
+      nameStepTitle: 'এই প্রশ্নসেটের নাম দিন',
+      nameStepHelp: 'ছাত্ররা এই নামটিই দেখবে। এই পরীক্ষার অন্য কোনো সেটের সাথে মিলতে পারবে না।',
+      nameLabel: 'সেটের নাম',
+      nameChecking: 'দেখা হচ্ছে…',
+      nameFree: 'এই নামটি খালি আছে',
+      useSuggestion: 'এটাই নিন',
+      confirmName: 'নাম নিশ্চিত করুন',
+
+      reviewTitle: 'প্রশ্নগুলো দেখে নিয়ে পাবলিশ করুন',
+      reviewHelp: 'নিচে চিহ্নিত জায়গাগুলো ঠিক করুন, অথবা সেট থেকে বাদ দিন।',
+      clean: 'টি ঠিক আছে',
+      needsReview: 'টি দেখে নিন',
+      blocking: 'টি ঠিক করতেই হবে',
+      allIncluded: 'টি প্রশ্ন পাবলিশ হবে',
+      skipped: 'টি বাদ',
+      showAll: 'সব',
+      showProblems: 'যেগুলোতে সমস্যা',
+      skipQuestion: 'বাদ দিন',
+      includeQuestion: 'ফিরিয়ে আনুন',
+      editQuestion: 'ঠিক করুন',
+      saveQuestion: 'সেভ',
+      correctAnswer: 'সঠিক উত্তর',
+      explanationLabel: 'ব্যাখ্যা',
+      publish: 'প্রশ্নসেট পাবলিশ করুন',
+      publishing: 'পাবলিশ হচ্ছে…',
+      cancelUpload: 'এই আপলোড বাতিল করুন',
+      cancelConfirm: 'আপলোডটি বাতিল করবেন? কিছুই তৈরি হয়নি, তাই কিছু হারাবে না।',
+
+      doneTitle: 'প্রশ্নসেট তৈরি হয়েছে',
+      doneBody: 'এটি ড্রাফট হিসেবে সেভ হয়েছে। প্রস্তুত হলে প্রশ্নসেট সেকশন থেকে পাবলিশ করুন।',
+      viewUploads: 'আপলোডে ফিরুন',
+      uploadAnother: 'আরেকটি আপলোড',
+    },
+
+    guide: {
+      title: 'প্রশ্নের PDF — ফরম্যাট গাইড',
+      subtitle: 'শিক্ষকদের ঠিক যে নিয়মে ফাইল বানাতে হবে। এই পাতাটি তাঁদের পাঠিয়ে দিন।',
+      printBtn: 'প্রিন্ট / PDF হিসেবে সেভ',
+
+      introTitle: 'কীভাবে কাজ করে',
+      introBody:
+        'একটি প্রশ্নপত্র একটিমাত্র PDF ফাইল হিসেবে জমা দিতে হয়। ফাইলের একদম শুরুতে একটি মেটাডেটা ব্লক থাকে, যেখান থেকে আমরা সময়, মোট প্রশ্ন ও নম্বরের হিসাব জেনে নিই — তারপর নির্দিষ্ট ফরম্যাটে প্রশ্নগুলো থাকে। সবটাই সিস্টেম নিজে পড়ে নেয়, আপনাকে হাতে কিছু লিখতে হয় না।',
+
+      rulesTitle: 'পাঁচটি নিয়ম',
+      rule1Title: 'Word বা Google Docs-এ লিখুন',
+      rule1Body: 'তারপর File → Save as PDF করুন। ছাপা কাগজ স্ক্যান বা ছবি তুলে দেবেন না — ছবি থেকে লেখা পড়া যায় না।',
+      rule2Title: 'প্রতিটি চিহ্ন নতুন লাইনে',
+      rule2Body: 'Q1., A), ANS: — প্রতিটি আলাদা লাইনের শুরুতে থাকবে। বাক্যের মাঝখানে বসাবেন না।',
+      rule3Title: '#META ব্লক সবার আগে',
+      rule3Body: 'ফাইলের একদম প্রথমে, কোনো প্রশ্নের আগে এটি থাকতেই হবে।',
+      rule4Title: 'টেবিল, কলাম বা টেক্সট বক্স নয়',
+      rule4Body: 'সাধারণ প্যারাগ্রাফে লিখুন। একাধিক কলামে লিখলে পড়ার ক্রম গুলিয়ে যায়।',
+      rule5Title: 'প্রশ্ন নম্বর ১, ২, ৩… কোনো ফাঁক ছাড়া',
+      rule5Body: 'কোনো নম্বর বাদ পড়লে বা দুবার এলে আপলোড আটকে যাবে।',
+
+      metaTitle: 'অংশ ১ — #META ব্লক',
+      metaBody: 'এটি আপনার ফাইলের উপরে কপি করে নিজের তথ্য বসান।',
+
+      questionTitle: 'অংশ ২ — প্রশ্নগুলো',
+      questionBody: '#END_META-এর পর প্রতিটি প্রশ্ন ঠিক এভাবে লিখুন।',
+
+      bilingualTitle: 'দুই ভাষার প্রশ্নপত্র',
+      bilingualBody:
+        'প্রশ্নপত্রে ইংরেজি ও বাংলা দুটোই থাকলে LANGUAGE: BILINGUAL দিন, আর একই লাইনে তিনটি পাইপ চিহ্ন দিয়ে দুটো আলাদা করুন।',
+
+      fieldsTitle: 'কোন লাইনের কী মানে',
+      colField: 'লাইন',
+      colRequired: 'আবশ্যক?',
+      colNotes: 'বিবরণ',
+      yes: 'হ্যাঁ',
+      no: 'ঐচ্ছিক',
+
+      errorsTitle: 'যেসব কারণে আপলোড আটকে যাবে',
+      warningsTitle: 'যেগুলো শুধু সতর্কবার্তা',
+
+      downloadTitle: 'টেমপ্লেট',
+      downloadBody: 'টেমপ্লেট থেকে শুরু করুন — তাহলে ফরম্যাট ভুল হওয়ার সম্ভাবনা অনেক কম।',
+      downloadDocx: 'Word টেমপ্লেট (.docx)',
+      downloadSample: 'নমুনা — ১০টি প্রশ্ন (.pdf)',
+      downloadSampleDocx: 'নমুনা — ১০টি প্রশ্ন (.docx)',
+    },
+  },
+} as const;
+
+export type AdminLang = 'EN' | 'BN';
+export type AdminCopy = (typeof adminCopy)['EN'];
+
+/** Admin copy for the current app language, falling back to English. */
+export function useAdminT(): { t: AdminCopy; lang: AdminLang } {
+  const language = useLanguageStore((s) => s.language);
+  const lang: AdminLang = language === 'BN' ? 'BN' : 'EN';
+  return { t: adminCopy[lang] as AdminCopy, lang };
+}

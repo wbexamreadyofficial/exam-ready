@@ -1,4 +1,4 @@
-import { apiClient } from './client';
+aimport { apiClient } from './client';
 import type { ApiResponse } from '@/types/api';
 import type {
   ActivityListParams,
