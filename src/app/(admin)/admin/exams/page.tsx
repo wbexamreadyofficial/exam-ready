@@ -1,98 +1,92 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, Search, FileEdit, Trash2, Globe, CheckCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
-import { PageHeader } from '@/components/layout/PageHeader';
+import { useQuery } from '@tanstack/react-query';
+import { FileText } from 'lucide-react';
 
-const MOCK_EXAMS_ADMIN = [
-  { id: 'ex1', title: 'WBCS Preliminary 2026 Full Mock Test', category: 'WBCS', questions: 200, duration: 150, status: 'PUBLISHED', isPaid: false, attempts: 12543 },
-  { id: 'ex2', title: 'WBPSC Clerkship Stage 1 Mock', category: 'WBPSC', questions: 100, duration: 90, status: 'PUBLISHED', isPaid: false, attempts: 8234 },
-  { id: 'ex3', title: 'SSC CGL Tier-1 Practice Set #5', category: 'SSC', questions: 100, duration: 60, status: 'DRAFT', isPaid: false, attempts: 0 },
-  { id: 'ex4', title: 'RRB NTPC CBT-2 Open Exam', category: 'Railway', questions: 120, duration: 90, status: 'PUBLISHED', isPaid: true, attempts: 6540 },
-];
+import { Card, CardContent } from '@/components/ui/card';
+import { PageHeader } from '@/components/layout/PageHeader';
+import { HierarchyGuide } from '@/components/admin/catalog/HierarchyGuide';
+import { ExamEditDialog } from '@/components/admin/catalog/EditDialogs';
+import { useRelationHost } from '@/components/admin/catalog/RelationDialog';
+import { ExamsTable } from '@/components/admin/catalog/tables';
+import { ACTIVE_OPTIONS, FilterBar, FilterSelect, LANGUAGE_LABEL, ListPanel, useOptions } from '@/components/admin/catalog/ui';
+import { ALL, useListState } from '@/components/admin/catalog/useListState';
+import { catalogApi, type ExamRow } from '@/lib/api/catalog';
+import { ELEVATED_CARD } from '@/lib/constants';
+
+const LANGUAGE_OPTIONS = Object.entries(LANGUAGE_LABEL).map(([value, label]) => ({ value, label }));
 
 export default function ExamsAdminPage() {
-  const [exams, setExams] = useState(MOCK_EXAMS_ADMIN);
-  const [search, setSearch] = useState('');
+  const relations = useRelationHost();
+  const [editing, setEditing] = useState<ExamRow | null>(null);
 
-  const filtered = exams.filter((e) => e.title.toLowerCase().includes(search.toLowerCase()) || e.category.toLowerCase().includes(search.toLowerCase()));
+  const state = useListState({ category: ALL, language: ALL, isActive: ALL });
+  const categories = useOptions('categories');
 
-  const togglePublish = (id: string) => {
-    setExams((prev) => prev.map((e) => (e.id === id ? { ...e, status: e.status === 'PUBLISHED' ? 'DRAFT' : 'PUBLISHED' } : e)));
-  };
+  const query = useQuery({
+    queryKey: ['catalog', 'exams', state.params],
+    queryFn: () => catalogApi.exams(state.params),
+    placeholderData: (previous) => previous,
+  });
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Exam Management"
-        description="Create, configure, and publish competitive mock tests"
-        actions={
-          <Button className="font-bold gap-2">
-          <Plus className="h-4 w-4" /> Create New Exam
-        </Button>
-        }
+        title="Exams"
+        description="Each exam is one paper, like “WB Constable Preliminary 2026”. Open an exam to see its question sets and questions."
       />
 
-      <Card>
-        <CardContent className="p-6">
-          <div className="flex items-center gap-4 mb-6">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--color-muted-foreground)]" />
-              <Input
-                placeholder="Filter by exam title or category..."
-                className="pl-9"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
-          </div>
+      <HierarchyGuide current="exam" />
 
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Exam Title</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Questions / Duration</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Access</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filtered.map((exam) => (
-                <TableRow key={exam.id}>
-                  <TableCell className="font-semibold text-sm">{exam.title}</TableCell>
-                  <TableCell><Badge variant="secondary">{exam.category}</Badge></TableCell>
-                  <TableCell className="text-xs text-[var(--color-muted-foreground)]">{exam.questions} Qs · {exam.duration} mins</TableCell>
-                  <TableCell>
-                    <Badge variant={exam.status === 'PUBLISHED' ? 'success' : 'outline'} className="text-[10px]">
-                      {exam.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={exam.isPaid ? 'default' : 'secondary'} className="text-[10px]">
-                      {exam.isPaid ? 'PRO' : 'FREE'}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right space-x-2">
-                    <Button variant="ghost" size="sm" onClick={() => togglePublish(exam.id)}>
-                      {exam.status === 'PUBLISHED' ? 'Unpublish' : 'Publish'}
-                    </Button>
-                    <Button variant="outline" size="sm" className="gap-1">
-                      <FileEdit className="h-3.5 w-3.5" /> Edit
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+      <Card className={ELEVATED_CARD}>
+        <CardContent className="p-4">
+          <FilterBar state={state} searchPlaceholder="Search exams by name or year…">
+            <FilterSelect
+              label="Exam category"
+              value={state.filters.category}
+              onChange={(value) => state.setFilters({ category: value })}
+              options={categories.options}
+              allLabel="All categories"
+            />
+            <FilterSelect
+              label="Language"
+              value={state.filters.language}
+              onChange={(value) => state.setFilters({ language: value })}
+              options={LANGUAGE_OPTIONS}
+              allLabel="Any language"
+              className="sm:w-44"
+            />
+            <FilterSelect
+              label="Status"
+              value={state.filters.isActive}
+              onChange={(value) => state.setFilters({ isActive: value })}
+              options={ACTIVE_OPTIONS}
+              allLabel="Active and inactive"
+              className="sm:w-44"
+            />
+          </FilterBar>
         </CardContent>
       </Card>
+
+      <ListPanel
+        query={query}
+        state={state}
+        columns={['Exam', 'Category', 'Paper pattern', 'Status', 'Actions']}
+        empty={{ icon: FileText, title: 'No exams yet', description: 'Exams are created when you upload a question paper.' }}
+      >
+        {(exams) => (
+          <ExamsTable
+            items={exams}
+            onEdit={setEditing}
+            onOpenSets={(exam) => relations.open({ scope: 'exams', id: exam._id, view: 'question-sets' })}
+            onOpenQuestions={(exam) => relations.open({ scope: 'exams', id: exam._id, view: 'questions' })}
+          />
+        )}
+      </ListPanel>
+
+      {relations.element}
+      {editing && <ExamEditDialog key={editing._id} exam={editing} onClose={() => setEditing(null)} />}
     </div>
   );
 }
