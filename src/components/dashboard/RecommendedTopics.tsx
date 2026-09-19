@@ -16,7 +16,7 @@ export default function RecommendedTopics() {
           const Icon = iconMap[topic.icon] || BookOpen;
           
           let bgClass = '';
-          if (index % 4 === 0) bgClass = 'bg-[var(--color-bblue-50)] text-[var(--color-bblue-600)] dark:bg-blue-900/20 dark:text-blue-400';
+          if (index % 4 === 0) bgClass = 'bg-[var(--color-bblue-50)] text-[var(--color-bblue-600)] dark:bg-orange-900/20 dark:text-orange-400';
           else if (index % 4 === 1) bgClass = 'bg-[var(--color-bgreen-50)] text-[var(--color-bgreen-600)] dark:bg-green-900/20 dark:text-green-400';
           else if (index % 4 === 2) bgClass = 'bg-[var(--color-borange-50)] text-[var(--color-borange-600)] dark:bg-orange-900/20 dark:text-orange-400';
           else bgClass = 'bg-purple-50 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400';

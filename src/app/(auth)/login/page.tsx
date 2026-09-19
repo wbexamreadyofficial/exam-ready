@@ -27,6 +27,13 @@ const TRUST_STATS = [
 
 const RESEND_COOLDOWN_SECONDS = 30;
 
+// Temporary one-click admin sign-in. It completes the normal admin OTP challenge with
+// the code the backend echoes, which only happens outside production, so it cannot work
+// against a production backend. Hidden in production builds unless explicitly enabled.
+const ADMIN_QUICK_MOBILE = '9876543210';
+const SHOW_ADMIN_QUICK_LOGIN =
+  process.env.NODE_ENV !== 'production' || process.env.NEXT_PUBLIC_ADMIN_QUICK_LOGIN === 'true';
+
 type Step = 'mobile' | 'otp';
 
 export default function LoginPage() {
@@ -120,6 +127,25 @@ export default function LoginPage() {
     }
   };
 
+  const handleAdminQuickLogin = async () => {
+    clearError();
+    try {
+      const outcome = await tryWebLogin(ADMIN_QUICK_MOBILE);
+      if (outcome === 'logged-in') return;
+      if (outcome === 'no-account') {
+        toast.error('Admin account not found.');
+        return;
+      }
+      if (!outcome.devOtp) {
+        toast.error('Quick admin login needs a backend running outside production.');
+        return;
+      }
+      await verifyWebOtp(ADMIN_QUICK_MOBILE, outcome.devOtp);
+    } catch {
+      /* `error` from useAuth already carries the message */
+    }
+  };
+
   const handleVerify = async (code: string) => {
     if (code.length !== 6) return;
     clearError();
@@ -205,6 +231,7 @@ export default function LoginPage() {
                     register={register}
                     errors={errors}
                     isLoading={isLoading}
+                    onAdminQuickLogin={SHOW_ADMIN_QUICK_LOGIN ? handleAdminQuickLogin : undefined}
                   />
                 ) : (
                   <OtpStep
@@ -270,7 +297,9 @@ function MobileStep({
   register,
   errors,
   isLoading,
+  onAdminQuickLogin,
 }: {
+  onAdminQuickLogin?: () => void;
   onSubmit: React.FormEventHandler<HTMLFormElement>;
   register: ReturnType<typeof useForm<MobileInput>>['register'];
   errors: ReturnType<typeof useForm<MobileInput>>['formState']['errors'];
@@ -334,6 +363,25 @@ function MobileStep({
           Continue
           <ArrowRight className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
         </Button>
+
+        {onAdminQuickLogin && (
+          <>
+            <div className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-wider text-ink-400 dark:text-slate-500">
+              <span className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
+              or
+              <span className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
+            </div>
+            <button
+              type="button"
+              onClick={onAdminQuickLogin}
+              disabled={isLoading}
+              className="flex h-[52px] w-full items-center justify-center gap-2 rounded-xl border border-orange-300/70 bg-orange-50 text-[14.5px] font-bold text-[#b9450d] transition-all hover:-translate-y-px hover:border-orange-400 hover:bg-orange-100 hover:shadow-md disabled:opacity-60 dark:border-orange-400/30 dark:bg-orange-500/10 dark:text-orange-300"
+            >
+              <ShieldCheck className="h-4 w-4" />
+              Admin login
+            </button>
+          </>
+        )}
       </form>
     </>
   );

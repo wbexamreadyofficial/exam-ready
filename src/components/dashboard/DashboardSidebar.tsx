@@ -8,7 +8,7 @@ import { sidebarNavGroups } from '@/lib/dashboard/mockData';
 import { 
   FileText, Database, History, Bookmark, StickyNote, 
   FunctionSquareIcon, LayoutDashboard, TrendingUp, Medal, 
-  User, HelpCircle, Crown, ChevronLeft, ChevronRight
+  User, HelpCircle, Crown, ChevronLeft, ChevronRight, ListChecks
 } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { LogoIcon } from '@/components/ui/Logo';
@@ -16,7 +16,7 @@ import { LogoIcon } from '@/components/ui/Logo';
 const iconMap: Record<string, React.ElementType> = { 
   FileText, Database, History, Bookmark, StickyNote, 
   FunctionSquare: FunctionSquareIcon, LayoutDashboard, TrendingUp, Medal, 
-  User, HelpCircle
+  User, HelpCircle, ListChecks
 };
 
 interface DashboardSidebarProps {
@@ -89,17 +89,23 @@ export default function DashboardSidebar({ isCollapsed, onToggle, onClose }: Das
                       href={item.href}
                       onClick={onClose}
                       className={cn(
-                        "flex items-center gap-3 px-3 py-1.5 rounded-md transition-colors relative text-[13.5px]",
+                        "flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors relative text-[13.5px]",
                         isActive
-                          ? "bg-[var(--color-bblue-50)] dark:bg-[var(--color-bblue-700)]/10 text-[var(--color-data-primary)] font-medium border-l-3 border-[var(--color-data-primary)]"
+                          ? "bg-gradient-to-r from-orange-100/90 to-orange-50/20 dark:from-orange-500/20 dark:to-orange-500/0 text-[#d4581a] dark:text-[#ff9147] font-semibold"
                           : "text-[var(--color-muted-foreground)] hover:bg-[var(--color-surface-muted)] hover:text-[var(--color-ink-900)]",
                         isCollapsed ? "justify-center border-l-0 px-0 h-9 w-9 mx-auto" : ""
                       )}
                     >
                       <Icon size={18} className="shrink-0" />
                       {!isCollapsed && <span className="truncate">{item.label}</span>}
-                      {isActive && isCollapsed && (
-                        <div className="absolute left-0 w-1 h-5 bg-[var(--color-data-primary)] rounded-r-md" />
+                      {isActive && (
+                        <span
+                          aria-hidden
+                          className={cn(
+                            "absolute left-0 w-1 rounded-r-full bg-gradient-to-b from-[#ffb26b] via-[#f4802f] to-[#d4501a] shadow-[0_0_10px_rgba(244,128,47,0.7)]",
+                            isCollapsed ? "h-5" : "top-1.5 bottom-1.5"
+                          )}
+                        />
                       )}
                     </Link>
                   );

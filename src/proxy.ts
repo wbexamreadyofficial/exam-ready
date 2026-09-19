@@ -10,7 +10,7 @@ import type { UserRole } from '@/types/auth';
  * belong to a role later
  */
 const ROLE_PREFIXES: Record<string, UserRole> = {
-  '/dashboard': 'student',
+  '/student': 'student',
   '/examiner': 'examiner',
   '/partner': 'partner',
 };
@@ -44,20 +44,13 @@ export function proxy(request: NextRequest) {
     }
   }
 
-  // Already signed in? Skip the login/register screen and go straight to the dashboard.
-  if ((pathname === '/login' || pathname === '/register') && role) {
-    return NextResponse.redirect(new URL(getRoleHome(role), request.url));
-  }
-
   return NextResponse.next();
 }
 
 export const config = {
   matcher: [
-    '/dashboard/:path*',
+    '/student/:path*',
     '/examiner/:path*',
     '/partner/:path*',
-    '/login',
-    '/register',
   ],
 };

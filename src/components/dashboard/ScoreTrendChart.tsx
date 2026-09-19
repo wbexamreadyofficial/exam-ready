@@ -34,7 +34,7 @@ export default function ScoreTrendChart() {
   };
 
   return (
-    <Card className="surface-card border-none shadow-sm h-full">
+    <Card className="surface-card h-full">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="display-card text-lg font-semibold text-[var(--color-ink-900)]">Score Trend</CardTitle>
         <div className="flex gap-1 bg-[var(--color-surface-muted)] rounded-lg p-1">

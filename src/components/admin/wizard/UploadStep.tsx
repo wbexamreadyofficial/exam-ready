@@ -41,7 +41,7 @@ export function UploadStep({ busy, progress, defaultName = '', onSubmit }: Uploa
   };
 
   return (
-    <div className="space-y-4">
+    <div className="w-full space-y-5">
       <div>
         <h2 className="text-lg font-black tracking-tight">{w.title}</h2>
         <p className="mt-1 text-sm text-[var(--color-muted-foreground)]">{w.subtitle}</p>
@@ -49,13 +49,13 @@ export function UploadStep({ busy, progress, defaultName = '', onSubmit }: Uploa
 
       {/* Bengali cannot survive a PDF round-trip, so this is stated up front
           rather than discovered after the parse. */}
-      <div className="flex gap-2.5 rounded-lg border border-[var(--color-bblue-100)] bg-[var(--color-bblue-50)] p-3 dark:border-[var(--color-bblue-700)]/30 dark:bg-[var(--color-bblue-700)]/10">
-        <Info className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-primary)]" />
+      <div className="flex gap-2.5 rounded-xl border border-orange-200/80 bg-gradient-to-br from-orange-50 to-white p-4 shadow-sm dark:border-orange-400/25 dark:from-orange-500/10 dark:to-transparent">
+        <Info className="mt-0.5 h-4 w-4 shrink-0 text-[#e2691f]" />
         <div className="min-w-0 text-[12.5px] leading-relaxed">
           <p>{w.docxNotice}</p>
           <Link
             href="/admin/upload-guide"
-            className="mt-1 inline-flex items-center gap-1 font-semibold text-[var(--color-primary)] hover:underline"
+            className="mt-1 inline-flex items-center gap-1 font-semibold text-[#c95817] hover:underline dark:text-orange-300"
           >
             <BookOpen className="h-3.5 w-3.5" />
             {w.viewGuide}
@@ -76,7 +76,7 @@ export function UploadStep({ busy, progress, defaultName = '', onSubmit }: Uploa
       {file ? (
         <Card>
           <CardContent className="flex items-center gap-3 p-4">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[var(--color-bblue-50)] text-[var(--color-primary)] dark:bg-[var(--color-bblue-700)]/20">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-orange-50 text-[#e2691f] dark:bg-orange-500/15">
               <FileText className="h-5 w-5" />
             </div>
             <div className="min-w-0 flex-1">
@@ -113,16 +113,18 @@ export function UploadStep({ busy, progress, defaultName = '', onSubmit }: Uploa
           }}
           onClick={() => inputRef.current?.click()}
           className={cn(
-            'cursor-pointer rounded-xl border-2 border-dashed p-8 text-center transition-colors',
+            'cursor-pointer rounded-2xl border-2 border-dashed px-6 py-16 text-center transition-all duration-300 sm:py-24',
             dragging
-              ? 'border-[var(--color-primary)] bg-[var(--color-bblue-50)] dark:bg-[var(--color-bblue-700)]/10'
-              : 'border-[var(--color-hairline)] hover:bg-[var(--color-muted)]'
+              ? 'scale-[1.005] border-[#e2691f] bg-orange-100/70 shadow-lg shadow-orange-500/15 dark:bg-orange-500/15'
+              : 'border-orange-300/70 bg-gradient-to-br from-orange-50/70 via-white to-white hover:border-[#e2691f] hover:shadow-md hover:shadow-orange-500/10 dark:border-orange-400/30 dark:from-orange-500/10 dark:via-transparent dark:to-transparent'
           )}
         >
-          <Upload className="mx-auto mb-2 h-7 w-7 text-[var(--color-muted-foreground)]" />
-          <p className="text-[14px] font-semibold">{w.dropTitle}</p>
-          <p className="mt-0.5 text-[12.5px] text-[var(--color-muted-foreground)]">{w.dropHint}</p>
-          <p className="mt-2 text-[11.5px] text-[var(--color-muted-foreground)]">{w.dropFormats}</p>
+          <span className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] text-white shadow-lg shadow-orange-600/30 ring-1 ring-inset ring-white/25">
+            <Upload className="h-7 w-7" />
+          </span>
+          <p className="text-base font-bold">{w.dropTitle}</p>
+          <p className="mt-1 text-[13.5px] text-[var(--color-muted-foreground)]">{w.dropHint}</p>
+          <p className="mt-3 text-[12px] text-[var(--color-muted-foreground)]">{w.dropFormats}</p>
           <input
             ref={inputRef}
             type="file"
@@ -136,7 +138,7 @@ export function UploadStep({ busy, progress, defaultName = '', onSubmit }: Uploa
       {sizeError && <p className="text-[12.5px] text-[var(--color-bred-600)]">{sizeError}</p>}
 
       <Button
-        className="w-full gap-2 font-bold sm:w-auto"
+        className="w-full gap-2 font-bold sm:w-auto border-0 bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] text-white shadow-md shadow-orange-600/30 ring-1 ring-inset ring-white/25 transition-all hover:-translate-y-px hover:bg-transparent hover:brightness-110 hover:shadow-lg hover:shadow-orange-600/40 disabled:opacity-50 disabled:shadow-none"
         disabled={!file || name.trim().length < 2 || busy}
         onClick={() => file && onSubmit(file, name.trim())}
       >

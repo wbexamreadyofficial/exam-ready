@@ -317,36 +317,22 @@ export const sidebarNavGroups: NavGroup[] = [
   {
     title: '',
     items: [
-      { label: 'Dashboard', icon: 'LayoutDashboard', href: '/dashboard', active: true },
+      { label: 'Dashboard', icon: 'LayoutDashboard', href: '/student/dashboard', active: true },
     ],
   },
   {
     title: 'Practice',
     items: [
       { label: 'Mock Tests', icon: 'FileText', href: '/exams' },
+      { label: 'Question Sets', icon: 'ListChecks', href: '/question-sets' },
       { label: 'Question Bank', icon: 'Database', href: '/questions' },
       { label: 'Previous Year', icon: 'History', href: '/previous-year' },
     ],
   },
   {
-    title: 'Study',
-    items: [
-      { label: 'Bookmarks', icon: 'Bookmark', href: '/bookmarks' },
-      { label: 'Notes', icon: 'StickyNote', href: '/notes' },
-      { label: 'Formulas', icon: 'FunctionSquare', href: '/formulas' },
-    ],
-  },
-  {
-    title: 'Analytics',
-    items: [
-      { label: 'Progress Report', icon: 'TrendingUp', href: '/progress' },
-      { label: 'Leaderboard', icon: 'Medal', href: '/leaderboard' },
-    ],
-  },
-  {
     title: 'Account',
     items: [
-      { label: 'Profile', icon: 'User', href: '/profile' },
+      { label: 'Profile', icon: 'User', href: '/student/profile' },
       { label: 'Help', icon: 'HelpCircle', href: '/help' },
     ],
   },

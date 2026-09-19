@@ -208,7 +208,7 @@ export default function ExamsPage() {
               <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
                 <span className="text-[11px] font-bold text-slate-500">{exam.testType}</span>
                 <Button size="sm" className="font-bold text-xs gap-1 h-8 px-3 bg-amber-500 hover:bg-amber-600 text-slate-950 shadow-sm" asChild>
-                  <Link href={`/exam/${exam.id}/instructions`}>
+                  <Link href={`/student/exam/${exam.id}/instructions`}>
                     Start Exam <ArrowRight className="h-3.5 w-3.5" />
                   </Link>
                 </Button>

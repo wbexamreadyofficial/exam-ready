@@ -21,7 +21,7 @@ const navItems = [
   { title: 'Home',            href: '/' },
   { title: 'Courses',         href: '/quizzes' },
   { title: 'Results',         href: '/leaderboard' },
-  { title: 'Pricing',         href: '/subscriptions' },
+  { title: 'Pricing',         href: '/student/subscriptions' },
   { title: 'Blog',            href: '/contact' },
   { title: 'Contact',         href: '/contact' },
 ];

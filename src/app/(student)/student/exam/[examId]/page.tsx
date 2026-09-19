@@ -141,7 +141,7 @@ export default function ExamPage({ params }: { params: Promise<{ examId: string 
     if (sessionId) {
       submitExam.mutate({ examId, sessionId, answers });
     } else {
-      router.push(`/exam/${examId}/result`);
+      router.push(`/student/exam/${examId}/result`);
     }
   };
 
@@ -207,7 +207,7 @@ export default function ExamPage({ params }: { params: Promise<{ examId: string 
               </div>
             </div>
 
-            <Card className="mb-6 border-2 border-[var(--color-border)] shadow-sm">
+            <Card className="mb-6 border-2 border-[var(--color-border)] shadow-elevated">
               <CardContent className="p-6">
                 <p className="text-base md:text-lg font-semibold leading-relaxed mb-6">
                   {currentQ.text}

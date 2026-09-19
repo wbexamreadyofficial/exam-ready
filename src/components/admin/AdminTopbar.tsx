@@ -5,6 +5,7 @@ import { Menu, FileUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeSwitcher } from '@/components/layout/ThemeSwitcher';
 import { AdminLangToggle } from './AdminLangToggle';
+import { ProfileMenu } from './ProfileMenu';
 import { useAdminT } from '@/lib/admin/i18n';
 
 interface AdminTopbarProps {
@@ -15,7 +16,7 @@ export function AdminTopbar({ onOpenMenu }: AdminTopbarProps) {
   const { t } = useAdminT();
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-3 border-b border-[var(--color-hairline)] bg-[var(--color-card)]/95 px-3 backdrop-blur sm:px-5">
+    <header className="sticky top-0 z-30 flex h-[72px] shrink-0 items-center gap-3 border-b border-[var(--color-hairline)] bg-[var(--color-card)]/95 px-3 backdrop-blur sm:px-5">
       {/* Mobile: opens the sidebar drawer. Hidden once the rail is visible. */}
       <button
         onClick={onOpenMenu}
@@ -40,6 +41,7 @@ export function AdminTopbar({ onOpenMenu }: AdminTopbarProps) {
 
         <AdminLangToggle />
         <ThemeSwitcher />
+        <ProfileMenu />
       </div>
     </header>
   );

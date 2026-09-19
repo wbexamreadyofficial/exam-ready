@@ -134,7 +134,7 @@ export default function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
               )}
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer flex items-center gap-2" onClick={() => router.push('/profile')}>
+            <DropdownMenuItem className="cursor-pointer flex items-center gap-2" onClick={() => router.push('/student/profile')}>
               <UserIcon size={16} className="text-[var(--color-muted-foreground)]" />
               <span>Profile</span>
             </DropdownMenuItem>

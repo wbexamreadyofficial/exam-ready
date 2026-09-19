@@ -17,7 +17,7 @@ export default function StatTiles() {
         let iconColorClass = '';
         
         if (index === 0 || index === 1) {
-          bgClass = 'bg-[var(--color-bblue-50)] dark:bg-blue-900/20';
+          bgClass = 'bg-[var(--color-bblue-50)] dark:bg-orange-900/20';
           iconColorClass = 'text-[var(--color-data-primary)]';
         } else if (index === 2) {
           bgClass = 'bg-[var(--color-borange-50)] dark:bg-orange-900/20';

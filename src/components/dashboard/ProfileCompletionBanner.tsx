@@ -73,12 +73,12 @@ export function ProfileCompletionBanner() {
   });
 
   return (
-    <div className="relative flex flex-wrap items-center gap-4 rounded-2xl border border-[var(--color-hairline)] bg-[var(--color-surface)] px-4 py-3.5 pr-11 sm:px-5 shadow-sm">
+    <div className="relative flex flex-wrap items-center gap-4 rounded-2xl border border-[var(--color-hairline)] bg-[var(--color-surface)] px-4 py-3.5 pr-11 sm:px-5 shadow-[0_1px_2px_rgba(30,64,110,0.05),0_6px_16px_-2px_rgba(30,64,110,0.08),0_16px_40px_-8px_rgba(30,64,110,0.16)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.4),0_10px_24px_-4px_rgba(0,0,0,0.6)]">
       <CircularProgress value={completion.completionPercentage} />
 
       <div className="min-w-0 flex-1 space-y-1">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center rounded-full bg-[var(--color-bblue-50)] dark:bg-blue-500/10 px-2.5 py-0.5 text-[11px] font-bold text-[var(--color-data-primary)]">
+          <span className="inline-flex items-center rounded-full bg-[var(--color-bblue-50)] dark:bg-orange-500/10 px-2.5 py-0.5 text-[11px] font-bold text-[var(--color-data-primary)]">
             Profile Completion
           </span>
           <p className="text-[13.5px] font-semibold text-[var(--color-ink-900)]">{completion.bannerText}</p>
@@ -93,7 +93,7 @@ export function ProfileCompletionBanner() {
 
       <button
         type="button"
-        onClick={() => router.push('/profile')}
+        onClick={() => router.push('/student/profile')}
         className="shrink-0 inline-flex items-center gap-1.5 rounded-xl bg-[var(--color-data-primary)] px-4 py-2.5 text-[13px] font-bold text-white hover:opacity-90 transition-opacity"
       >
         Complete Profile

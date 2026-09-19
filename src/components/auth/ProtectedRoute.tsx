@@ -1,4 +1,5 @@
 'use client';
+import { getRoleHome } from '@/lib/auth/roleHome';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
@@ -21,7 +22,7 @@ export function ProtectedRoute({ children, requiredRole, redirectTo = '/login', 
       if (!isAuthenticated) {
         router.push(`${redirectTo}?next=${encodeURIComponent(window.location.pathname)}`);
       } else if (requiredRole && user?.role !== requiredRole) {
-        router.push('/dashboard');
+        router.push(getRoleHome(user?.role));
       }
     }
   }, [isAuthenticated, isLoading, user, requiredRole, redirectTo, router]);

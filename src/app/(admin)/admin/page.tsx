@@ -5,6 +5,7 @@ import {
   FileUp, BookOpen, LayoutGrid, Library, FileText, ListChecks, HelpCircle, History, ArrowRight,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { PageHeader } from '@/components/layout/PageHeader';
 import { UploadSteps } from '@/components/admin/UploadSteps';
 import { useAdminT } from '@/lib/admin/i18n';
 
@@ -22,17 +23,14 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-black tracking-tight sm:text-2xl">{t.dashboard.title}</h1>
-        <p className="mt-1 text-sm text-[var(--color-muted-foreground)]">{t.dashboard.subtitle}</p>
-      </div>
+      <PageHeader title={t.dashboard.title} description={t.dashboard.subtitle} />
 
       {/* Primary actions — the two things an operator is most likely here to do */}
       <div className="grid gap-4 lg:grid-cols-2">
         <Link href="/admin/uploads/new" className="group">
-          <Card className="h-full border-[var(--color-primary)]/25 bg-gradient-to-br from-[var(--color-bblue-50)] to-[var(--color-card)] transition-shadow hover:shadow-md dark:from-[var(--color-bblue-700)]/15">
+          <Card className="h-full border-orange-300/60 bg-gradient-to-br from-orange-50 via-white to-[var(--color-card)] transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-orange-500/15 dark:border-orange-400/25 dark:from-orange-500/15 dark:via-transparent dark:to-transparent">
             <CardContent className="flex items-start gap-4 p-5">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[var(--color-primary)] text-[var(--color-primary-foreground)]">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] text-white shadow-md shadow-orange-600/30 ring-1 ring-inset ring-white/25">
                 <FileUp className="h-5 w-5" />
               </div>
               <div className="min-w-0 flex-1">
@@ -49,7 +47,7 @@ export default function AdminDashboardPage() {
         </Link>
 
         <Link href="/admin/upload-guide" className="group">
-          <Card className="h-full transition-shadow hover:shadow-md">
+          <Card className="h-full transition-all hover:-translate-y-0.5 hover:border-orange-300/60 hover:shadow-md">
             <CardContent className="flex items-start gap-4 p-5">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[var(--color-borange-50)] text-[var(--color-accent)] dark:bg-[var(--color-borange-500)]/15">
                 <BookOpen className="h-5 w-5" />
@@ -82,9 +80,9 @@ export default function AdminDashboardPage() {
             const Icon = s.icon;
             return (
               <Link key={s.href} href={s.href}>
-                <Card className="h-full transition-colors hover:border-[var(--color-primary)]/40 hover:bg-[var(--color-muted)]">
+                <Card className="h-full transition-colors hover:border-orange-300/70 hover:bg-orange-50/60 dark:hover:bg-orange-500/10">
                   <CardContent className="flex flex-col items-start gap-2 p-4">
-                    <Icon className="h-5 w-5 text-[var(--color-primary)]" />
+                    <Icon className="h-5 w-5 text-[#e2691f]" />
                     <span className="text-[13px] font-semibold leading-snug">{t.nav[s.labelKey]}</span>
                   </CardContent>
                 </Card>

@@ -4,7 +4,7 @@ import { Logo } from '@/components/ui/Logo';
 const quickLinks = [
   { title: 'Courses', href: '/quizzes' },
   { title: 'Results', href: '/leaderboard' },
-  { title: 'Pricing', href: '/subscriptions' },
+  { title: 'Pricing', href: '/student/subscriptions' },
 ];
 
 const examLinks = [

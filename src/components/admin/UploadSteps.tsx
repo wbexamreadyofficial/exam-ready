@@ -68,7 +68,7 @@ export function UploadSteps({ variant = 'full', className }: UploadStepsProps) {
               {!isLast && (
                 <span
                   aria-hidden
-                  className="absolute left-[17px] top-10 h-[calc(100%-1.75rem)] w-px bg-[var(--color-hairline)] sm:left-[19px]"
+                  className="absolute left-[17px] top-10 h-[calc(100%-1.75rem)] w-px bg-gradient-to-b from-orange-300/70 to-orange-200/20 dark:from-orange-400/30 sm:left-[19px]"
                 />
               )}
 
@@ -77,7 +77,7 @@ export function UploadSteps({ variant = 'full', className }: UploadStepsProps) {
                   'relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 sm:h-10 sm:w-10',
                   isLast
                     ? 'border-[var(--color-bgreen-500)] bg-[var(--color-bgreen-50)] text-[var(--color-bgreen-600)] dark:bg-[var(--color-bgreen-500)]/15'
-                    : 'border-[var(--color-primary)]/30 bg-[var(--color-bblue-50)] text-[var(--color-primary)] dark:bg-[var(--color-bblue-700)]/20'
+                    : 'border-orange-300/70 bg-orange-50 text-[#e2691f] shadow-sm shadow-orange-500/10 dark:border-orange-400/30 dark:bg-orange-500/15 dark:text-orange-300'
                 )}
               >
                 <Icon className="h-4 w-4 sm:h-[18px] sm:w-[18px]" />

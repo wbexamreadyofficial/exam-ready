@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
+import { ELEVATED_CARD } from '@/lib/constants';
 
 const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
       className={cn(
-        'rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] text-[var(--color-card-foreground)] shadow-sm',
+        'rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] text-[var(--color-card-foreground)]',
+        ELEVATED_CARD,
         className
       )}
       {...props}

@@ -52,7 +52,7 @@ export default function GreetingBanner() {
             </div>
           </div>
           <div className="flex flex-col gap-1 mb-3">
-            <div className="icon-tile bg-[var(--color-bblue-50)] dark:bg-blue-900/20 w-8 h-8">
+            <div className="icon-tile bg-[var(--color-bblue-50)] dark:bg-orange-900/20 w-8 h-8">
               <BookOpen className="w-4 h-4 text-[var(--color-data-primary)]" />
             </div>
             <div className="icon-tile bg-[var(--color-bgreen-50)] dark:bg-green-900/20 w-8 h-8">

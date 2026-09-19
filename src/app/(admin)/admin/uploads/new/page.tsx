@@ -194,7 +194,7 @@ function UploadWizard() {
           </CardContent>
         </Card>
         <div className="flex gap-2">
-          <Button onClick={() => setRejection(null)} className="font-semibold">{w.tryAgain}</Button>
+          <Button onClick={() => setRejection(null)} className="font-semibold border-0 bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] text-white shadow-md shadow-orange-600/30 ring-1 ring-inset ring-white/25 transition-all hover:-translate-y-px hover:bg-transparent hover:brightness-110 hover:shadow-lg hover:shadow-orange-600/40 disabled:opacity-50 disabled:shadow-none">{w.tryAgain}</Button>
           <Button asChild variant="outline"><Link href="/admin/upload-guide">{w.viewGuide}</Link></Button>
         </div>
       </div>
@@ -202,7 +202,7 @@ function UploadWizard() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl space-y-5">
+    <div className="w-full space-y-6">
       {/* Progress rail */}
       <div className="flex items-center gap-2">
         <span className="shrink-0 text-[11.5px] font-bold uppercase tracking-wider text-[var(--color-muted-foreground)]">
@@ -213,8 +213,8 @@ function UploadWizard() {
             <span
               key={i}
               className={cn(
-                'h-1 flex-1 rounded-full',
-                i + 1 <= currentStep ? 'bg-[var(--color-primary)]' : 'bg-[var(--color-muted)]'
+                'h-1.5 flex-1 rounded-full transition-colors',
+                i + 1 <= currentStep ? 'bg-gradient-to-r from-[#f4953f] to-[#e2691f] shadow-[0_0_8px_rgba(226,105,31,0.45)]' : 'bg-[var(--color-muted)]'
               )}
             />
           ))}
@@ -243,7 +243,7 @@ function UploadWizard() {
           <Card>
             <CardContent className="flex flex-wrap items-center gap-x-5 gap-y-2 p-3.5">
               <span className="flex items-center gap-1.5 text-[13px] font-semibold">
-                <FileText className="h-4 w-4 text-[var(--color-primary)]" />
+                <FileText className="h-4 w-4 text-[#e2691f]" />
                 {upload.file.name}
               </span>
               <span className="text-[12.5px] text-[var(--color-muted-foreground)]">
@@ -381,7 +381,7 @@ function UploadWizard() {
                     className={cn(
                       'rounded-md border px-3 py-1.5 text-[12.5px] font-semibold transition-colors',
                       filter === value
-                        ? 'border-[var(--color-primary)] bg-[var(--color-bblue-50)] text-[var(--color-primary)] dark:bg-[var(--color-bblue-700)]/15'
+                        ? 'border-orange-400 bg-orange-50 text-[#c95817] dark:bg-orange-500/15 dark:text-orange-300'
                         : 'border-[var(--color-hairline)] hover:bg-[var(--color-muted)]'
                     )}
                   >
@@ -404,7 +404,7 @@ function UploadWizard() {
 
               <div className="sticky bottom-0 -mx-4 flex flex-wrap gap-2 border-t border-[var(--color-hairline)] bg-[var(--color-background)]/95 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6">
                 <Button
-                  className="gap-2 font-bold"
+                  className="gap-2 font-bold border-0 bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] text-white shadow-md shadow-orange-600/30 ring-1 ring-inset ring-white/25 transition-all hover:-translate-y-px hover:bg-transparent hover:brightness-110 hover:shadow-lg hover:shadow-orange-600/40 disabled:opacity-50 disabled:shadow-none"
                   disabled={counts.blocking > 0 || counts.included === 0 || commit.isPending}
                   onClick={() =>
                     commit.mutate(

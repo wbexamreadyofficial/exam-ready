@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 
 const statusConfig: Record<TestCardStatus, { label: string; bg: string; text: string }> = {
-  'in-progress': { label: 'In Progress', bg: 'bg-[var(--color-bblue-50)] dark:bg-blue-900/20', text: 'text-[var(--color-data-primary)]' },
+  'in-progress': { label: 'In Progress', bg: 'bg-[var(--color-bblue-50)] dark:bg-orange-900/20', text: 'text-[var(--color-data-primary)]' },
   'attempt-again': { label: 'Attempt Again', bg: 'bg-[var(--color-borange-50)] dark:bg-orange-900/20', text: 'text-[var(--color-data-premium)]' },
   'recommended': { label: 'Recommended', bg: 'bg-[var(--color-bgreen-50)] dark:bg-green-900/20', text: 'text-[var(--color-data-positive)]' },
   'new': { label: 'New', bg: 'bg-purple-50 dark:bg-purple-900/20', text: 'text-purple-600 dark:text-purple-400' },
