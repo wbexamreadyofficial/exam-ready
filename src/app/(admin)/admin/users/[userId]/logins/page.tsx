@@ -16,6 +16,8 @@ import {
   Monitor,
   MonitorX,
   Percent,
+  KeyRound,
+  Phone,
   Smartphone,
   UserRound,
   X,
@@ -42,6 +44,8 @@ import {
   describeUserAgent,
   formatDate,
   isMobileDevice,
+  LOGIN_METHOD_HINT,
+  LOGIN_METHOD_LABEL,
   parseDate,
   timeAgo,
 } from '@/lib/userFormat';
@@ -71,7 +75,7 @@ function LoginTableSkeleton({ rows }: { rows: number }) {
             <TableHead>Location</TableHead>
             <TableHead>IP address</TableHead>
             <TableHead>Network</TableHead>
-            <TableHead>Method</TableHead>
+            <TableHead>Sign-in method</TableHead>
             <TableHead>Status</TableHead>
           </TableRow>
         </TableHeader>
@@ -253,9 +257,9 @@ export default function UserLoginsPage() {
                   <SelectValue placeholder="Filter by method" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Methods</SelectItem>
+                  <SelectItem value="all">All Sign-in Methods</SelectItem>
                   <SelectItem value="otp">OTP</SelectItem>
-                  <SelectItem value="mobile">Mobile</SelectItem>
+                  <SelectItem value="mobile">Phone number</SelectItem>
                 </SelectContent>
               </Select>
               <Select
@@ -334,7 +338,7 @@ export default function UserLoginsPage() {
                     <TableHead>Location</TableHead>
                     <TableHead>IP address</TableHead>
                     <TableHead>Network</TableHead>
-                    {sortableHead('Method', 'loginMethod')}
+                    {sortableHead('Sign-in method', 'loginMethod')}
                     <TableHead>Status</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -365,9 +369,13 @@ export default function UserLoginsPage() {
                           {login.ipInfo.org || '—'}
                         </TableCell>
                         <TableCell>
-                          <Badge variant={login.loginMethod === 'otp' ? 'info' : 'secondary'} className="gap-1 text-[10px]">
-                            <Smartphone className="h-3 w-3" />
-                            {login.loginMethod === 'otp' ? 'OTP' : 'Mobile'}
+                          <Badge
+                            variant={login.loginMethod === 'otp' ? 'info' : 'secondary'}
+                            className="gap-1 text-[10px]"
+                            title={LOGIN_METHOD_HINT[login.loginMethod]}
+                          >
+                            {login.loginMethod === 'otp' ? <KeyRound className="h-3 w-3" /> : <Phone className="h-3 w-3" />}
+                            {LOGIN_METHOD_LABEL[login.loginMethod]}
                           </Badge>
                         </TableCell>
                         <TableCell>

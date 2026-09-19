@@ -52,6 +52,7 @@ import {
   describeUserAgent,
   formatDate,
   formatDateTime,
+  LOGIN_METHOD_LABEL,
   parseDate,
   timeAgo,
 } from '@/lib/userFormat';
@@ -599,7 +600,7 @@ export default function UserDetailPage() {
                       variant={login.status === 'failed' ? 'destructive' : 'secondary'}
                       className="shrink-0 text-[10px]"
                     >
-                      {login.status === 'failed' ? 'Failed' : login.loginMethod === 'otp' ? 'OTP' : 'Mobile'}
+                      {login.status === 'failed' ? 'Failed' : LOGIN_METHOD_LABEL[login.loginMethod]}
                     </Badge>
                   </div>
                   <p className="mt-1 text-[11px] text-[var(--color-muted-foreground)]" title={formatDateTime(login.createdAt)}>

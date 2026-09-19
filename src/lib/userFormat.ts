@@ -85,3 +85,11 @@ export function describeLocation(login: LoginRecord): string {
 export function isMobileDevice(userAgent?: string): boolean {
   return !!userAgent && /okhttp|dart|expo|reactnative|android|iphone|ipad|ios|mobile/i.test(userAgent);
 }
+
+/** How someone signed in — NOT the device they used. */
+export const LOGIN_METHOD_LABEL = { otp: 'OTP', mobile: 'Phone number' } as const;
+
+export const LOGIN_METHOD_HINT = {
+  otp: 'Signed in by entering a one-time code',
+  mobile: 'Signed in with just the phone number (no code)',
+} as const;
