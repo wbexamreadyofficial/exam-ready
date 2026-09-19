@@ -68,7 +68,7 @@ export function Navbar() {
         <Logo href="/" size="sm" showTagline={false} />
 
         {/* Desktop Nav */}
-        <nav className="hidden lg:flex items-center gap-0.5 rounded-full border hairline dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/60 p-1" aria-label="Main navigation">
+        <nav className="hidden xl:flex items-center gap-0.5 rounded-full border hairline dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/60 p-1" aria-label="Main navigation">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
@@ -144,7 +144,7 @@ export function Navbar() {
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden h-9 w-9"
+            className="xl:hidden h-9 w-9"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
           >
@@ -155,7 +155,7 @@ export function Navbar() {
 
       {/* Mobile Nav */}
       {mobileOpen && (
-        <div className="lg:hidden border-t hairline dark:border-slate-800 bg-white dark:bg-slate-950 px-4 pb-5 pt-3 animate-fade-in shadow-lg">
+        <div className="xl:hidden border-t hairline dark:border-slate-800 bg-white dark:bg-slate-950 px-4 pb-5 pt-3 animate-fade-in shadow-lg">
           <nav className="flex flex-col gap-0.5 mb-5">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
