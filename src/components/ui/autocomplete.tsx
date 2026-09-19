@@ -182,7 +182,13 @@ export function Autocomplete<T>({
           <p className="border-b border-[var(--color-border)] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-[var(--color-muted-foreground)]">
             {heading(debounced)}
           </p>
-          <ul id={listId} role="listbox" className="max-h-72 overflow-y-auto p-1">
+          <ul
+            id={listId}
+            role="listbox"
+            // Lenis (global smooth scroll) otherwise swallows the wheel and scrolls the page instead.
+            data-lenis-prevent
+            className="max-h-72 overflow-y-auto overscroll-contain p-1"
+          >
             {options.map((option, index) => (
               <li
                 key={getOptionKey(option)}

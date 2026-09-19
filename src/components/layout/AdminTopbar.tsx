@@ -2,10 +2,11 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
-import { Bell, LogOut, Menu, User } from 'lucide-react';
+import { LogOut, Menu, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu,DropdownMenuContent,DropdownMenuItem,DropdownMenuLabel,DropdownMenuSeparator,DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { NotificationBell } from './NotificationBell';
 import { ThemeSwitcher } from './ThemeSwitcher';
 import { useAuth } from '@/hooks/useAuth';
 import { usersApi } from '@/lib/api/users';
@@ -36,7 +37,7 @@ export function AdminTopbar() {
       <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Open menu" onClick={() => setMobileSidebarOpen(true)}><Menu className="h-5 w-5" /></Button>
       <div className="flex-1" />
       <ThemeSwitcher />
-      <Button variant="ghost" size="icon" aria-label="Notifications"><Bell className="h-4 w-4" /></Button>
+      <NotificationBell />
       {user && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

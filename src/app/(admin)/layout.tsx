@@ -3,6 +3,7 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { AdminSidebar } from '@/components/layout/AdminSidebar';
 import { AdminTopbar } from '@/components/layout/AdminTopbar';
 import { AdminLayoutSkeleton } from '@/components/ui/page-skeletons';
+import { NotificationProvider } from '@/providers/NotificationProvider';
 import { useUIStore } from '@/store/uiStore';
 import { cn } from '@/lib/utils';
 function AdminShell({ children }: { children: React.ReactNode }) {
@@ -20,7 +21,9 @@ function AdminShell({ children }: { children: React.ReactNode }) {
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <ProtectedRoute requiredRole="admin" redirectTo="/login" fallback={<AdminLayoutSkeleton />}>
-      <AdminShell>{children}</AdminShell>
+      <NotificationProvider>
+        <AdminShell>{children}</AdminShell>
+      </NotificationProvider>
     </ProtectedRoute>
   );
 }

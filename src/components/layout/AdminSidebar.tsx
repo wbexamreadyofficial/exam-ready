@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
+  Bell,
   LayoutDashboard,
   Users,
   FileText,
@@ -25,6 +26,7 @@ import { cn } from '@/lib/utils';
 import { ELEVATED_EDGE_RIGHT } from '@/lib/constants';
 import { useUIStore } from '@/store/uiStore';
 import { useAuth } from '@/hooks/useAuth';
+import { useUnreadCount } from '@/hooks/useNotifications';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
@@ -42,6 +44,7 @@ const navItems = [
   { title: 'Payments', href: '/admin/payments', icon: CreditCard },
   { title: 'Analytics', href: '/admin/analytics', icon: TrendingUp },
   { title: 'Content', href: '/admin/content', icon: FolderOpen },
+  { title: 'Notifications', href: '/admin/notifications', icon: Bell },
   { title: 'Activity Log', href: '/admin/activity', icon: ScrollText },
   { title: 'Settings', href: '/admin/settings', icon: Settings },
 ];
@@ -50,6 +53,7 @@ export function AdminSidebar() {
   const pathname = usePathname();
   const { sidebarOpen, toggleSidebar, mobileSidebarOpen, setMobileSidebarOpen } = useUIStore();
   const closeMobile = () => setMobileSidebarOpen(false);
+  const { data: unreadCount = 0 } = useUnreadCount();
   const { logout } = useAuth();
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 
@@ -136,7 +140,7 @@ export function AdminSidebar() {
                   href={item.href}
                   onClick={closeMobile}
                   className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150',
+                    'relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150',
                     isActive
                       ? 'bg-[var(--color-sidebar-primary)] text-[var(--color-sidebar-primary-foreground)] shadow-[0_8px_18px_-4px_rgba(37,99,235,0.5),0_2px_4px_rgba(37,99,235,0.25)]'
                       : 'text-[var(--color-sidebar-foreground)] hover:bg-[var(--color-sidebar-accent)] hover:text-[var(--color-sidebar-accent-foreground)] hover:shadow-[0_1px_2px_rgba(30,64,110,0.06),0_6px_14px_-4px_rgba(30,64,110,0.18)] dark:hover:shadow-[0_6px_14px_-4px_rgba(0,0,0,0.6)]'
@@ -144,6 +148,16 @@ export function AdminSidebar() {
                 >
                   <Icon className="h-5 w-5 shrink-0" />
                   <span className={cn(!sidebarOpen && 'lg:hidden')}>{item.title}</span>
+                  {item.href === '/admin/notifications' && unreadCount > 0 && (
+                    <span
+                      className={cn(
+                        'ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-[var(--color-cta)] px-1.5 text-[10px] font-bold leading-none text-white',
+                        !sidebarOpen && 'lg:absolute lg:right-1.5 lg:top-1.5 lg:h-2.5 lg:min-w-0 lg:w-2.5 lg:px-0 lg:text-[0px]'
+                      )}
+                    >
+                      {unreadCount > 99 ? '99+' : unreadCount}
+                    </span>
+                  )}
                 </Link>
               );
 
