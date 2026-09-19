@@ -1132,3 +1132,76 @@ h1, h2, h3, h4, .font-display {
 .dark .display-hero a,
 .dark .display-section a,
 .dark .display-card a { color: inherit; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   PRINT — admin documents
+   ═══════════════════════════════════════════════════════════════════
+   The PDF format guide is printed and handed to teachers, so the printed
+   copy must be a plain black-on-white document: no brand colours, no card
+   tints, no shadows. `!important` is unavoidable here because the on-screen
+   styling comes from Tailwind utilities and CSS custom properties that would
+   otherwise win. `.no-print` drops chrome (sidebar, topbar, buttons) that
+   means nothing on paper.
+   ═══════════════════════════════════════════════════════════════════ */
+@media print {
+  @page { size: A4; margin: 14mm; }
+
+  html, body {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+  }
+
+  /* Kill every tinted surface, coloured text and shadow inside the document. */
+  .print-doc,
+  .print-doc * {
+    background: transparent !important;
+    background-image: none !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* Every visible edge becomes a hairline black rule. */
+  .print-doc [class*='border'],
+  .print-doc table,
+  .print-doc th,
+  .print-doc td,
+  .print-doc pre {
+    border-color: #000000 !important;
+  }
+
+  /* Cards and code blocks keep a visible outline once their tint is gone. */
+  .print-doc .print-box,
+  .print-doc pre {
+    border: 1px solid #000000 !important;
+    border-radius: 4px !important;
+  }
+
+  .print-doc th {
+    border-bottom: 1.5px solid #000000 !important;
+    font-weight: 700 !important;
+  }
+  .print-doc td { border-bottom: 1px solid #000000 !important; }
+
+  /* Screen-only chrome. */
+  .no-print,
+  .no-print * { display: none !important; }
+
+  /* The admin shell reserves space for a fixed sidebar that is not printed. */
+  .print-reset-layout {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: none !important;
+  }
+
+  /* Keep a rule, its code sample or its table from splitting across pages. */
+  .print-doc section,
+  .print-doc pre,
+  .print-doc table,
+  .print-doc li { break-inside: avoid; page-break-inside: avoid; }
+
+  .print-doc h1, .print-doc h2, .print-doc h3 { break-after: avoid; page-break-after: avoid; }
+
+  /* Bengali needs a little more leading at print sizes. */
+  .print-doc { font-size: 10pt !important; line-height: 1.5 !important; }
+}

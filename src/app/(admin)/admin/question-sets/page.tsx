@@ -5,5 +5,5 @@ import { useAdminT } from '@/lib/admin/i18n';
 
 export default function Page() {
   const { t } = useAdminT();
-  return <ComingSoon title={t.nav.questions} note="The global question bank — search, edit and deactivate individual questions. Built next." />;
+  return <ComingSoon title={t.nav.questionSets} note="Every question set, with its config, question order and publish state. Built next." />;
 }

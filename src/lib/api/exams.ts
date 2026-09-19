@@ -46,24 +46,4 @@ export const examsApi = {
     );
     return data.data;
   },
-
-  // Admin
-  createExam: async (payload: Partial<Exam>): Promise<Exam> => {
-    const { data } = await apiClient.post<ApiResponse<Exam>>('/admin/exams', payload);
-    return data.data;
-  },
-
-  updateExam: async (examId: string, payload: Partial<Exam>): Promise<Exam> => {
-    const { data } = await apiClient.put<ApiResponse<Exam>>(`/admin/exams/${examId}`, payload);
-    return data.data;
-  },
-
-  deleteExam: async (examId: string): Promise<void> => {
-    await apiClient.delete(`/admin/exams/${examId}`);
-  },
-
-  publishExam: async (examId: string): Promise<Exam> => {
-    const { data } = await apiClient.patch<ApiResponse<Exam>>(`/admin/exams/${examId}/publish`);
-    return data.data;
-  },
 };

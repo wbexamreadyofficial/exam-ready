@@ -10,7 +10,6 @@ import type { UserRole } from '@/types/auth';
  * belong to a role later.
  */
 const ROLE_PREFIXES: Record<string, UserRole> = {
-  '/admin': 'admin',
   '/dashboard': 'student',
   '/examiner': 'examiner',
   '/partner': 'partner',
@@ -56,7 +55,6 @@ export function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     '/dashboard/:path*',
-    '/admin/:path*',
     '/examiner/:path*',
     '/partner/:path*',
     '/login',
