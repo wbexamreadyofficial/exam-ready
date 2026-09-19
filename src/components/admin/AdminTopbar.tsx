@@ -30,7 +30,7 @@ export function AdminTopbar({ onOpenMenu }: AdminTopbarProps) {
       </div>
 
       <div className="flex shrink-0 items-center gap-2">
-        <Button asChild size="sm" className="hidden gap-1.5 font-semibold sm:inline-flex">
+        <Button asChild size="sm" className="hidden gap-1.5 border-0 bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] font-semibold text-white shadow-md shadow-orange-600/30 ring-1 ring-inset ring-white/25 transition-all hover:-translate-y-px hover:brightness-110 hover:shadow-lg hover:shadow-orange-600/40 sm:inline-flex">
           <Link href="/admin/uploads/new">
             <FileUp className="h-4 w-4" />
             <span className="hidden md:inline">{t.nav.uploadPdf}</span>

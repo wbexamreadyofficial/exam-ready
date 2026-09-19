@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard, FileUp, History, BookOpen, LayoutGrid,
-  Library, FileText, ListChecks, HelpCircle, Bell,
+  Library, FileText, ListChecks, HelpCircle, Bell, Users,
   ChevronLeft, ChevronRight, ArrowLeft,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -17,7 +17,7 @@ import { useUnreadCount } from '@/hooks/useNotifications';
 
 const iconMap: Record<string, React.ElementType> = {
   LayoutDashboard, FileUp, History, BookOpen, LayoutGrid,
-  Library, FileText, ListChecks, HelpCircle, Bell,
+  Library, FileText, ListChecks, HelpCircle, Bell, Users,
 };
 
 interface AdminSidebarProps {
@@ -104,11 +104,11 @@ export function AdminSidebar({ isCollapsed, onToggle, onClose }: AdminSidebarPro
                       className={cn(
                         'relative flex items-center gap-3 rounded-md px-3 py-2 text-[13.5px] transition-colors',
                         isActive
-                          ? 'border-l-[3px] border-[var(--color-primary)] bg-[var(--color-bblue-50)] font-semibold text-[var(--color-primary)] dark:bg-[var(--color-bblue-700)]/15'
+                          ? 'bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] font-semibold text-white shadow-md shadow-orange-600/30 ring-1 ring-inset ring-white/20'
                           : item.highlight
                             ? 'font-semibold text-[var(--color-accent)] hover:bg-[var(--color-borange-50)] dark:hover:bg-[var(--color-borange-500)]/10'
                             : 'text-[var(--color-muted-foreground)] hover:bg-[var(--color-muted)] hover:text-[var(--color-foreground)]',
-                        isCollapsed && 'mx-auto h-9 w-9 justify-center border-l-0 px-0'
+                        isCollapsed && 'mx-auto h-9 w-9 justify-center px-0'
                       )}
                     >
                       <Icon size={18} className="shrink-0" />

@@ -100,60 +100,50 @@ export function HeroCardDeck() {
             0.7
           );
 
-        // The end state equals the CSS layout, so drop every inline transform
-        // (perspective included) once it lands. Leaving a perspective transform
-        // on the card would keep it on a blurrier 3D layer and override CSS.
-        entrance.eventCallback('onComplete', () => {
-          gsap.set([...rings, ...practice, ...progress, ...goal, ...rows], {
-            // transformOrigin is listed explicitly: 'transform' alone leaves the
-            // px pivot GSAP wrote, which stops being centred once the card resizes.
-            clearProps: 'transform,transformOrigin,opacity',
+        // Slow, larger drifts with a slight sway. They run at a timeScale that is
+        // eased between 0 and 1, so pausing/resuming decelerates instead of freezing.
+        const drift = (
+          target: string,
+          vars: gsap.TweenVars
+        ) =>
+          gsap.to(select(`[data-deck-float="${target}"]`), {
+            repeat: -1,
+            yoyo: true,
+            ease: 'sine.inOut',
+            force3D: true,
+            ...vars,
           });
-        });
-
         const floats = [
-          gsap.to(select('[data-deck-float="progress"]'), {
-            y: -4,
-            duration: 6,
-            repeat: -1,
-            yoyo: true,
-            ease: 'sine.inOut',
-            paused: true,
-          }),
-          gsap.to(select('[data-deck-float="practice"]'), {
-            y: -3,
-            duration: 7,
-            delay: 0.4,
-            repeat: -1,
-            yoyo: true,
-            ease: 'sine.inOut',
-            paused: true,
-          }),
-          gsap.fromTo(
-            select('[data-deck-float="goal"]'),
-            { y: -4 },
-            {
-              y: 0,
-              duration: 5.5,
-              delay: 0.8,
-              repeat: -1,
-              yoyo: true,
-              ease: 'sine.inOut',
-              paused: true,
-            }
-          ),
+          drift('progress', { y: -12, rotation: 0.6, duration: 5.2 }),
+          drift('practice', { y: -9, duration: 6.4, delay: 0.5 }),
+          drift('goal', { y: -11, rotation: -0.6, duration: 4.8, delay: 1 }),
         ];
+        floats.forEach((animation) => animation.timeScale(0));
 
         let visible = false;
         let focused = false;
         let hovered = false;
+        let entered = false;
         const update = () => {
           const stopped = !visible || document.hidden || pausedByUser.current;
           entrance.paused(stopped);
+          const still = stopped || !entered || focused || hovered;
           floats.forEach((animation) =>
-            animation.paused(stopped || focused || hovered)
+            gsap.to(animation, {
+              timeScale: still ? 0 : 1,
+              duration: still ? 0.6 : 1.2,
+              ease: 'power2.out',
+              overwrite: true,
+            })
           );
         };
+        entrance.eventCallback('onComplete', () => {
+          gsap.set([...rings, ...practice, ...progress, ...goal, ...rows], {
+            clearProps: 'transform,transformOrigin,opacity',
+          });
+          entered = true;
+          update();
+        });
         const onPointerEnter = () => {
           hovered = true;
           update();

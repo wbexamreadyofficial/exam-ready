@@ -103,6 +103,12 @@ const ROLE_BADGE: Record<UserRole, 'default' | 'info' | 'warning' | 'secondary'>
   student: 'secondary',
 };
 
+const RICH_ORANGE =
+  'border-transparent bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] text-white shadow-sm shadow-orange-600/30 hover:bg-transparent';
+const SOFT_ORANGE =
+  'border-orange-200 bg-orange-100 text-orange-800 dark:border-orange-400/20 dark:bg-orange-500/15 dark:text-orange-300';
+const ROLE_BADGE_CLASS: Partial<Record<UserRole, string>> = { admin: RICH_ORANGE, examiner: SOFT_ORANGE };
+
 const dateFormatter = new Intl.DateTimeFormat('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
 
 function formatDate(value?: string): string {
@@ -485,7 +491,7 @@ export default function UsersAdminPage() {
       )}
 
       {selectedIds.length > 0 && (
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[var(--color-primary)]/30 bg-[var(--color-primary)]/5 px-4 py-3">
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-orange-300/50 bg-orange-500/5 px-4 py-3">
           <p className="text-sm font-semibold">
             {selectedIds.length} user{selectedIds.length > 1 ? 's' : ''} selected
           </p>
@@ -569,12 +575,12 @@ export default function UsersAdminPage() {
                               >
                                 <Avatar className="h-9 w-9 cursor-zoom-in">
                                   <AvatarImage src={user.profilePhoto} alt={displayName} />
-                                  <AvatarFallback className="text-xs">{generateInitials(displayName)}</AvatarFallback>
+                                  <AvatarFallback className="text-xs bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] text-white">{generateInitials(displayName)}</AvatarFallback>
                                 </Avatar>
                               </button>
                             ) : (
                               <Avatar className="h-9 w-9">
-                                <AvatarFallback className="text-xs">{generateInitials(displayName)}</AvatarFallback>
+                                <AvatarFallback className="text-xs bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] text-white">{generateInitials(displayName)}</AvatarFallback>
                               </Avatar>
                             )}
                             <div className="min-w-0">
@@ -610,7 +616,7 @@ export default function UsersAdminPage() {
                         </TableCell>
                         <TableCell>
                           {user.role ? (
-                            <Badge variant={ROLE_BADGE[user.role]} className="text-[10px]">
+                            <Badge variant={ROLE_BADGE[user.role]} className={cn('text-[10px]', ROLE_BADGE_CLASS[user.role])}>
                               {ROLE_LABEL[user.role]}
                             </Badge>
                           ) : (
@@ -618,7 +624,7 @@ export default function UsersAdminPage() {
                           )}
                         </TableCell>
                         <TableCell>
-                          <Badge variant={user.isAppUser ? 'info' : 'secondary'} className="gap-1 text-[10px]">
+                          <Badge variant="secondary" className={cn('gap-1 text-[10px]', user.isAppUser && SOFT_ORANGE)}>
                             {user.isAppUser ? <Smartphone className="h-3 w-3" /> : <Globe className="h-3 w-3" />}
                             {user.isAppUser ? 'App' : 'Web'}
                           </Badge>

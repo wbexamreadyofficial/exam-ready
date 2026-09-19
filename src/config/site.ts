@@ -10,9 +10,7 @@ export const siteConfig = {
   },
   nav: [
     { title: 'Home', href: '/' },
-    { title: 'Mock Tests', href: '/exams' },
     { title: 'Courses', href: '/quizzes' },
-    { title: 'Study Materials', href: '/about' },
     { title: 'Results', href: '/leaderboard' },
     { title: 'Pricing', href: '/subscriptions' },
     { title: 'Blog', href: '/contact' },

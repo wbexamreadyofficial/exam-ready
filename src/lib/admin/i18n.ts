@@ -31,6 +31,7 @@ export const adminCopy = {
       uploadGuide: 'PDF Format Guide',
 
       system: 'System',
+      users: 'Users',
       notifications: 'Notifications',
     },
 
@@ -245,6 +246,7 @@ export const adminCopy = {
       uploadGuide: 'PDF ফরম্যাট গাইড',
 
       system: 'সিস্টেম',
+      users: 'ব্যবহারকারী',
       notifications: 'বিজ্ঞপ্তি',
     },
 

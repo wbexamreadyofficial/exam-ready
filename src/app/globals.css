@@ -139,7 +139,7 @@
     orange is 6.2:1, so the brand colour is preserved exactly and the
     label still passes. Swap to #FFFFFF only if AA is not required.
   */
-  --color-cta-foreground: #26150A;
+  --color-cta-foreground: #FFFFFF;
 
   /* Sidebar — light */
   --color-sidebar-background: hsl(0, 0%, 100%);

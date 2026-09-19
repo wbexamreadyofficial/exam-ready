@@ -23,7 +23,9 @@ import {
 import styles from './home.module.css';
 import { ExamGrid } from './ExamGrid';
 import { FeatureGrid } from './FeatureGrid';
+import { FaqList } from './FaqList';
 import { HomeAmbient } from './HomeAmbient';
+import { StepsGrid } from './StepsGrid';
 
 const exams = [
   {
@@ -326,7 +328,7 @@ function PreparationJourney() {
   return (
     <section
       id="how-it-works"
-      className={`${styles.section} ${styles.shell}`}
+      className={`${styles.section} ${styles.shell} ${styles.stepsSection}`}
       aria-labelledby="journey-title"
     >
       <div
@@ -340,20 +342,22 @@ function PreparationJourney() {
           <span>A stronger you tomorrow.</span>
         </h2>
       </div>
-      <div className={styles.steps}>
+      <StepsGrid>
         {steps.map(({ title, text, icon: Icon }, i) => (
-          <article className={styles.step} key={title} data-reveal>
+          <article className={styles.step} key={title} data-step>
             <div className={styles.stepTop}>
-              <span className={styles.stepIcon}>
+              <span className={styles.stepIcon} data-step-icon>
                 <Icon size={23} />
               </span>
-              <span>0{i + 1}</span>
+              <span className={styles.stepNumber} data-step-num>
+                0{i + 1}
+              </span>
             </div>
-            <h3>{title}</h3>
-            <p>{text}</p>
+            <h3 data-step-text>{title}</h3>
+            <p data-step-text>{text}</p>
           </article>
         ))}
-      </div>
+      </StepsGrid>
       <div className={styles.centerAction} data-reveal>
         <Link className={styles.textLink} href="/register">
           Take your first step <ArrowRight size={17} />
@@ -384,7 +388,7 @@ function HomeFaq() {
   ];
   return (
     <section
-      className={`${styles.shell} ${styles.faqSection}`}
+      className={`${styles.shell} ${styles.faqSection} ${styles.faqPremium}`}
       aria-labelledby="faq-title"
     >
       <div data-reveal>
@@ -399,17 +403,7 @@ function HomeFaq() {
           We&apos;re here to help <ArrowUpRight size={16} />
         </Link>
       </div>
-      <div className={styles.faqList}>
-        {questions.map(([question, answer]) => (
-          <details key={question} data-reveal>
-            <summary>
-              {question}
-              <ArrowDown size={18} />
-            </summary>
-            <p>{answer}</p>
-          </details>
-        ))}
-      </div>
+      <FaqList items={questions as [string, string][]} />
     </section>
   );
 }

@@ -56,10 +56,18 @@ export function ActiveBadge({ active }: { active: boolean }) {
   );
 }
 
+const STATUS_DOT: Record<string, string> = {
+  success: 'bg-green-500',
+  warning: 'bg-amber-500',
+  destructive: 'bg-white',
+  secondary: 'bg-slate-400',
+};
+
 export function SetStatusBadge({ status }: { status: SetStatus }) {
   const meta = SET_STATUS[status];
   return (
-    <Badge variant={meta.variant} className="text-[10px]" title={meta.hint}>
+    <Badge variant={meta.variant} className="gap-1.5 px-2.5 py-1 text-[11px]" title={meta.hint}>
+      <span aria-hidden className={`h-1.5 w-1.5 rounded-full ${STATUS_DOT[meta.variant]}`} />
       {meta.label}
     </Badge>
   );
@@ -68,7 +76,8 @@ export function SetStatusBadge({ status }: { status: SetStatus }) {
 export function QuestionStatusBadge({ status }: { status: QuestionStatus }) {
   const meta = QUESTION_STATUS[status];
   return (
-    <Badge variant={meta.variant} className="text-[10px]" title={meta.hint}>
+    <Badge variant={meta.variant} className="gap-1.5 px-2.5 py-1 text-[11px]" title={meta.hint}>
+      <span aria-hidden className={`h-1.5 w-1.5 rounded-full ${STATUS_DOT[meta.variant]}`} />
       {meta.label}
     </Badge>
   );
@@ -305,13 +314,13 @@ export function RelationButton({
     <Button
       variant="outline"
       size="sm"
-      className="h-8 gap-1.5 px-2.5 text-xs"
+      className="group h-8 gap-1.5 px-2.5 text-xs"
       onClick={onClick}
       title={`Show ${label.toLowerCase()}`}
     >
-      <Icon className="h-3.5 w-3.5 text-[var(--color-primary)]" />
+      <Icon className="h-3.5 w-3.5 text-[#e2691f] transition-colors group-hover:text-white" />
       {label}
-      <span className="rounded bg-[var(--color-muted)] px-1.5 py-px text-[10px] font-bold">{count.toLocaleString()}</span>
+      <span className="rounded bg-[var(--color-muted)] px-1.5 py-px text-[10px] font-bold text-[var(--color-foreground)] transition-colors group-hover:bg-white/25 group-hover:text-white">{count.toLocaleString()}</span>
     </Button>
   );
 }

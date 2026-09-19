@@ -19,9 +19,7 @@ import { Logo } from '@/components/ui/Logo';
 
 const navItems = [
   { title: 'Home',            href: '/' },
-  { title: 'Mock Tests',      href: '/exams' },
   { title: 'Courses',         href: '/quizzes' },
-  { title: 'Study Materials', href: '/about' },
   { title: 'Results',         href: '/leaderboard' },
   { title: 'Pricing',         href: '/subscriptions' },
   { title: 'Blog',            href: '/contact' },
@@ -78,8 +76,8 @@ export function Navbar() {
                 className={cn(
                   'relative px-3 xl:px-3.5 py-1.5 rounded-full text-[13px] font-semibold transition-all duration-200 whitespace-nowrap',
                   isActive
-                    ? 'bg-white dark:bg-slate-800 text-blue-700 dark:text-blue-400 shadow-sm'
-                    : 'text-ink-600 dark:text-slate-400 hover:text-blue-700 dark:hover:text-blue-400 hover:bg-white/70 dark:hover:bg-slate-800/60'
+                    ? 'bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] text-white shadow-md shadow-orange-600/30 ring-1 ring-inset ring-white/25'
+                    : 'text-ink-600 dark:text-slate-400 hover:text-[#c95817] dark:hover:text-orange-400 hover:bg-white/70 dark:hover:bg-slate-800/60'
                 )}
               >
                 {item.title}
@@ -167,12 +165,12 @@ export function Navbar() {
                   className={cn(
                     'flex items-center justify-between px-3.5 py-3 rounded-xl text-[15px] font-semibold transition-colors',
                     isActive
-                      ? 'bg-blue-50 text-blue-700 dark:text-blue-400 dark:bg-blue-500/10'
+                      ? 'bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] text-white shadow-md shadow-orange-600/25'
                       : 'text-ink-700 dark:text-slate-400 hover:text-ink-900 hover:bg-slate-50 dark:hover:bg-slate-800/60'
                   )}
                 >
                   {item.title}
-                  {isActive && <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />}
+                  {isActive && <span className="h-1.5 w-1.5 rounded-full bg-white" />}
                 </Link>
               );
             })}

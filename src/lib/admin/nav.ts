@@ -22,7 +22,10 @@ export interface AdminNavGroup {
 export const adminNavGroups: AdminNavGroup[] = [
   {
     titleKey: 'overview',
-    items: [{ labelKey: 'dashboard', href: '/admin', icon: 'LayoutDashboard' }],
+    items: [
+      { labelKey: 'dashboard', href: '/admin', icon: 'LayoutDashboard' },
+      { labelKey: 'users', href: '/admin/users', icon: 'Users' },
+    ],
   },
   {
     titleKey: 'uploads',
