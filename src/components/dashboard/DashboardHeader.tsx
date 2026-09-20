@@ -1,9 +1,11 @@
 'use client';
 
+import { NotificationBell } from '@/components/layout/NotificationBell';
+import { useStudentDashboard } from '@/hooks/useStudentDashboard';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { Search, Bell, Flame, Menu, Sparkles, User as UserIcon, LogOut } from 'lucide-react';
+import { Search, Flame, Menu, Sparkles, User as UserIcon, LogOut } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -39,6 +41,8 @@ function getInitials(name: string): string {
 }
 
 export default function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
+  const { data: dashboard } = useStudentDashboard();
+  const streak = dashboard?.streak.count ?? 0;
   const router = useRouter();
   const { user, logout } = useAuth();
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
@@ -84,7 +88,7 @@ export default function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
         <Button 
           variant="default" 
           size="sm" 
-          className="hidden sm:flex bg-[var(--color-cta)] text-[var(--color-cta-foreground)] hover:bg-[var(--color-cta-hover)] btn-premium gap-1.5 h-8"
+          className="hidden sm:flex bg-[var(--color-cta)] text-[var(--color-cta-foreground)] hover:bg-[var(--color-cta-hover)] btn-premium gap-1.5 h-7 text-[11px]"
         >
           <Sparkles size={14} />
           <span>Upgrade</span>
@@ -92,20 +96,13 @@ export default function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
 
         <div className="inline-flex items-center gap-1.5 bg-[var(--color-borange-50)] dark:bg-[var(--color-borange-500)]/10 rounded-full px-3 py-1 text-xs font-semibold text-[var(--color-data-premium)]">
           <Flame size={14} className="fill-current" />
-          <span>7</span>
+          <span>{streak}</span>
           <span className="hidden sm:inline">Day Streak</span>
         </div>
 
         <ThemeSwitcher />
 
-        <div className="relative">
-          <button className="p-2 text-[var(--color-muted-foreground)] hover:bg-[var(--color-surface-muted)] rounded-full transition-colors relative">
-            <Bell size={20} />
-            <span className="bg-[var(--color-data-negative)] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center absolute -top-1 -right-1 border-2 border-[var(--color-surface)]">
-              3
-            </span>
-          </button>
-        </div>
+        <NotificationBell viewAllHref="/student/notifications" />
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

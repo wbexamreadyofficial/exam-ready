@@ -3,9 +3,11 @@
 import React from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { BookOpen, GraduationCap, Sparkles } from 'lucide-react';
+import { useStudentDashboard } from '@/hooks/useStudentDashboard';
 
 export default function GreetingBanner() {
   const user = useAuthStore((s) => s.user);
+  const { data } = useStudentDashboard();
   const hour = new Date().getHours();
   const greeting =
     hour < 12 ? 'Good Morning' : hour < 17 ? 'Good Afternoon' : 'Good Evening';
@@ -14,14 +16,20 @@ export default function GreetingBanner() {
   return (
     <div className="surface-card overflow-hidden relative">
       <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-bblue-50)] via-transparent to-[var(--color-bblue-50)] dark:from-[var(--color-bblue-700)]/10 dark:via-transparent dark:to-[var(--color-bblue-700)]/5 pointer-events-none" />
-      <div className="relative flex items-center justify-between p-6">
+      <div className="relative flex items-center justify-between px-5 py-3.5">
         {/* Left: text */}
         <div className="min-w-0">
-          <h2 className="display-card text-xl sm:text-2xl">
+          <h2 className="display-card text-lg sm:text-xl">
             {greeting}, {name}! 👋
           </h2>
-          <p className="lede text-sm mt-1.5 max-w-md">
-            You&apos;ve made great progress this week. Keep up the momentum!
+          <p className="lede mt-0.5 max-w-md text-[13px] leading-snug">
+            {!data
+              ? 'Here is how your preparation is going.'
+              : data.stats.testsAttempted === 0
+                ? 'Ready when you are — take your first mock test to start tracking your progress.'
+                : data.stats.testsThisWeek > 0
+                  ? `You finished ${data.stats.testsThisWeek} test${data.stats.testsThisWeek === 1 ? '' : 's'} this week. Keep up the momentum!`
+                  : 'No tests this week yet — a quick practice keeps your streak alive.'}
           </p>
         </div>
 
@@ -29,7 +37,7 @@ export default function GreetingBanner() {
         <div className="hidden sm:flex items-end gap-2 opacity-80" aria-hidden="true">
           <div className="relative">
             {/* Desk */}
-            <svg width="140" height="100" viewBox="0 0 140 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="96" height="69" viewBox="0 0 140 100" fill="none" xmlns="http://www.w3.org/2000/svg">
               {/* Desk surface */}
               <rect x="10" y="65" width="120" height="6" rx="3" fill="var(--color-bblue-500)" opacity="0.15" />
               {/* Desk legs */}

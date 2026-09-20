@@ -33,7 +33,7 @@ export default function DashboardLayout({ children, rightSidebar }: DashboardLay
         "fixed z-50 h-screen flex-shrink-0 transition-transform duration-300 ease-in-out bg-[var(--color-surface)]",
         "lg:relative lg:z-auto lg:translate-x-0",
         mobileMenuOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full",
-        sidebarCollapsed ? "w-[72px]" : "w-[272px]"
+        sidebarCollapsed ? "w-[68px]" : "w-[224px]"
       )}>
         <DashboardSidebar 
           isCollapsed={sidebarCollapsed} 

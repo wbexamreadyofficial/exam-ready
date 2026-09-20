@@ -51,14 +51,14 @@ function Metric({
 }) {
   return (
     <Card className="overflow-hidden border-orange-200/60 bg-gradient-to-br from-orange-50/60 to-white dark:border-orange-400/20 dark:from-orange-500/10 dark:to-transparent">
-      <CardContent className="flex items-center gap-4 p-5">
-        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] text-white shadow-md shadow-orange-600/30 ring-1 ring-inset ring-white/25">
-          <Icon className="h-5 w-5" />
+      <CardContent className="flex items-center gap-3 p-3.5">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] text-white shadow-md shadow-orange-600/30 ring-1 ring-inset ring-white/25">
+          <Icon className="h-[18px] w-[18px]" />
         </span>
         <div className="min-w-0">
-          <p className="text-[11px] font-semibold uppercase tracking-wider text-[var(--color-muted-foreground)]">{label}</p>
-          <p className="text-2xl font-black leading-tight tabular-nums">{value}</p>
-          {sub && <p className="text-xs text-[var(--color-muted-foreground)]">{sub}</p>}
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-[var(--color-muted-foreground)]">{label}</p>
+          <p className="text-xl font-black leading-tight tabular-nums">{value}</p>
+          {sub && <p className="truncate text-[11px] text-[var(--color-muted-foreground)]">{sub}</p>}
         </div>
       </CardContent>
     </Card>
@@ -74,18 +74,18 @@ function Compare({ result }: { result: TestResult }) {
   ];
   return (
     <Card>
-      <CardContent className="space-y-4 p-6">
-        <h3 className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#c95817] dark:text-orange-300">Compare</h3>
+      <CardContent className="space-y-2.5 p-4">
+        <h3 className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#c95817] dark:text-orange-300">Compare</h3>
         {rows.map((row) => (
           <div key={row.label} className="flex items-center gap-3">
-            <span className="w-16 shrink-0 text-sm font-semibold">{row.label}</span>
-            <div className="h-3 flex-1 overflow-hidden rounded-full bg-[var(--color-muted)]">
+            <span className="w-14 shrink-0 text-[13px] font-semibold">{row.label}</span>
+            <div className="h-2 flex-1 overflow-hidden rounded-full bg-[var(--color-muted)]">
               <div
                 className={cn('h-full rounded-full bg-gradient-to-r transition-all duration-700', row.tone)}
                 style={{ width: `${Math.max(2, Math.min(100, (Math.max(row.value, 0) / max) * 100))}%` }}
               />
             </div>
-            <span className="w-14 shrink-0 text-right text-sm font-bold tabular-nums">{row.value}</span>
+            <span className="w-12 shrink-0 text-right text-[13px] font-bold tabular-nums">{row.value}</span>
           </div>
         ))}
       </CardContent>
@@ -96,15 +96,15 @@ function Compare({ result }: { result: TestResult }) {
 function Analysis({ result }: { result: TestResult }) {
   const { summary, comparison } = result;
   return (
-    <div className="space-y-5">
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+    <div className="space-y-3.5">
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         <Metric
           icon={Trophy}
           label="Score"
           value={
             <>
               {summary.score}
-              <span className="text-base font-semibold text-[var(--color-muted-foreground)]"> / {summary.totalMarks}</span>
+              <span className="text-sm font-semibold text-[var(--color-muted-foreground)]"> / {summary.totalMarks}</span>
             </>
           }
           sub={`Average ${comparison.averageScore} · Best ${comparison.topScore}`}
@@ -116,7 +116,7 @@ function Analysis({ result }: { result: TestResult }) {
             comparison.rank ? (
               <>
                 {comparison.rank}
-                <span className="text-base font-semibold text-[var(--color-muted-foreground)]"> / {comparison.participants}</span>
+                <span className="text-sm font-semibold text-[var(--color-muted-foreground)]"> / {comparison.participants}</span>
               </>
             ) : (
               '—'
@@ -137,14 +137,14 @@ function Analysis({ result }: { result: TestResult }) {
           value={
             <>
               {summary.attempted}
-              <span className="text-base font-semibold text-[var(--color-muted-foreground)]"> / {summary.totalQuestions}</span>
+              <span className="text-sm font-semibold text-[var(--color-muted-foreground)]"> / {summary.totalQuestions}</span>
             </>
           }
         />
         <Metric icon={Clock} label="Time taken" value={minutes(result.timeTakenSeconds)} sub={`of ${result.durationMinutes} min`} />
       </div>
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-2">
         <Chip tone="green" icon={CheckCircle2} label="Correct" value={summary.correct} />
         <Chip tone="red" icon={XCircle} label="Incorrect" value={summary.wrong} />
         <Chip tone="slate" icon={MinusCircle} label="Unattempted" value={summary.unattempted} />
@@ -163,7 +163,7 @@ const CHIP_TONES = {
 
 function Chip({ tone, icon: Icon, label, value }: { tone: keyof typeof CHIP_TONES; icon: typeof Clock; label: string; value: number }) {
   return (
-    <div className={cn('flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold', CHIP_TONES[tone])}>
+    <div className={cn('flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-[13px] font-semibold', CHIP_TONES[tone])}>
       <Icon className="h-4 w-4" />
       {label}: <span className="tabular-nums">{value}</span>
     </div>
@@ -397,6 +397,67 @@ function Leaderboard({ setId }: { setId: string }) {
   );
 }
 
+/** Placeholder that mirrors the result page: header, tabs, six score cards, chips and the compare card. */
+function ResultSkeleton() {
+  const tone = 'bg-[rgba(244,149,63,0.2)]';
+  return (
+    <div className="space-y-6" aria-busy="true" aria-label="Loading your result">
+      {/* Header */}
+      <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[var(--color-border)] bg-gradient-to-r from-white via-[#FFF6EC] to-[#FFE4CC] px-6 py-5 shadow-elevated dark:from-[#0B1220] dark:via-[#1A1410] dark:to-[#3A1D08]">
+        <div className="space-y-2.5">
+          <Skeleton className="h-3 w-24" />
+          <Skeleton className="h-7 w-72 max-w-[60vw]" />
+        </div>
+        <Skeleton className={cn('h-10 w-40 rounded-md', tone)} />
+      </div>
+
+      {/* Tabs */}
+      <div className="flex gap-1 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] p-1">
+        <Skeleton className={cn('h-10 flex-1 rounded-lg', tone)} />
+        <Skeleton className="h-10 flex-1 rounded-lg bg-transparent" />
+        <Skeleton className="h-10 flex-1 rounded-lg bg-transparent" />
+      </div>
+
+      {/* Score cards */}
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        {Array.from({ length: 6 }, (_, i) => (
+          <Card key={i} className="border-orange-200/60 bg-gradient-to-br from-orange-50/60 to-white dark:border-orange-400/20 dark:from-orange-500/10 dark:to-transparent">
+            <CardContent className="flex items-center gap-4 p-5">
+              <Skeleton className={cn('h-12 w-12 shrink-0 rounded-xl', tone)} />
+              <div className="space-y-2">
+                <Skeleton className="h-2.5 w-14" />
+                <Skeleton className="h-7 w-28" />
+                <Skeleton className="h-3 w-36" />
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Correct / incorrect / unattempted chips */}
+      <div className="flex flex-wrap gap-3">
+        <Skeleton className="h-11 w-36 rounded-xl" />
+        <Skeleton className="h-11 w-40 rounded-xl" />
+        <Skeleton className="h-11 w-44 rounded-xl" />
+      </div>
+
+      {/* Compare */}
+      <Card>
+        <CardContent className="space-y-4 p-6">
+          <Skeleton className="h-3 w-20" />
+          {Array.from({ length: 3 }, (_, i) => (
+            <div key={i} className="flex items-center gap-3">
+              <Skeleton className="h-4 w-16 shrink-0" />
+              <Skeleton className="h-3 flex-1 rounded-full" />
+              <Skeleton className="h-4 w-12 shrink-0" />
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
 export default function TestResultPage({ params }: { params: Promise<{ attemptId: string }> }) {
   const { attemptId } = use(params);
   const [tab, setTab] = useState<Tab>('analysis');
@@ -410,7 +471,7 @@ export default function TestResultPage({ params }: { params: Promise<{ attemptId
   const status = (error as { response?: { status?: number } })?.response?.status;
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6">
+    <div className="w-full space-y-4">
       <Link
         href={data?.exam?._id ? `/student/mock-tests/${data.exam._id}` : '/student/mock-tests'}
         className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--color-muted-foreground)] transition-colors hover:text-[#c95817]"
@@ -419,14 +480,7 @@ export default function TestResultPage({ params }: { params: Promise<{ attemptId
       </Link>
 
       {isLoading ? (
-        <div className="space-y-4" aria-busy="true">
-          <Skeleton className="h-24 w-full rounded-2xl" />
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            {Array.from({ length: 6 }, (_, i) => (
-              <Skeleton key={i} className="h-24 rounded-xl" />
-            ))}
-          </div>
-        </div>
+        <ResultSkeleton />
       ) : isError || !data ? (
         <ErrorState
           message={status === 409 ? 'Submit the test to see its result.' : status === 404 ? 'This result was not found.' : 'Could not load your result.'}
@@ -435,21 +489,22 @@ export default function TestResultPage({ params }: { params: Promise<{ attemptId
         />
       ) : (
         <>
-          <header className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[var(--color-border)] bg-gradient-to-r from-white via-[#FFF6EC] to-[#FFE4CC] px-6 py-5 shadow-elevated dark:from-[#0B1220] dark:via-[#1A1410] dark:to-[#3A1D08]">
+          <header className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[var(--color-border)] bg-gradient-to-r from-white via-[#FFF6EC] to-[#FFE4CC] px-5 py-3 shadow-elevated dark:from-[#0B1220] dark:via-[#1A1410] dark:to-[#3A1D08]">
             <div className="min-w-0">
-              <p className="mb-1 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em] text-[#c95817] dark:text-orange-300">
-                <Award className="h-3.5 w-3.5" /> Test result
+              <p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.14em] text-[#c95817] dark:text-orange-300">
+                <Award className="h-3 w-3" /> Test result
               </p>
-              <h1 className="text-xl font-black leading-tight tracking-tight sm:text-2xl">{bilingual(data.title)}</h1>
+              <h1 className="text-lg font-black leading-tight tracking-tight">{bilingual(data.title)}</h1>
             </div>
-            <Button asChild className={cn('gap-2', ORANGE_BUTTON)}>
+            <Button asChild size="sm" className={cn('gap-2', ORANGE_BUTTON)}>
               <Link href={`/student/tests/${data.questionSetId}`}>
                 <RotateCcw className="h-4 w-4" /> Reattempt test
               </Link>
             </Button>
           </header>
 
-          <div className="flex gap-1 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] p-1" role="tablist">
+          <div className="sticky -top-4 z-20 -mx-4 -mt-1 bg-[var(--color-surface-subtle)]/95 px-4 pb-1.5 pt-4 backdrop-blur-md sm:-top-6 sm:-mx-6 sm:px-6 sm:pt-6">
+          <div className="flex gap-1 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] p-1 shadow-elevated" role="tablist">
             {(
               [
                 ['analysis', 'Analysis'],
@@ -464,7 +519,7 @@ export default function TestResultPage({ params }: { params: Promise<{ attemptId
                 aria-selected={tab === key}
                 onClick={() => setTab(key)}
                 className={cn(
-                  'flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all',
+                  'flex-1 rounded-lg px-4 py-1.5 text-[13px] font-semibold transition-all',
                   tab === key
                     ? 'bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] text-white shadow-md shadow-orange-600/30'
                     : 'text-[var(--color-muted-foreground)] hover:bg-orange-50 hover:text-[#c95817] dark:hover:bg-orange-500/10'
@@ -473,6 +528,7 @@ export default function TestResultPage({ params }: { params: Promise<{ attemptId
                 {label}
               </button>
             ))}
+          </div>
           </div>
 
           {tab === 'analysis' && <Analysis result={data} />}

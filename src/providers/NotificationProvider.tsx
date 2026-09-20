@@ -6,7 +6,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { env } from '@/config/env';
 import { NOTIFICATION_KEYS, useUnreadCount } from '@/hooks/useNotifications';
-import { getStoredToken } from '@/lib/api/client';
+import { endSession, getStoredToken } from '@/lib/api/client';
 import { notificationsApi } from '@/lib/api/notifications';
 import { useNotificationStore } from '@/store/notificationStore';
 import type { NotificationItem, SocketMessage } from '@/types/notification';
@@ -26,7 +26,7 @@ const MAX_INITIAL_ATTEMPTS = 5;
  * on an unreachable/serverless backend stops trying and leaves the polling in
  * `useUnreadCount` (30s) to keep the badge current.
  */
-export function NotificationProvider({ children }: { children: React.ReactNode }) {
+export function NotificationProvider({ children, viewAllHref = '/admin/notifications' }: { children: React.ReactNode; viewAllHref?: string }) {
   const queryClient = useQueryClient();
   const router = useRouter();
   const socketConnected = useNotificationStore((state) => state.socketConnected);
@@ -110,6 +110,10 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
           case 'auth_error':
             authFailed = true;
             break;
+          case 'session.replaced':
+            disposed = true;
+            endSession('session-replaced');
+            break;
         }
       };
 
@@ -158,12 +162,12 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     if (previousUnread.current !== null && unread > previousUnread.current && !socketConnected) {
       const added = unread - previousUnread.current;
       toast(`${added} new notification${added === 1 ? '' : 's'}`, {
-        action: { label: 'View', onClick: () => router.push('/admin/notifications') },
+        action: { label: 'View', onClick: () => router.push(viewAllHref) },
       });
     }
 
     previousUnread.current = unread;
-  }, [unread, socketConnected, router]);
+  }, [unread, socketConnected, router, viewAllHref]);
 
   return <>{children}</>;
 }

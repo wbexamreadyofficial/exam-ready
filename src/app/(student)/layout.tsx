@@ -5,6 +5,7 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
+import { NotificationProvider } from '@/providers/NotificationProvider';
 
 /** Pages that bring their own dashboard shell (with their own right-hand panel). */
 const OWN_SHELL = /^\/student\/(dashboard|profile)(\/|$)/;
@@ -13,7 +14,7 @@ const LIVE_TEST = /^\/student\/(exam\/[^/]+|quiz\/[^/]+)\/?$/;
 /** The test instructions and the exam screen own the whole viewport (no sidebar or dashboard header). */
 const FULL_SCREEN = /^\/student\/tests\/(attempt\/[^/]+|(?!attempt$|result$)[^/]+)\/?$/;
 
-export default function StudentLayout({ children }: { children: React.ReactNode }) {
+function StudentShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() ?? '';
 
   if (OWN_SHELL.test(pathname)) {
@@ -42,5 +43,13 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
     <ProtectedRoute>
       <DashboardLayout>{children}</DashboardLayout>
     </ProtectedRoute>
+  );
+}
+
+export default function StudentLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <NotificationProvider viewAllHref="/student/notifications">
+      <StudentShell>{children}</StudentShell>
+    </NotificationProvider>
   );
 }

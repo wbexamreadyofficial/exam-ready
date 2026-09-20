@@ -56,7 +56,7 @@ function SetCard({ set }: { set: TestSetSummary }) {
         </div>
 
         <div className="min-w-0">
-          <h2 className="text-base font-bold leading-snug tracking-tight">{bilingual(set.title)}</h2>
+          <h2 className="text-sm font-bold leading-snug tracking-tight">{bilingual(set.title)}</h2>
           {set.title.bn && set.title.en && set.title.bn !== set.title.en && (
             <p className="mt-0.5 truncate text-xs text-[var(--color-muted-foreground)]">{set.title.bn}</p>
           )}
@@ -69,7 +69,7 @@ function SetCard({ set }: { set: TestSetSummary }) {
           <Stat
             icon={MinusCircle}
             label="Negative marking"
-            value={set.negativeMarksPerQuestion > 0 ? `−${set.negativeMarksPerQuestion} per wrong` : 'No negative'}
+            value={set.negativeMarksPerQuestion > 0 ? `−${set.negativeMarksPerQuestion} / wrong` : 'No negative'}
           />
         </div>
 

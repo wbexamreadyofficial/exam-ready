@@ -416,9 +416,11 @@ function Runner({ payload }: { payload: AttemptPayload }) {
                 </button>
               </div>
 
-              <p className="whitespace-pre-line text-[17px] font-medium leading-relaxed sm:text-lg">{questionText}</p>
+              <div className="rounded-2xl border border-orange-200/60 bg-[var(--color-card)] bg-gradient-to-br from-orange-50/60 to-transparent p-5 shadow-elevated sm:p-6 dark:border-orange-400/20 dark:from-orange-500/10">
+                <p className="whitespace-pre-line text-[17px] font-semibold leading-relaxed sm:text-lg">{questionText}</p>
+              </div>
 
-              <div className="mt-6 space-y-3" role="radiogroup" aria-label="Answer options">
+              <div className="mt-5 space-y-3.5" role="radiogroup" aria-label="Answer options">
                 {current.options.map((option, optionIndex) => {
                   const active = currentAnswer?.selected === optionIndex;
                   return (
@@ -429,24 +431,24 @@ function Runner({ payload }: { payload: AttemptPayload }) {
                       aria-checked={active}
                       onClick={() => update({ selected: active ? null : optionIndex })}
                       className={cn(
-                        'flex w-full items-center gap-4 rounded-xl border-2 px-4 py-3.5 text-left transition-all duration-200',
+                        'flex w-full items-center gap-4 rounded-2xl border px-5 py-4 text-left transition-all duration-300',
                         active
-                          ? 'border-[#e2691f] bg-gradient-to-r from-orange-50 to-white shadow-md shadow-orange-500/15 dark:from-orange-500/15 dark:to-transparent'
-                          : 'border-[var(--color-border)] hover:-translate-y-px hover:border-orange-300 hover:bg-orange-50/50 dark:hover:bg-orange-500/5'
+                          ? 'border-transparent bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] text-white shadow-[0_2px_6px_rgba(201,88,23,0.25),0_18px_36px_-12px_rgba(184,67,15,0.65)] ring-1 ring-inset ring-white/30'
+                          : 'border-[var(--color-border)] bg-[var(--color-card)] shadow-elevated hover:-translate-y-0.5 hover:border-orange-300 hover:shadow-[0_2px_4px_rgba(30,64,110,0.06),0_12px_28px_-6px_rgba(201,88,23,0.25)]'
                       )}
                     >
                       <span
                         className={cn(
-                          'flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-sm font-bold transition-colors',
+                          'flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-sm font-bold transition-colors',
                           active
-                            ? 'border-transparent bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] text-white'
-                            : 'border-[var(--color-border)] text-[var(--color-muted-foreground)]'
+                            ? 'border-white/40 bg-white text-[#c4501a] shadow-sm'
+                            : 'border-orange-200 bg-orange-50 text-[#b9450d] dark:border-orange-400/30 dark:bg-orange-500/10 dark:text-orange-300'
                         )}
                       >
                         {String.fromCharCode(65 + optionIndex)}
                       </span>
-                      <span className="text-base leading-snug">{bilingual(option, showBn ? 'bn' : 'en')}</span>
-                      {active && <CheckCircle2 className="ml-auto h-5 w-5 shrink-0 text-[#e2691f]" />}
+                      <span className={cn('text-base leading-snug', active && 'font-semibold')}>{bilingual(option, showBn ? 'bn' : 'en')}</span>
+                      {active && <CheckCircle2 className="ml-auto h-6 w-6 shrink-0 text-white" />}
                     </button>
                   );
                 })}
@@ -595,6 +597,87 @@ const CELL = {
   unseen: 'border-[var(--color-border)] text-[var(--color-muted-foreground)] hover:border-orange-300',
 };
 
+/** Placeholder that mirrors the exam screen while the attempt loads. */
+function RunnerSkeleton() {
+  const tone = 'bg-[rgba(244,149,63,0.2)] dark:bg-[rgba(244,149,63,0.15)]';
+  return (
+    <div className="flex min-h-0 flex-1 flex-col" aria-busy="true" aria-label="Loading your test">
+      {/* Top bar */}
+      <div className="flex h-16 shrink-0 items-center gap-3 border-b border-orange-200/60 bg-gradient-to-r from-white via-[#FFF6EC] to-[#FFE4CC] px-4 sm:px-6 dark:border-orange-400/15 dark:from-[#0B1220] dark:via-[#1A1410] dark:to-[#3A1D08]">
+        <Skeleton className={cn('h-10 w-32 rounded-xl', tone)} />
+        <div className="flex-1 space-y-2">
+          <Skeleton className="h-4 w-56 max-w-[50%]" />
+          <Skeleton className="hidden h-3 w-32 sm:block" />
+        </div>
+        <Skeleton className="h-9 w-24 rounded-lg" />
+        <Skeleton className="hidden h-9 w-9 rounded-lg sm:block" />
+        <Skeleton className={cn('h-9 w-24 rounded-lg', tone)} />
+      </div>
+
+      <div className="flex min-h-0 flex-1">
+        <main className="flex min-w-0 flex-1 flex-col">
+          <div className="min-h-0 flex-1 overflow-hidden">
+            <div className="mx-auto w-full max-w-3xl px-4 py-6 sm:px-6">
+              {/* Question header */}
+              <div className="mb-5 flex items-center gap-3">
+                <Skeleton className={cn('h-10 w-10 rounded-full', tone)} />
+                <Skeleton className="h-4 w-12" />
+                <Skeleton className="h-6 w-10 rounded-md" />
+                <Skeleton className="h-6 w-12 rounded-md" />
+                <Skeleton className="h-6 w-28 rounded-md" />
+                <Skeleton className="ml-auto h-9 w-36 rounded-lg" />
+              </div>
+              {/* Question text */}
+              <div className="space-y-3">
+                <Skeleton className="h-5 w-full" />
+                <Skeleton className="h-5 w-4/5" />
+              </div>
+              {/* Options */}
+              <div className="mt-7 space-y-3">
+                {Array.from({ length: 4 }, (_, i) => (
+                  <div key={i} className="flex items-center gap-4 rounded-xl border-2 border-[var(--color-border)] px-4 py-3.5">
+                    <Skeleton className={cn('h-8 w-8 shrink-0 rounded-full', tone)} />
+                    <Skeleton className="h-4" style={{ width: `${62 - i * 9}%` }} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          {/* Action bar */}
+          <div className="flex h-[72px] shrink-0 items-center border-t border-[var(--color-border)] px-2 sm:px-6">
+            <div className="mx-auto flex w-full max-w-3xl items-center gap-2">
+              <Skeleton className="h-10 w-24 rounded-md" />
+              <Skeleton className="h-10 w-32 rounded-md" />
+              <Skeleton className="h-10 w-20 rounded-md" />
+              <Skeleton className={cn('ml-auto h-10 w-36 rounded-md', tone)} />
+            </div>
+          </div>
+        </main>
+
+        {/* Palette */}
+        <aside className="hidden min-h-0 w-80 shrink-0 flex-col overflow-hidden border-l border-orange-200/60 bg-gradient-to-b from-orange-50/60 to-transparent pt-4 lg:flex dark:border-orange-400/15 dark:from-orange-500/5">
+          <Skeleton className="mx-4 mb-4 h-3 w-36" />
+          <div className="mb-4 grid grid-cols-2 gap-x-3 gap-y-2 px-4">
+            {Array.from({ length: 4 }, (_, i) => (
+              <Skeleton key={i} className="h-3.5 w-full" />
+            ))}
+          </div>
+          <div className="min-h-0 flex-1 overflow-hidden px-4">
+            <div className="grid grid-cols-5 gap-2.5">
+              {Array.from({ length: 40 }, (_, i) => (
+                <Skeleton key={i} className="h-10 rounded-full" />
+              ))}
+            </div>
+          </div>
+          <div className="flex h-[72px] shrink-0 items-center border-t border-[var(--color-border)] px-4">
+            <Skeleton className={cn('h-11 w-full rounded-md', tone)} />
+          </div>
+        </aside>
+      </div>
+    </div>
+  );
+}
+
 // ───────────────────────────── loader ─────────────────────────────
 
 export default function AttemptPage({ params }: { params: Promise<{ attemptId: string }> }) {
@@ -621,30 +704,25 @@ export default function AttemptPage({ params }: { params: Promise<{ attemptId: s
 
   return (
     <div className="fixed inset-0 z-40 flex flex-col bg-[var(--color-background)]">
-      <div className="h-16 shrink-0 border-b border-[var(--color-border)]" />
       {isError ? (
-        <div className="flex flex-1 flex-col items-center justify-center gap-4">
-          <ErrorState
-            message={notFound ? 'This test attempt no longer exists. Start it again from Mock Tests.' : 'Could not load your test.'}
-            onRetry={notFound ? undefined : () => refetch()}
-            className="py-8"
-          />
-          <Button
-            className="gap-2 border-0 bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] font-semibold text-white shadow-md shadow-orange-600/30"
-            onClick={() => router.replace('/student/mock-tests')}
-          >
-            <ArrowLeft className="h-4 w-4" /> Go to Mock Tests
-          </Button>
-        </div>
+        <>
+          <div className="h-16 shrink-0 border-b border-[var(--color-border)]" />
+          <div className="flex flex-1 flex-col items-center justify-center gap-4">
+            <ErrorState
+              message={notFound ? 'This test attempt no longer exists. Start it again from Mock Tests.' : 'Could not load your test.'}
+              onRetry={notFound ? undefined : () => refetch()}
+              className="py-8"
+            />
+            <Button
+              className="gap-2 border-0 bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] font-semibold text-white shadow-md shadow-orange-600/30"
+              onClick={() => router.replace('/student/mock-tests')}
+            >
+              <ArrowLeft className="h-4 w-4" /> Go to Mock Tests
+            </Button>
+          </div>
+        </>
       ) : (
-        <div className="mx-auto w-full max-w-3xl space-y-4 p-6" aria-busy="true">
-          <Skeleton className="h-10 w-40" />
-          <Skeleton className="h-6 w-full" />
-          <Skeleton className="h-6 w-2/3" />
-          {Array.from({ length: 4 }, (_, i) => (
-            <Skeleton key={i} className="h-14 w-full rounded-xl" />
-          ))}
-        </div>
+        <RunnerSkeleton />
       )}
     </div>
   );

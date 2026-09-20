@@ -22,7 +22,7 @@ import TopExams from '@/components/dashboard/TopExams';
 
 export default function DashboardPage() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Profile completion nudge */}
       <ProfileCompletionBanner />
 
@@ -39,7 +39,7 @@ export default function DashboardPage() {
       <ContinuePreparation />
 
       {/* 5. Your Preparation Journey */}
-      <div className="space-y-6">
+      <div className="space-y-4">
         <h2 className="display-card text-lg font-semibold text-[var(--color-ink-900)]">
           Your Preparation Journey
         </h2>
@@ -54,7 +54,7 @@ export default function DashboardPage() {
       <UpgradeCTA />
 
       {/* Right sidebar content stacked on non-xl screens */}
-      <div className="xl:hidden space-y-6 pt-2">
+      <div className="xl:hidden space-y-4 pt-1">
         <h2 className="display-card text-lg font-semibold text-[var(--color-ink-900)]">
           Quick Overview
         </h2>

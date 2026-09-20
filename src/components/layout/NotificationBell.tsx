@@ -16,7 +16,7 @@ import type { NotificationItem } from '@/types/notification';
 const SHEET_LIMIT = 20;
 
 /** Header bell: unread badge, and a side sheet with the latest notifications. */
-export function NotificationBell() {
+export function NotificationBell({ viewAllHref = '/admin/notifications' }: { viewAllHref?: string }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const { data: unread = 0 } = useUnreadCount();
@@ -51,10 +51,10 @@ export function NotificationBell() {
         </Button>
       </SheetTrigger>
 
-      <SheetContent className="p-0" aria-describedby={undefined}>
-        <SheetHeader className="space-y-1 border-b border-orange-200/60 bg-gradient-to-br from-orange-50 via-white to-orange-50/40 px-5 py-4 pr-12 dark:border-orange-400/15 dark:from-orange-500/10 dark:via-transparent dark:to-transparent">
+      <SheetContent className="p-0 sm:max-w-[340px]" aria-describedby={undefined}>
+        <SheetHeader className="space-y-1 border-b border-orange-200/60 bg-gradient-to-br from-orange-50 via-white to-orange-50/40 px-4 py-3 pr-11 dark:border-orange-400/15 dark:from-orange-500/10 dark:via-transparent dark:to-transparent">
           <div className="flex items-center justify-between gap-3">
-            <SheetTitle className="flex items-center gap-2">
+            <SheetTitle className="flex items-center gap-2 text-base">
               Notifications
               {unread > 0 && (
                 <span className="rounded-full bg-[var(--color-cta)]/15 px-2 py-0.5 text-xs font-bold text-[var(--color-cta)]">
@@ -63,7 +63,7 @@ export function NotificationBell() {
               )}
             </SheetTitle>
           </div>
-          <SheetDescription>Latest activity on your platform.</SheetDescription>
+          <SheetDescription className="text-xs">Latest activity on your platform.</SheetDescription>
           {unread > 0 && (
             <Button
               variant="ghost"
@@ -80,8 +80,8 @@ export function NotificationBell() {
         <div className="flex flex-1 flex-col overflow-y-auto overscroll-contain divide-y divide-[var(--color-border)]">
           {isLoading ? (
             Array.from({ length: 5 }).map((_, index) => (
-              <div key={index} className="flex gap-3 px-4 py-3.5">
-                <Skeleton className="h-9 w-9 shrink-0 rounded-xl" />
+              <div key={index} className="flex gap-2.5 px-3.5 py-2.5">
+                <Skeleton className="h-8 w-8 shrink-0 rounded-lg" />
                 <div className="flex-1 space-y-2">
                   <Skeleton className="h-4 w-40" />
                   <Skeleton className="h-3 w-full" />
@@ -114,9 +114,9 @@ export function NotificationBell() {
           )}
         </div>
 
-        <div className="border-t border-[var(--color-border)] p-3">
+        <div className="border-t border-[var(--color-border)] p-2.5">
           <Button asChild variant="outline" className="w-full" onClick={() => setOpen(false)}>
-            <Link href="/admin/notifications">View all notifications</Link>
+            <Link href={viewAllHref}>View all notifications</Link>
           </Button>
         </div>
       </SheetContent>
