@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { FileText, FileUp, Loader2 } from 'lucide-react';
+import { FileText, FileUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
+import { PageHeader } from '@/components/layout/PageHeader';
 import { cn } from '@/lib/utils';
 import { useUploadList } from '@/hooks/useQuestionUpload';
 import { useAdminT } from '@/lib/admin/i18n';
@@ -14,9 +16,9 @@ const STATUS_STYLES: Record<UploadStatus, string> = {
   committed: 'bg-[var(--color-bgreen-50)] text-[var(--color-bgreen-600)] dark:bg-[var(--color-bgreen-500)]/15',
   rejected: 'bg-[var(--color-bred-50)] text-[var(--color-bred-600)] dark:bg-[var(--color-bred-500)]/15',
   cancelled: 'bg-[var(--color-muted)] text-[var(--color-muted-foreground)]',
-  ready: 'bg-[var(--color-bblue-50)] text-[var(--color-primary)] dark:bg-[var(--color-bblue-700)]/20',
-  resolving: 'bg-[var(--color-borange-50)] text-[var(--color-borange-600)] dark:bg-[var(--color-borange-500)]/15',
-  parsed: 'bg-[var(--color-borange-50)] text-[var(--color-borange-600)] dark:bg-[var(--color-borange-500)]/15',
+  ready: 'bg-orange-100 text-[#b9450d] dark:bg-orange-500/20 dark:text-orange-300',
+  resolving: 'bg-amber-50 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300',
+  parsed: 'bg-amber-50 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300',
 };
 
 const FILTERS: (UploadStatus | 'all')[] = ['all', 'parsed', 'resolving', 'ready', 'committed', 'rejected'];
@@ -29,20 +31,22 @@ export default function UploadsPage() {
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-xl font-black tracking-tight sm:text-2xl">{t.nav.uploadHistory}</h1>
-          <p className="mt-1 text-sm text-[var(--color-muted-foreground)]">
-            {t.dashboard.uploadCtaDesc}
-          </p>
-        </div>
-        <Button asChild size="sm" className="gap-1.5 font-semibold">
-          <Link href="/admin/uploads/new">
-            <FileUp className="h-4 w-4" />
-            {t.nav.uploadPdf}
-          </Link>
-        </Button>
-      </div>
+      <PageHeader
+        title={t.nav.uploadHistory}
+        description={t.dashboard.uploadCtaDesc}
+        actions={
+          <Button
+            asChild
+            size="sm"
+            className="gap-1.5 border-0 bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] font-semibold text-white shadow-md shadow-orange-600/30 ring-1 ring-inset ring-white/25 transition-all hover:-translate-y-px hover:bg-transparent hover:brightness-110 hover:shadow-lg hover:shadow-orange-600/40"
+          >
+            <Link href="/admin/uploads/new">
+              <FileUp className="h-4 w-4" />
+              {t.nav.uploadPdf}
+            </Link>
+          </Button>
+        }
+      />
 
       <div className="flex flex-wrap gap-1.5">
         {FILTERS.map((value) => (
@@ -52,8 +56,8 @@ export default function UploadsPage() {
             className={cn(
               'rounded-md border px-3 py-1.5 text-[12.5px] font-semibold capitalize transition-colors',
               status === value
-                ? 'border-[var(--color-primary)] bg-[var(--color-bblue-50)] text-[var(--color-primary)] dark:bg-[var(--color-bblue-700)]/15'
-                : 'border-[var(--color-hairline)] hover:bg-[var(--color-muted)]'
+                ? 'border-orange-400 bg-orange-50 text-[#c95817] shadow-sm dark:bg-orange-500/15 dark:text-orange-300'
+                : 'border-[var(--color-hairline)] hover:border-orange-300 hover:bg-orange-50/60 dark:hover:bg-orange-500/10'
             )}
           >
             {value}
@@ -62,9 +66,20 @@ export default function UploadsPage() {
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center gap-2 py-16 text-[var(--color-muted-foreground)]">
-          <Loader2 className="h-5 w-5 animate-spin" />
-          {t.common.loading}
+        <div className="space-y-2" aria-busy="true" aria-label={t.common.loading}>
+          {Array.from({ length: 8 }, (_, i) => (
+            <Card key={i}>
+              <CardContent className="flex flex-wrap items-center gap-3 p-3.5">
+                <Skeleton className="h-9 w-9 shrink-0 rounded-lg" />
+                <div className="min-w-0 flex-1 space-y-2">
+                  <Skeleton className="h-3.5 w-1/3 max-w-72" />
+                  <Skeleton className="h-3 w-1/4 max-w-52" />
+                </div>
+                <Skeleton className="h-5 w-20 shrink-0 rounded-full" />
+                <Skeleton className="h-8 w-14 shrink-0 rounded-md" />
+              </CardContent>
+            </Card>
+          ))}
         </div>
       ) : uploads.length === 0 ? (
         <Card>
@@ -104,7 +119,7 @@ export default function UploadsPage() {
                   </span>
 
                   {resumable && (
-                    <Button asChild variant="outline" size="sm" className="shrink-0 text-[12px]">
+                    <Button asChild variant="outline" size="sm" className="shrink-0 text-[12px] hover:border-orange-300 hover:bg-orange-50 hover:text-[#c95817]">
                       <Link href={`/admin/uploads/new?resume=${upload._id}`}>{t.common.edit}</Link>
                     </Button>
                   )}

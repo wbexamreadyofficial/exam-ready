@@ -37,7 +37,7 @@ export default function ResultsPage() {
           icon={FileText}
           title="No exams attempted yet"
           description="Attempt a mock exam to view your detailed result analytics."
-          action={{ label: 'Explore Exams', onClick: () => window.location.href = '/exams' }}
+          action={{ label: 'Explore Exams', onClick: () => window.location.href = '/student/mock-tests' }}
         />
       ) : (
         <div className="space-y-3">

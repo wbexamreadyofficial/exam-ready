@@ -154,7 +154,7 @@ export function TrendingCarousel() {
             className="font-extrabold text-sm border-2 border-blue-500 text-blue-600 dark:text-blue-400 hover:bg-blue-600 hover:text-white transition-all gap-2 h-10 px-5 shadow-sm self-start md:self-auto shrink-0"
             asChild
           >
-            <Link href="/exams">
+            <Link href="/student/mock-tests">
               <span>View All Tests</span>
               <ArrowRight className="h-4 w-4 stroke-[2.5]" />
             </Link>
@@ -224,7 +224,7 @@ export function TrendingCarousel() {
                       className="font-black bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 text-slate-950 hover:from-amber-500 hover:to-yellow-600 gap-1.5 shadow-md shadow-amber-500/25 border-none rounded-xl h-10 px-5"
                       asChild
                     >
-                      <Link href="/exams">
+                      <Link href="/student/mock-tests">
                         <PlayCircle className="h-4 w-4 stroke-[2.5]" />
                         <span>Attempt Test</span>
                       </Link>

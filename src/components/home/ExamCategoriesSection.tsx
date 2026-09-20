@@ -20,7 +20,7 @@ const exams = [
     difficulty: 2,
     icon: ShieldCheck,
     accent: '#2563EB',
-    href: '/exams/wb-constable',
+    href: '/student/mock-tests',
   },
   {
     title: 'WB SI',
@@ -31,7 +31,7 @@ const exams = [
     difficulty: 3,
     icon: Shield,
     accent: '#FF700B',
-    href: '/exams/wb-si',
+    href: '/student/mock-tests',
   },
   {
     title: 'Food SI',
@@ -42,7 +42,7 @@ const exams = [
     difficulty: 2,
     icon: Utensils,
     accent: '#16A34A',
-    href: '/exams/food-si',
+    href: '/student/mock-tests',
   },
   {
     title: 'PSC Clerkship',
@@ -53,7 +53,7 @@ const exams = [
     difficulty: 2,
     icon: FileText,
     accent: '#DC2626',
-    href: '/exams/psc-clerkship',
+    href: '/student/mock-tests',
   },
   {
     title: 'PSC Miscellaneous',
@@ -64,7 +64,7 @@ const exams = [
     difficulty: 3,
     icon: Briefcase,
     accent: '#2563EB',
-    href: '/exams/psc-miscellaneous',
+    href: '/student/mock-tests',
   },
   {
     title: 'Others',
@@ -75,7 +75,7 @@ const exams = [
     difficulty: 3,
     icon: MoreHorizontal,
     accent: '#FF700B',
-    href: '/exams/others',
+    href: '/student/mock-tests',
   },
 ];
 
@@ -96,7 +96,7 @@ export function ExamCategoriesSection() {
               </h2>
             </div>
             <Link
-              href="/exams"
+              href="/student/mock-tests"
               className="link-underline self-start sm:self-auto shrink-0 text-blue-700 dark:text-blue-400 font-semibold flex items-center text-[14px] gap-1.5 group whitespace-nowrap"
             >
               View All Exams

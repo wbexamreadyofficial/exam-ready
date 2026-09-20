@@ -107,7 +107,7 @@ export function PracticePreview({ compact = false }: { compact?: boolean }) {
           )}
         </div>
       </div>
-      <Link href="/exams" className={styles.previewFooter} data-deck-row>
+      <Link href="/student/mock-tests" className={styles.previewFooter} data-deck-row>
         Ready for the real challenge?{' '}
         <span>
           Explore tests <ArrowRight size={14} />

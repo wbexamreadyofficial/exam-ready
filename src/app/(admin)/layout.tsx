@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 import { AdminTopbar } from '@/components/admin/AdminTopbar';
 import { cn } from '@/lib/utils';
+import { NotificationProvider } from '@/providers/NotificationProvider';
 
 /**
  * Admin shell.
@@ -42,6 +43,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }, [mobileOpen]);
 
   return (
+    <NotificationProvider>
     <div className="min-h-screen bg-[var(--color-background)]">
       {/* Desktop rail */}
       <aside
@@ -84,5 +86,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <main className="w-full p-4 sm:p-6 print-reset-layout">{children}</main>
       </div>
     </div>
+    </NotificationProvider>
   );
 }

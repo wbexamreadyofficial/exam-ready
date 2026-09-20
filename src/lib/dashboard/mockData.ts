@@ -323,7 +323,8 @@ export const sidebarNavGroups: NavGroup[] = [
   {
     title: 'Practice',
     items: [
-      { label: 'Mock Tests', icon: 'FileText', href: '/exams' },
+      { label: 'Exam Categories', icon: 'LayoutGrid', href: '/student/exam-categories' },
+      { label: 'Mock Tests', icon: 'FileText', href: '/student/mock-tests' },
       { label: 'Question Sets', icon: 'ListChecks', href: '/question-sets' },
       { label: 'Question Bank', icon: 'Database', href: '/questions' },
       { label: 'Previous Year', icon: 'History', href: '/previous-year' },

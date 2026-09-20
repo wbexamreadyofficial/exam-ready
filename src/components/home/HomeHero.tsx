@@ -25,7 +25,7 @@ export function HomeHero() {
             you can see.
           </p>
           <div className={styles.actions} data-hero-reveal>
-            <Link href="/exams" className={styles.primaryButton}>
+            <Link href="/student/mock-tests" className={styles.primaryButton}>
               Find your mock test <ArrowRight size={18} />
             </Link>
             <a href="#how-it-works" className={styles.secondaryButton}>

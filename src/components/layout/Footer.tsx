@@ -8,11 +8,11 @@ const quickLinks = [
 ];
 
 const examLinks = [
-  { title: 'WB Constable', href: '/exams/wb-constable' },
-  { title: 'WB SI', href: '/exams/wb-si' },
-  { title: 'Food SI', href: '/exams/food-si' },
-  { title: 'PSC Clerkship', href: '/exams/psc-clerkship' },
-  { title: 'State PSC Exams', href: '/exams/others' },
+  { title: 'WB Constable', href: '/student/mock-tests' },
+  { title: 'WB SI', href: '/student/mock-tests' },
+  { title: 'Food SI', href: '/student/mock-tests' },
+  { title: 'PSC Clerkship', href: '/student/mock-tests' },
+  { title: 'State PSC Exams', href: '/student/mock-tests' },
 ];
 
 const supportLinks = [

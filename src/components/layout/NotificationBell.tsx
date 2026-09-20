@@ -39,7 +39,7 @@ export function NotificationBell() {
         <Button
           variant="ghost"
           size="icon"
-          className="relative"
+          className="relative h-9 w-9 rounded-full border border-[var(--color-hairline)] bg-[var(--color-card)] shadow-sm transition-all hover:border-orange-300 hover:bg-orange-50 hover:text-[#c95817]"
           aria-label={unread > 0 ? `Notifications, ${unread} unread` : 'Notifications'}
         >
           <Bell className="h-4 w-4" />
@@ -52,7 +52,7 @@ export function NotificationBell() {
       </SheetTrigger>
 
       <SheetContent className="p-0" aria-describedby={undefined}>
-        <SheetHeader className="space-y-1 border-b border-[var(--color-border)] px-5 py-4 pr-12">
+        <SheetHeader className="space-y-1 border-b border-orange-200/60 bg-gradient-to-br from-orange-50 via-white to-orange-50/40 px-5 py-4 pr-12 dark:border-orange-400/15 dark:from-orange-500/10 dark:via-transparent dark:to-transparent">
           <div className="flex items-center justify-between gap-3">
             <SheetTitle className="flex items-center gap-2">
               Notifications

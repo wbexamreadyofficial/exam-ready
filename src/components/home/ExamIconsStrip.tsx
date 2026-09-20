@@ -47,7 +47,7 @@ export function ExamIconsStrip() {
             return (
               <Link
                 key={`${exam.id}-${idx}`}
-                href={`/exams/${exam.id}`}
+                href={`/student/mock-tests`}
                 className="flex flex-col items-center gap-3 shrink-0 group"
               >
                 <div

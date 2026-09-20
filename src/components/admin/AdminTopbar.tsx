@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { ThemeSwitcher } from '@/components/layout/ThemeSwitcher';
 import { AdminLangToggle } from './AdminLangToggle';
 import { ProfileMenu } from './ProfileMenu';
+import { NotificationBell } from '@/components/layout/NotificationBell';
 import { useAdminT } from '@/lib/admin/i18n';
 
 interface AdminTopbarProps {
@@ -41,6 +42,7 @@ export function AdminTopbar({ onOpenMenu }: AdminTopbarProps) {
 
         <AdminLangToggle />
         <ThemeSwitcher />
+        <NotificationBell />
         <ProfileMenu />
       </div>
     </header>

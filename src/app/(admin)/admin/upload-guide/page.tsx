@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { CodeBlock } from '@/components/admin/CodeBlock';
 import { UploadSteps } from '@/components/admin/UploadSteps';
+import { PageHeader } from '@/components/layout/PageHeader';
+import { ThemeSwitcher } from '@/components/layout/ThemeSwitcher';
 import { useAdminT } from '@/lib/admin/i18n';
 import {
   META_SAMPLE, QUESTION_SAMPLE, BILINGUAL_SAMPLE,
@@ -30,28 +32,38 @@ export default function UploadGuidePage() {
   return (
     <div className="space-y-6 print-doc">
       {/* ─── Header ─── */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div className="min-w-0">
-          <h1 className="text-xl font-black tracking-tight sm:text-2xl">{g.title}</h1>
-          <p className="mt-1 text-sm text-[var(--color-muted-foreground)]">{g.subtitle}</p>
-        </div>
-
-        <div className="flex shrink-0 flex-wrap gap-2 no-print">
-          <Button variant="outline" size="sm" className="gap-1.5" onClick={() => window.print()}>
-            <Printer className="h-4 w-4" />
-            {g.printBtn}
-          </Button>
-          <Button asChild size="sm" className="gap-1.5 font-semibold">
-            <Link href="/admin/uploads/new">
-              <FileUp className="h-4 w-4" />
-              {t.nav.uploadPdf}
-            </Link>
-          </Button>
-        </div>
+      <PageHeader
+        className="no-print"
+        title={g.title}
+        description={g.subtitle}
+        actions={
+          <>
+            <ThemeSwitcher />
+            <Button variant="outline" size="sm" className="gap-1.5 hover:border-orange-300 hover:bg-orange-50 hover:text-[#c95817]" onClick={() => window.print()}>
+              <Printer className="h-4 w-4" />
+              {g.printBtn}
+            </Button>
+            <Button
+              asChild
+              size="sm"
+              className="gap-1.5 border-0 bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] font-semibold text-white shadow-md shadow-orange-600/30 ring-1 ring-inset ring-white/25 transition-all hover:-translate-y-px hover:bg-transparent hover:brightness-110 hover:shadow-lg hover:shadow-orange-600/40"
+            >
+              <Link href="/admin/uploads/new">
+                <FileUp className="h-4 w-4" />
+                {t.nav.uploadPdf}
+              </Link>
+            </Button>
+          </>
+        }
+      />
+      {/* Printed copy keeps a plain title */}
+      <div className="hidden print:block">
+        <h1 className="text-2xl font-black">{g.title}</h1>
+        <p className="mt-1 text-sm">{g.subtitle}</p>
       </div>
 
       {/* ─── How it works ─── */}
-      <Card className="print-box border-[var(--color-bblue-100)] bg-[var(--color-bblue-50)] dark:border-[var(--color-bblue-700)]/30 dark:bg-[var(--color-bblue-700)]/10">
+      <Card className="print-box border-orange-200/80 bg-gradient-to-br from-orange-50 to-white dark:border-orange-400/25 dark:from-orange-500/10 dark:to-transparent">
         <CardContent className="p-4 sm:p-5">
           <h2 className="mb-1.5 text-base font-bold">{g.introTitle}</h2>
           <p className="text-sm leading-relaxed text-[var(--color-muted-foreground)]">{g.introBody}</p>
@@ -70,7 +82,7 @@ export default function UploadGuidePage() {
             return (
               <Card key={i} className="print-box h-full">
                 <CardContent className="flex h-full gap-3 p-4">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--color-bblue-50)] text-[var(--color-primary)] dark:bg-[var(--color-bblue-700)]/20">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-orange-50 text-[#e2691f] dark:bg-orange-500/15">
                     <Icon className="h-4.5 w-4.5" size={18} />
                   </div>
                   <div className="min-w-0">
@@ -106,7 +118,7 @@ export default function UploadGuidePage() {
       {/* ─── Bilingual ─── */}
       <section>
         <h2 className="flex items-center gap-2 text-base font-bold sm:text-lg">
-          <Languages className="h-4 w-4 text-[var(--color-primary)]" />
+          <Languages className="h-4 w-4 text-[#e2691f]" />
           {g.bilingualTitle}
         </h2>
         <p className="mb-3 mt-1 text-sm text-[var(--color-muted-foreground)]">{g.bilingualBody}</p>

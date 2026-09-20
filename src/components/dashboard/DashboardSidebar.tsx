@@ -8,7 +8,7 @@ import { sidebarNavGroups } from '@/lib/dashboard/mockData';
 import { 
   FileText, Database, History, Bookmark, StickyNote, 
   FunctionSquareIcon, LayoutDashboard, TrendingUp, Medal, 
-  User, HelpCircle, Crown, ChevronLeft, ChevronRight, ListChecks
+  User, HelpCircle, Crown, ChevronLeft, ChevronRight, ListChecks, LayoutGrid
 } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { LogoIcon } from '@/components/ui/Logo';
@@ -16,7 +16,7 @@ import { LogoIcon } from '@/components/ui/Logo';
 const iconMap: Record<string, React.ElementType> = { 
   FileText, Database, History, Bookmark, StickyNote, 
   FunctionSquare: FunctionSquareIcon, LayoutDashboard, TrendingUp, Medal, 
-  User, HelpCircle, ListChecks
+  User, HelpCircle, ListChecks, LayoutGrid
 };
 
 interface DashboardSidebarProps {

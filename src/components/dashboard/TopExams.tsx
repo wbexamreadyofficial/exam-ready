@@ -39,7 +39,7 @@ export default function TopExams() {
             return (
               <Link 
                 key={exam.id} 
-                href={`/exams`}
+                href={`/student/mock-tests`}
                 className="flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-[var(--color-surface-muted)] transition-colors group cursor-pointer"
               >
                 <Icon className="h-4 w-4 text-[var(--color-data-primary)]" />
