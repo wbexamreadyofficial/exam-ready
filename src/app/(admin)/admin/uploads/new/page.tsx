@@ -13,12 +13,16 @@ import { UploadStep } from '@/components/admin/wizard/UploadStep';
 import { ResolveStep } from '@/components/admin/wizard/ResolveStep';
 import { SubjectsStep } from '@/components/admin/wizard/SubjectsStep';
 import { NameStep } from '@/components/admin/wizard/NameStep';
+import { PatternStep } from '@/components/admin/wizard/PatternStep';
+import { AddQuestionForm } from '@/components/admin/wizard/AddQuestionForm';
 import { QuestionCard } from '@/components/admin/wizard/QuestionCard';
 import { questionUploadsApi, toFailure } from '@/lib/api/questionUploads';
 import {
+  useAddQuestion,
   useCategories,
   useCommitUpload,
   useConfirmName,
+  useConfirmPattern,
   useEditQuestion,
   useExams,
   useQuestionSets,
@@ -69,6 +73,8 @@ function UploadWizard() {
   const resolveSubjects = useResolveSubjects(uploadId);
   const resolveExam = useResolveExam(uploadId);
   const confirmName = useConfirmName(uploadId);
+  const confirmPattern = useConfirmPattern(uploadId);
+  const addQuestion = useAddQuestion(uploadId);
   const editQuestion = useEditQuestion(uploadId);
   const commit = useCommitUpload(uploadId);
 
@@ -142,6 +148,11 @@ function UploadWizard() {
   // Issues with no question number are about the file as a whole.
   const paperIssues = (upload?.parseErrors ?? []).filter((i) => i.questionNumber === undefined);
   const paperWarnings = (upload?.parseWarnings ?? []).filter((i) => i.questionNumber === undefined);
+
+  // How many questions the confirmed marking scheme demands, and how far short
+  // the set currently is. The same rule is enforced again by the API on commit.
+  const requiredQuestions = step?.pattern?.requiredQuestions ?? 0;
+  const shortBy = Math.max(0, requiredQuestions - counts.included);
 
   const currentStep = createdSet ? 9 : (upload?.currentStep ?? (uploadId ? 4 : 2));
 
@@ -339,8 +350,17 @@ function UploadWizard() {
             />
           )}
 
-          {/* ── steps 8 + 9 ── */}
-          {upload.currentStep >= 8 && (
+          {/* ── step 8 — the marking scheme, confirmed before anything is created ── */}
+          {upload.currentStep === 8 && step.pattern && (
+            <PatternStep
+              draft={step.pattern}
+              busy={confirmPattern.isPending}
+              onSubmit={(input) => confirmPattern.mutate(input)}
+            />
+          )}
+
+          {/* ── step 9 ── */}
+          {upload.currentStep >= 9 && (
             <div className="space-y-4">
               <div>
                 <h2 className="text-lg font-black tracking-tight">{w.reviewTitle}</h2>
@@ -373,6 +393,19 @@ function UploadWizard() {
                 </CardContent>
               </Card>
 
+              {/* The publish gate: a set must be worth the marks it claims. */}
+              {shortBy > 0 && (
+                <Card className="border-[var(--color-borange-200)] bg-[var(--color-borange-50)] dark:border-[var(--color-borange-500)]/30 dark:bg-[var(--color-borange-500)]/10">
+                  <CardContent className="flex gap-2 p-3.5 text-[12.5px] leading-relaxed">
+                    <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-borange-600)]" />
+                    <span>
+                      {w.requiredQuestionsNote} <b>{requiredQuestions}</b> {w.questionsWord}. {w.youHaveNow}{' '}
+                      <b>{counts.included}</b>. <b>{w.shortOfQuestions} {shortBy}.</b>
+                    </span>
+                  </CardContent>
+                </Card>
+              )}
+
               <div className="flex gap-1.5">
                 {(['all', 'problems'] as const).map((value) => (
                   <button
@@ -402,10 +435,15 @@ function UploadWizard() {
                 ))}
               </div>
 
+              <AddQuestionForm
+                busy={addQuestion.isPending}
+                onSubmit={(input, done) => addQuestion.mutate(input, { onSuccess: done })}
+              />
+
               <div className="sticky bottom-0 -mx-4 flex flex-wrap gap-2 border-t border-[var(--color-hairline)] bg-[var(--color-background)]/95 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6">
                 <Button
-                  className="gap-2 font-bold border-0 bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] text-white shadow-md shadow-orange-600/30 ring-1 ring-inset ring-white/25 transition-all hover:-translate-y-px hover:bg-transparent hover:brightness-110 hover:shadow-lg hover:shadow-orange-600/40 disabled:opacity-50 disabled:shadow-none"
-                  disabled={counts.blocking > 0 || counts.included === 0 || commit.isPending}
+                  className="gap-2 font-bold"
+                  disabled={counts.blocking > 0 || counts.included === 0 || shortBy > 0 || commit.isPending}
                   onClick={() =>
                     commit.mutate(
                       {

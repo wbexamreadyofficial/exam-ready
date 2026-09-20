@@ -16,6 +16,8 @@ import {
 import { useLanguageStore } from '@/store/languageStore';
 import { useAuthStore } from '@/store/authStore';
 import type {
+  NewQuestionInput,
+  PatternInput,
   QuestionEditInput,
   ResolveInput,
   SubjectResolveInput,
@@ -98,6 +100,18 @@ export function useConfirmName(uploadId: string | null) {
   const userId = useAuthStore((s) => s.user?.id ?? '');
   return useStepMutation<string>(uploadId, (id, name) =>
     questionUploadsApi.confirmName(id, name, userId)
+  );
+}
+
+export function useConfirmPattern(uploadId: string | null) {
+  return useStepMutation<PatternInput>(uploadId, (id, input) =>
+    questionUploadsApi.confirmPattern(id, input)
+  );
+}
+
+export function useAddQuestion(uploadId: string | null) {
+  return useStepMutation<NewQuestionInput>(uploadId, (id, input) =>
+    questionUploadsApi.addQuestion(id, input)
   );
 }
 

@@ -2,6 +2,7 @@
 
 import type { ReactNode } from 'react';
 import { useQuery, type UseQueryResult } from '@tanstack/react-query';
+import { isAxiosError } from 'axios';
 import { Search, X, type LucideIcon } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
@@ -193,6 +194,8 @@ export function FilterBar({
 
 // ───────────────────────────── list panel (loading / error / empty / pagination) ─────────────────────────────
 
+const isForbidden = (error: unknown) => isAxiosError(error) && error.response?.status === 403;
+
 function ListSkeleton({ columns, rows }: { columns: string[]; rows: number }) {
   return (
     <div aria-busy="true">
@@ -239,7 +242,16 @@ export function ListPanel<T>({ query, state, columns, empty, children, bare }: L
     isLoading || (isPlaceholderData && !data) ? (
       <ListSkeleton columns={columns} rows={Math.min(state.pageSize, 8)} />
     ) : isError ? (
-      <ErrorState message="Could not load this list." onRetry={() => refetch()} className="py-12" />
+      <ErrorState
+        title={isForbidden(query.error) ? 'Admin sign-in required' : undefined}
+        message={
+          isForbidden(query.error)
+            ? 'You are signed in with an account that is not an admin. Log out, then sign in with the admin account.'
+            : 'Could not load this list.'
+        }
+        onRetry={() => refetch()}
+        className="py-12"
+      />
     ) : items.length === 0 ? (
       state.hasFilters ? (
         <EmptyState icon={Search} title="Nothing matches" description="Try a different word, or clear the filters." className="py-12" />
