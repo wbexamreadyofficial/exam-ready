@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { HierarchyGuide } from '@/components/admin/catalog/HierarchyGuide';
 import { QuestionSetEditDialog } from '@/components/admin/catalog/EditDialogs';
+import { SetApproveDialog } from '@/components/admin/catalog/SetApproveDialog';
 import { useRelationHost } from '@/components/admin/catalog/RelationDialog';
 import { QuestionSetsTable } from '@/components/admin/catalog/tables';
 import { FilterBar, FilterSelect, ListPanel, SET_STATUS_OPTIONS, useOptions } from '@/components/admin/catalog/ui';
@@ -18,6 +19,7 @@ import { ELEVATED_CARD } from '@/lib/constants';
 export default function QuestionSetsAdminPage() {
   const relations = useRelationHost();
   const [editing, setEditing] = useState<QuestionSetRow | null>(null);
+  const [approving, setApproving] = useState<QuestionSetRow | null>(null);
 
   const state = useListState({ category: ALL, exam: ALL, status: ALL });
   const { filters } = state;
@@ -79,6 +81,7 @@ export default function QuestionSetsAdminPage() {
           <QuestionSetsTable
             items={sets}
             onEdit={setEditing}
+            onApprove={setApproving}
             onOpenQuestions={(set) => relations.open({ scope: 'question-sets', id: set._id, view: 'questions' })}
           />
         )}
@@ -86,6 +89,7 @@ export default function QuestionSetsAdminPage() {
 
       {relations.element}
       {editing && <QuestionSetEditDialog key={editing._id} set={editing} onClose={() => setEditing(null)} />}
+      {approving && <SetApproveDialog key={approving._id} set={approving} onClose={() => setApproving(null)} />}
     </div>
   );
 }

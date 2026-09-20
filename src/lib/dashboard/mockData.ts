@@ -328,6 +328,7 @@ export const sidebarNavGroups: NavGroup[] = [
       { label: 'Question Sets', icon: 'ListChecks', href: '/question-sets' },
       { label: 'Question Bank', icon: 'Database', href: '/questions' },
       { label: 'Previous Year', icon: 'History', href: '/previous-year' },
+      { label: 'My Results', icon: 'BarChart3', href: '/student/results' },
     ],
   },
   {

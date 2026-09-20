@@ -109,6 +109,8 @@ export interface QuestionSetRow {
   publishedAt?: string;
   createdAt: string;
   questionCount: number;
+  /** How many of the set's questions are approved. */
+  approvedCount?: number;
 }
 
 export interface QuestionRow {
@@ -256,6 +258,13 @@ export interface QuestionSetApprovalInfo {
   };
 }
 
+export interface ApproveWholeSetResult extends ApproveSetResult {
+  alreadyApproved: number;
+  totalApproved: number;
+  /** True when the set is now live for students. */
+  published: boolean;
+}
+
 export interface ApproveSetResult {
   approved: number;
   skipped: number;
@@ -311,6 +320,12 @@ export const catalogApi = {
       `${BASE}/question-sets/${setId}/approval-info`
     );
     return data.data.info;
+  },
+
+  /** Approves every ready question AND publishes the set so students can take it. */
+  approveSet: async (setId: string): Promise<ApproveWholeSetResult> => {
+    const { data } = await apiClient.post<ApiResponse<ApproveWholeSetResult>>(`${BASE}/question-sets/${setId}/approve`);
+    return data.data;
   },
 
   /** Approves every question in the set that is ready; the rest are reported back. */

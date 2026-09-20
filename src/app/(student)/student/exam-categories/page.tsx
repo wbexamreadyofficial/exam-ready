@@ -89,7 +89,7 @@ export default function ExamCategoriesPage() {
       ) : (
         <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {categories.map((category, index) => (
-            <Link key={category._id} href="/student/mock-tests" className="group block focus-visible:outline-none">
+            <Link key={category._id} href={`/student/mock-tests?category=${category._id}`} className="group block focus-visible:outline-none">
               <Card className="relative h-full overflow-hidden border-orange-200/60 bg-gradient-to-br from-orange-50/70 via-white to-white transition-all duration-300 group-hover:-translate-y-1 group-hover:border-orange-300 group-hover:shadow-xl group-hover:shadow-orange-500/15 group-focus-visible:ring-2 group-focus-visible:ring-orange-400/60 dark:border-orange-400/20 dark:from-orange-500/10 dark:via-transparent dark:to-transparent">
                 <div
                   aria-hidden

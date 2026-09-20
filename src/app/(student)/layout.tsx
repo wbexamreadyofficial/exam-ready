@@ -10,11 +10,17 @@ import { Footer } from '@/components/layout/Footer';
 const OWN_SHELL = /^\/student\/(dashboard|profile)(\/|$)/;
 /** The live test screens stay outside the sidebar so nothing competes with the exam. */
 const LIVE_TEST = /^\/student\/(exam\/[^/]+|quiz\/[^/]+)\/?$/;
+/** The test instructions and the exam screen own the whole viewport (no sidebar or dashboard header). */
+const FULL_SCREEN = /^\/student\/tests\/(attempt\/[^/]+|(?!attempt$|result$)[^/]+)\/?$/;
 
 export default function StudentLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() ?? '';
 
   if (OWN_SHELL.test(pathname)) {
+    return <ProtectedRoute>{children}</ProtectedRoute>;
+  }
+
+  if (FULL_SCREEN.test(pathname)) {
     return <ProtectedRoute>{children}</ProtectedRoute>;
   }
 
