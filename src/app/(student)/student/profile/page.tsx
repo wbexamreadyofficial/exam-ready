@@ -31,13 +31,6 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const ROLE_LABEL: Record<string, string> = {
@@ -374,7 +367,7 @@ export default function ProfilePage() {
         </div>
         <div className="px-4 sm:px-6 pb-4">
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5">
-            <div className="relative shrink-0 -mt-10 sm:-mt-12">
+            <div className="relative w-fit shrink-0 -mt-10 sm:-mt-12">
               <div className="h-20 w-20 sm:h-24 sm:w-24 rounded-full ring-4 ring-[var(--color-surface)] bg-gradient-to-br from-[#f4953f] to-[#c4501a] overflow-hidden flex items-center justify-center shadow-[0_0_0_3px_rgba(226,105,31,0.35),0_18px_36px_-12px_rgba(201,88,23,0.65)]">
                 {profile.profilePhoto ? (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -522,16 +515,32 @@ export default function ProfilePage() {
                 control={control}
                 name="preferredLanguage"
                 render={({ field }) => (
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger>
-                      <Languages size={15} className="mr-1.5 text-[var(--color-muted-foreground)]" />
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="en">English</SelectItem>
-                      <SelectItem value="bn">Bengali</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <div role="tablist" aria-label="Preferred language" className="grid h-10 grid-cols-2 gap-1 rounded-xl border border-orange-200/70 bg-orange-50/60 p-1 dark:border-orange-400/25 dark:bg-orange-500/10">
+                    {[
+                      { value: 'en', label: 'English' },
+                      { value: 'bn', label: 'Bengali' },
+                    ].map((opt) => {
+                      const active = field.value === opt.value;
+                      return (
+                        <button
+                          key={opt.value}
+                          type="button"
+                          role="tab"
+                          aria-selected={active}
+                          onClick={() => field.onChange(opt.value)}
+                          className={cn(
+                            'flex cursor-pointer items-center justify-center gap-1.5 rounded-lg text-[13px] font-semibold transition-all',
+                            active
+                              ? 'bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] text-white shadow-md shadow-orange-600/30'
+                              : 'text-[var(--color-ink-700)] hover:bg-white/70 dark:hover:bg-white/10'
+                          )}
+                        >
+                          <Languages size={14} />
+                          {opt.label}
+                        </button>
+                      );
+                    })}
+                  </div>
                 )}
               />
             </div>
