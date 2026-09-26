@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import {
@@ -19,11 +19,9 @@ import { AddQuestionForm } from '@/components/admin/wizard/AddQuestionForm';
 import { QuestionCard } from '@/components/admin/wizard/QuestionCard';
 import { questionUploadsApi, toFailure } from '@/lib/api/questionUploads';
 import {
-  useAddQuestion,
   useCategories,
   useCommitUpload,
   useConfirmName,
-  useConfirmPattern,
   useEditQuestion,
   useExams,
   useQuestionSets,
@@ -36,10 +34,97 @@ import {
 import { useAuthStore } from '@/store/authStore';
 import { useAdminT } from '@/lib/admin/i18n';
 import { cn } from '@/lib/utils';
-import type { ApiFailure, UploadIssue } from '@/types/questionUpload';
+import type {
+  ApiFailure,
+  NewQuestionInput,
+  ParsedQuestion,
+  PatternDraft,
+  PatternInput,
+  QuestionEditInput,
+  QuestionUpload,
+  UploadIssue,
+} from '@/types/questionUpload';
 
 const BLOCKING = new Set(['MISSING_ANSWER', 'ANSWER_NOT_IN_OPTIONS', 'TOO_FEW_OPTIONS']);
 const TOTAL_STEPS = 9;
+
+/**
+ * The marking scheme to show when the API response does not carry one: what the
+ * operator already confirmed, otherwise what the file proposed. Mirrors the
+ * server's `getPatternDraft`, so step 8 is never left with nothing to render.
+ */
+function fallbackPattern(upload: QuestionUpload): PatternDraft {
+  const positive = (value: unknown) => {
+    const n = Number(value);
+    return value != null && Number.isFinite(n) && n > 0 ? n : undefined;
+  };
+  const saved = upload.pattern ?? {};
+  const included = upload.parsedQuestions.filter((q) => q.decision !== 'skip').length;
+  const marksPerQuestion = saved.marksPerQuestion ?? positive(upload.meta.MARKS_PER_QUESTION) ?? 1;
+  const totalMarks = saved.totalMarks ?? marksPerQuestion * included;
+
+  return {
+    durationMinutes: saved.durationMinutes ?? positive(upload.meta.DURATION) ?? 60,
+    marksPerQuestion,
+    negativeMarksPerQuestion: saved.negativeMarksPerQuestion ?? positive(upload.meta.NEGATIVE_MARKS) ?? 0,
+    totalMarks,
+    passingMarks: saved.passingMarks ?? positive(upload.meta.PASSING_MARKS) ?? null,
+    confirmed: Boolean(saved.confirmed),
+    requiredQuestions: marksPerQuestion > 0 ? Math.ceil(totalMarks / marksPerQuestion) : 0,
+    includedQuestions: included,
+  };
+}
+
+/**
+ * Steps 8 and 9 are saved only when the set is published, so what the operator
+ * has decided so far is kept per upload in session storage — a reload does not
+ * lose the marking scheme or questions written by hand.
+ */
+interface LocalDraft {
+  pattern: PatternInput | null;
+  newQuestions: NewQuestionInput[];
+}
+
+const EMPTY_DRAFT: LocalDraft = { pattern: null, newQuestions: [] };
+const draftKey = (uploadId: string) => `upload-draft:${uploadId}`;
+
+function readDraft(uploadId: string | null): LocalDraft {
+  if (!uploadId || typeof window === 'undefined') return EMPTY_DRAFT;
+  try {
+    const raw = sessionStorage.getItem(draftKey(uploadId));
+    return raw ? { ...EMPTY_DRAFT, ...(JSON.parse(raw) as LocalDraft) } : EMPTY_DRAFT;
+  } catch {
+    return EMPTY_DRAFT;
+  }
+}
+
+function writeDraft(uploadId: string, draft: LocalDraft | null) {
+  try {
+    if (draft) sessionStorage.setItem(draftKey(uploadId), JSON.stringify(draft));
+    else sessionStorage.removeItem(draftKey(uploadId));
+  } catch {
+    // Storage can be unavailable (private mode); the draft then lives in memory only.
+  }
+}
+
+/** Shows a hand-written question in the same card as the parsed ones. */
+function toParsedQuestion(input: NewQuestionInput, number: number): ParsedQuestion {
+  return {
+    number,
+    text: input.text,
+    textBn: input.textBn,
+    options: input.options,
+    answerKey: input.answerKey,
+    subject: input.subject,
+    difficulty: input.difficulty,
+    explanation: input.explanation,
+    explanationBn: input.explanationBn,
+    confidence: 1,
+    issues: [],
+    decision: 'include',
+    editedByOperator: true,
+  };
+}
 
 /**
  * `useSearchParams` needs a Suspense boundary in the App Router, so the wizard
@@ -66,6 +151,21 @@ function UploadWizard() {
   const [rejection, setRejection] = useState<ApiFailure | null>(null);
   const [createdSet, setCreatedSet] = useState<{ _id: string; title: { en: string } } | null>(null);
   const [filter, setFilter] = useState<'all' | 'problems'>('all');
+  const [editingPattern, setEditingPattern] = useState(false);
+  const [draft, setDraft] = useState<LocalDraft>(EMPTY_DRAFT);
+
+  // Load the local draft that belongs to the upload on screen.
+  useEffect(() => {
+    setDraft(readDraft(uploadId));
+    setEditingPattern(false);
+  }, [uploadId]);
+
+  const updateDraft = (next: (current: LocalDraft) => LocalDraft) =>
+    setDraft((current) => {
+      const value = next(current);
+      if (uploadId) writeDraft(uploadId, value);
+      return value;
+    });
 
   const { data: step, isLoading } = useUploadStep(uploadId);
   const upload = step?.upload;
@@ -74,8 +174,6 @@ function UploadWizard() {
   const resolveSubjects = useResolveSubjects(uploadId);
   const resolveExam = useResolveExam(uploadId);
   const confirmName = useConfirmName(uploadId);
-  const confirmPattern = useConfirmPattern(uploadId);
-  const addQuestion = useAddQuestion(uploadId);
   const editQuestion = useEditQuestion(uploadId);
   const commit = useCommitUpload(uploadId);
 
@@ -137,8 +235,17 @@ function UploadWizard() {
       else clean += 1;
     }
 
-    return { clean, warning, blocking, skipped, included: questions.length - skipped };
-  }, [upload, issuesByQuestion]);
+    // Questions written by hand are checked by the form, so they arrive clean.
+    clean += draft.newQuestions.length;
+
+    return {
+      clean,
+      warning,
+      blocking,
+      skipped,
+      included: questions.length - skipped + draft.newQuestions.length,
+    };
+  }, [upload, issuesByQuestion, draft.newQuestions.length]);
 
   const visibleQuestions = useMemo(() => {
     const questions = upload?.parsedQuestions ?? [];
@@ -152,10 +259,57 @@ function UploadWizard() {
 
   // How many questions the confirmed marking scheme demands, and how far short
   // the set currently is. The same rule is enforced again by the API on commit.
-  const requiredQuestions = step?.pattern?.requiredQuestions ?? 0;
+  // The operator's own numbers win over whatever the server or file proposed.
+  const pattern = useMemo<PatternDraft | null>(() => {
+    if (!upload) return null;
+    const base = step?.pattern ?? fallbackPattern(upload);
+    const local = draft.pattern;
+    return {
+      ...base,
+      ...(local ? { ...local, passingMarks: local.passingMarks ?? null, confirmed: true } : {}),
+      includedQuestions: counts.included,
+    };
+  }, [upload, step?.pattern, draft.pattern, counts.included]);
+  const marksPerQuestion = pattern?.marksPerQuestion ?? 0;
+  const totalMarks = pattern?.totalMarks ?? 0;
+  const requiredQuestions = marksPerQuestion > 0 ? Math.ceil(totalMarks / marksPerQuestion) : 0;
   const shortBy = Math.max(0, requiredQuestions - counts.included);
+  // The included questions must be worth at least the set's total marks.
+  const marksCovered = counts.included * marksPerQuestion;
+  const patternConfirmed = Boolean(pattern?.confirmed);
 
-  const currentStep = createdSet ? 9 : (upload?.currentStep ?? (uploadId ? 4 : 2));
+  // Step 8 is answered in the browser, so confirming it moves on to review
+  // without a round trip; the server only hears about it at publish time.
+  const serverStep = upload?.currentStep ?? (uploadId ? 4 : 2);
+  const showReview = serverStep >= 9 || (serverStep === 8 && patternConfirmed);
+  const currentStep = createdSet || showReview ? 9 : serverStep;
+
+  const firstNewNumber =
+    (upload?.parsedQuestions ?? []).reduce((max, question) => Math.max(max, question.number), 0) + 1;
+
+  const confirmPatternLocally = (input: PatternInput) => {
+    updateDraft((current) => ({ ...current, pattern: input }));
+    setEditingPattern(false);
+  };
+
+  const editNewQuestion = (index: number, input: QuestionEditInput) =>
+    updateDraft((current) => ({
+      ...current,
+      newQuestions:
+        input.decision === 'skip'
+          ? current.newQuestions.filter((_, i) => i !== index)
+          : current.newQuestions.map((question, i) =>
+              i === index
+                ? {
+                    ...question,
+                    ...(input.text !== undefined && { text: input.text }),
+                    ...(input.options !== undefined && { options: input.options }),
+                    ...(input.answerKey !== undefined && { answerKey: input.answerKey }),
+                    ...(input.explanation !== undefined && { explanation: input.explanation }),
+                  }
+                : question
+            ),
+    }));
 
   // ─────────────────────────── screens ───────────────────────────
 
@@ -385,16 +539,12 @@ function UploadWizard() {
           )}
 
           {/* ── step 8 — the marking scheme, confirmed before anything is created ── */}
-          {upload.currentStep === 8 && step.pattern && (
-            <PatternStep
-              draft={step.pattern}
-              busy={confirmPattern.isPending}
-              onSubmit={(input) => confirmPattern.mutate(input)}
-            />
+          {upload.currentStep === 8 && !showReview && pattern && (
+            <PatternStep draft={pattern} busy={false} onSubmit={confirmPatternLocally} />
           )}
 
           {/* ── step 9 ── */}
-          {upload.currentStep >= 9 && (
+          {showReview && (
             <div className="space-y-4">
               <div>
                 <h2 className="text-lg font-black tracking-tight">{w.reviewTitle}</h2>
@@ -426,6 +576,45 @@ function UploadWizard() {
                   </span>
                 </CardContent>
               </Card>
+
+              {/* The marking scheme the set is held to, and how much of it is covered. */}
+              <Card>
+                <CardContent className="flex flex-wrap items-center gap-x-4 gap-y-2 p-3.5 text-[12.5px]">
+                  <span>
+                    {w.marksPerQuestionLabel}: <b>{marksPerQuestion}</b>
+                  </span>
+                  <span>
+                    {w.totalMarksLabel}: <b>{totalMarks}</b>
+                  </span>
+                  <span
+                    className={cn(
+                      'font-semibold',
+                      marksCovered >= totalMarks
+                        ? 'text-[var(--color-bgreen-600)]'
+                        : 'text-[var(--color-borange-600)]'
+                    )}
+                  >
+                    {w.marksCovered}: {marksCovered} / {totalMarks}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="ml-auto h-7 text-[12px]"
+                    onClick={() => setEditingPattern((open) => !open)}
+                  >
+                    {editingPattern ? w.hidePattern : w.editPattern}
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {(editingPattern || !patternConfirmed) && pattern && (
+                <PatternStep
+                  key={`${pattern.marksPerQuestion}-${pattern.totalMarks}-${pattern.confirmed}`}
+                  draft={pattern}
+                  busy={false}
+                  onSubmit={confirmPatternLocally}
+                />
+              )}
 
               {/* The publish gate: a set must be worth the marks it claims. */}
               {shortBy > 0 && (
@@ -467,17 +656,41 @@ function UploadWizard() {
                     onEdit={(input) => editQuestion.mutate({ number: question.number, input })}
                   />
                 ))}
+
+                {/* Written by hand here; saved together with the set on publish. */}
+                {filter === 'all' &&
+                  draft.newQuestions.map((input, index) => (
+                    <QuestionCard
+                      key={`new-${index}-${input.text}`}
+                      question={toParsedQuestion(input, firstNewNumber + index)}
+                      issues={[]}
+                      onEdit={(edit) => editNewQuestion(index, edit)}
+                    />
+                  ))}
               </div>
 
               <AddQuestionForm
-                busy={addQuestion.isPending}
-                onSubmit={(input, done) => addQuestion.mutate(input, { onSuccess: done })}
+                busy={false}
+                onSubmit={(input, done) => {
+                  updateDraft((current) => ({
+                    ...current,
+                    newQuestions: [...current.newQuestions, input],
+                  }));
+                  done();
+                }}
               />
 
               <div className="sticky bottom-0 -mx-4 flex flex-wrap gap-2 border-t border-[var(--color-hairline)] bg-[var(--color-background)]/95 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6">
                 <Button
                   className="gap-2 font-bold"
-                  disabled={counts.blocking > 0 || counts.included === 0 || shortBy > 0 || commit.isPending}
+                  disabled={
+                    counts.blocking > 0 ||
+                    counts.included === 0 ||
+                    shortBy > 0 ||
+                    marksCovered < totalMarks ||
+                    !patternConfirmed ||
+                    commit.isPending
+                  }
                   onClick={() =>
                     commit.mutate(
                       {
@@ -487,9 +700,19 @@ function UploadWizard() {
                           parsedName: r.parsedName ?? '',
                           subjectId: r.resolvedId ?? null,
                         })),
+                        // Steps 8 and 9 are saved here, in the same call that publishes.
+                        pattern: {
+                          durationMinutes: Math.round(pattern?.durationMinutes ?? 60),
+                          marksPerQuestion,
+                          negativeMarksPerQuestion: pattern?.negativeMarksPerQuestion ?? 0,
+                          totalMarks,
+                          ...(pattern?.passingMarks != null ? { passingMarks: pattern.passingMarks } : {}),
+                        },
+                        newQuestions: draft.newQuestions,
                       },
                       {
                         onSuccess: (questionSet) => {
+                          writeDraft(upload._id, null);
                           setCreatedSet(questionSet);
                           toast.success(w.doneTitle);
                         },
@@ -506,6 +729,7 @@ function UploadWizard() {
                   className="text-[var(--color-muted-foreground)]"
                   onClick={() => {
                     if (!window.confirm(w.cancelConfirm)) return;
+                    writeDraft(upload._id, null);
                     questionUploadsApi.cancel(upload._id).finally(() => setUploadId(null));
                   }}
                 >

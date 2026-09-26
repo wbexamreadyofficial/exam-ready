@@ -5,8 +5,6 @@ import type {
   ApiFailure,
   CommitPayload,
   NameCheckResult,
-  NewQuestionInput,
-  PatternInput,
   QuestionEditInput,
   QuestionUpload,
   ResolveInput,
@@ -154,24 +152,6 @@ export const questionUploadsApi = {
     return data.data.upload;
   },
 
-  /** Step 8 — accept the marking scheme; this fixes how many questions are needed. */
-  confirmPattern: async (uploadId: string, input: PatternInput): Promise<QuestionUpload> => {
-    const { data } = await apiClient.post<ApiResponse<{ upload: QuestionUpload }>>(
-      `/question-uploads/${uploadId}/pattern`,
-      input
-    );
-    return data.data.upload;
-  },
-
-  /** Step 9 — write a question the file did not contain. */
-  addQuestion: async (uploadId: string, input: NewQuestionInput): Promise<QuestionUpload> => {
-    const { data } = await apiClient.post<ApiResponse<{ upload: QuestionUpload }>>(
-      `/question-uploads/${uploadId}/questions`,
-      input
-    );
-    return data.data.upload;
-  },
-
   /** Step 9 — fix a question inline, or drop it from the set. */
   editQuestion: async (
     uploadId: string,
@@ -187,6 +167,10 @@ export const questionUploadsApi = {
 
   /**
    * Steps 8+9 — the only call that actually creates DB records.
+   *
+   * The marking scheme (step 8) and any questions added by hand (step 9) are
+   * kept in the browser until now and sent in this payload, so nothing is
+   * saved piecemeal before the operator publishes.
    *
    * Sends all resolved ObjectId references explicitly so the backend can:
    *   • create the questionsets document (name unique per exam)

@@ -46,6 +46,14 @@ export const adminNavGroups: AdminNavGroup[] = [
     ],
   },
   {
+    titleKey: 'blog',
+    items: [
+      { labelKey: 'blogs', href: '/admin/blogs', icon: 'Newspaper' },
+      { labelKey: 'blogCategories', href: '/admin/blogs/categories', icon: 'FolderKanban' },
+      { labelKey: 'blogComments', href: '/admin/blogs/comments', icon: 'MessageSquare' },
+    ],
+  },
+  {
     titleKey: 'system',
     items: [
       { labelKey: 'notifications', href: '/admin/notifications', icon: 'Bell' },

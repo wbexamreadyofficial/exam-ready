@@ -30,6 +30,11 @@ export const adminCopy = {
       questionSets: 'Question Sets',
       questions: 'Question Bank',
 
+      blog: 'Blog',
+      blogs: 'Blogs',
+      blogCategories: 'Blog Categories',
+      blogComments: 'Blog Comments',
+
       uploads: 'Uploads',
       uploadPdf: 'Upload Question PDF',
       uploadHistory: 'Upload History',
@@ -167,6 +172,10 @@ export const adminCopy = {
       questionsWord: 'questions',
       youHaveNow: 'You have',
       confirmPattern: 'Confirm and continue',
+      marksCovered: 'Marks covered',
+      editPattern: 'Change marking scheme',
+      hidePattern: 'Close',
+      patternNotConfirmed: 'Confirm the marking scheme before publishing.',
 
       addQuestionTitle: 'Add a question by hand',
       addQuestionHelp: 'Use this when your file was short of questions. It is added at the end of the set.',
@@ -274,6 +283,11 @@ export const adminCopy = {
       exams: 'পরীক্ষা',
       questionSets: 'প্রশ্নসেট',
       questions: 'প্রশ্নব্যাংক',
+
+      blog: 'ব্লগ',
+      blogs: 'ব্লগসমূহ',
+      blogCategories: 'ব্লগ ক্যাটাগরি',
+      blogComments: 'ব্লগ কমেন্ট',
 
       uploads: 'আপলোড',
       uploadPdf: 'প্রশ্নের PDF আপলোড',
@@ -412,6 +426,10 @@ export const adminCopy = {
       questionsWord: 'টি প্রশ্ন',
       youHaveNow: 'এখন আছে',
       confirmPattern: 'নিশ্চিত করে এগিয়ে যান',
+      marksCovered: 'মোট নম্বর হচ্ছে',
+      editPattern: 'নম্বরের নিয়ম বদলান',
+      hidePattern: 'বন্ধ করুন',
+      patternNotConfirmed: 'পাবলিশ করার আগে নম্বরের নিয়ম নিশ্চিত করুন।',
 
       addQuestionTitle: 'নিজে একটি প্রশ্ন যোগ করুন',
       addQuestionHelp: 'ফাইলে প্রশ্ন কম থাকলে এটি ব্যবহার করুন। প্রশ্নটি সেটের শেষে যোগ হবে।',

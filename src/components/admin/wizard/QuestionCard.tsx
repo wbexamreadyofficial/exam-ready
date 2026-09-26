@@ -41,6 +41,15 @@ export function QuestionCard({ question, issues, busy, onEdit }: QuestionCardPro
       ? 'warning'
       : 'clean';
 
+  // Always start from the saved question, not from an earlier abandoned edit.
+  const startEditing = () => {
+    setText(question.text);
+    setOptions(question.options);
+    setAnswerKey(question.answerKey ?? '');
+    setExplanation(question.explanation ?? '');
+    setEditing(true);
+  };
+
   const save = () => {
     onEdit({
       text: text.trim(),
@@ -96,7 +105,7 @@ export function QuestionCard({ question, issues, busy, onEdit }: QuestionCardPro
 
           <div className="ml-auto flex gap-1">
             {!skipped && !editing && (
-              <Button variant="ghost" size="sm" className="h-7 gap-1 px-2 text-[11.5px]" onClick={() => setEditing(true)}>
+              <Button variant="ghost" size="sm" className="h-7 gap-1 px-2 text-[11.5px]" onClick={startEditing}>
                 <Pencil className="h-3 w-3" />
                 {w.editQuestion}
               </Button>
