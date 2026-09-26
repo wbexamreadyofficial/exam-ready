@@ -63,7 +63,7 @@ export default function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
   const avatarUrl = profile?.profilePhoto;
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center justify-between px-4 sm:px-6 bg-[var(--color-surface)] border-b border-[var(--color-hairline)] shrink-0">
+    <header className="sticky top-0 z-30 flex h-[68px] items-center justify-between px-4 sm:px-6 bg-[var(--color-surface)] border-b border-[var(--color-hairline)] shrink-0">
       <div className="flex items-center gap-4 flex-1">
         <button 
           onClick={onMenuClick}

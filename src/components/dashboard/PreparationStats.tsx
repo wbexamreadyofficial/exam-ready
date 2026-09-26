@@ -19,7 +19,7 @@ export default function PreparationStats() {
     return (
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3" aria-busy="true">
         {Array.from({ length: 5 }, (_, i) => (
-          <Skeleton key={i} className="h-[46px] rounded-lg" />
+          <Skeleton key={i} className="h-[46px] rounded-xl" />
         ))}
       </div>
     );
@@ -40,7 +40,7 @@ export default function PreparationStats() {
       {stats.map((stat) => {
         const Icon = stat.icon;
         return (
-          <div key={stat.label} className="flex items-center gap-2.5 p-2.5 rounded-lg bg-[var(--color-surface-muted)] border border-[var(--color-hairline)]">
+          <div key={stat.label} className="flex items-center gap-2.5 p-2.5 rounded-xl bg-[var(--color-surface)] border border-orange-200/60 shadow-elevated dark:border-orange-400/20">
             <div className="text-[#e2691f]">
               <Icon size={16} />
             </div>

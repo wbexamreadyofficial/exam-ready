@@ -31,7 +31,7 @@ export default function DashboardLayout({ children, rightSidebar }: DashboardLay
       {/* Sidebar — fixed on desktop, drawer on mobile */}
       <aside className={cn(
         "fixed z-50 h-screen flex-shrink-0 transition-transform duration-300 ease-in-out bg-[var(--color-surface)]",
-        "lg:relative lg:z-auto lg:translate-x-0",
+        "lg:relative lg:z-40 lg:translate-x-0",
         mobileMenuOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full",
         sidebarCollapsed ? "w-[68px]" : "w-[224px]"
       )}>

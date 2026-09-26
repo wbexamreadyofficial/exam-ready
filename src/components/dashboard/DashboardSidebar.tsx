@@ -35,10 +35,8 @@ export default function DashboardSidebar({ isCollapsed, onToggle, onClose }: Das
       "flex flex-col h-full min-h-0 bg-[var(--color-sidebar-background,var(--color-surface))] text-[var(--color-sidebar-foreground,var(--color-ink-900))] border-r border-[var(--color-hairline)] transition-all duration-300 ease-in-out relative",
       isCollapsed ? "w-[68px]" : "w-[224px]"
     )}>
-      {/* Top: Logo + collapse toggle — kept inside the header row (not an
-          absolutely-positioned circle straddling the border) so it's never
-          clipped by an ancestor's overflow or the viewport edge. */}
-      <div className="h-14 flex items-center justify-between gap-1.5 border-b border-[var(--color-hairline)] shrink-0 px-2.5">
+      {/* Top: Logo */}
+      <div className="h-[68px] flex items-center justify-between gap-1.5 border-b border-[var(--color-hairline)] shrink-0 px-2.5">
         <Link href="/" className="flex items-center gap-2 overflow-hidden min-w-0" onClick={onClose}>
           <LogoIcon className="h-7 w-7 shrink-0" />
           {!isCollapsed && (
@@ -48,27 +46,16 @@ export default function DashboardSidebar({ isCollapsed, onToggle, onClose }: Das
             </span>
           )}
         </Link>
-
-        {!isCollapsed && (
-          <button
-            onClick={onToggle}
-            aria-label="Collapse sidebar"
-            className="hidden lg:flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-[var(--color-hairline)] text-[var(--color-muted-foreground)] hover:bg-[var(--color-surface-muted)] hover:text-[var(--color-ink-900)] transition-colors"
-          >
-            <ChevronLeft size={14} />
-          </button>
-        )}
       </div>
 
-      {isCollapsed && (
-        <button
-          onClick={onToggle}
-          aria-label="Expand sidebar"
-          className="hidden lg:flex mx-auto mt-2 h-7 w-7 shrink-0 items-center justify-center rounded-md border border-[var(--color-hairline)] text-[var(--color-muted-foreground)] hover:bg-[var(--color-surface-muted)] hover:text-[var(--color-ink-900)] transition-colors"
-        >
-          <ChevronRight size={14} />
-        </button>
-      )}
+      {/* Floating round toggle straddling the sidebar's right edge */}
+      <button
+        onClick={onToggle}
+        aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        className="absolute -right-3.5 top-[20px] z-10 hidden h-7 w-7 cursor-pointer items-center justify-center rounded-full border border-[var(--color-hairline)] bg-[var(--color-surface)] text-[var(--color-muted-foreground)] shadow-md transition-all hover:scale-105 hover:border-orange-300 hover:text-[#e2691f] lg:flex"
+      >
+        {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
+      </button>
 
       {/* Nav groups */}
       <div data-lenis-prevent className="flex-1 overflow-y-auto py-2.5 dashboard-scrollbar flex flex-col gap-3">

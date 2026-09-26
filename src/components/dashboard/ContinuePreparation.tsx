@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { ChevronRight, ChevronLeft, Timer } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Play, RotateCcw, Timer } from 'lucide-react';
 
 const statusConfig: Record<ContinueStatus, { label: string; bg: string; text: string }> = {
   'in-progress': { label: 'In Progress', bg: 'bg-orange-50 dark:bg-orange-500/15', text: 'text-[#e2691f]' },
@@ -174,6 +174,7 @@ export default function ContinuePreparation() {
           let ctaText = 'Start';
           if (card.status === 'in-progress') ctaText = 'Resume';
           else if (card.status === 'attempt-again') ctaText = 'Retake';
+          const CtaIcon = card.status === 'attempt-again' ? RotateCcw : Play;
 
           return (
             <div 
@@ -221,14 +222,10 @@ export default function ContinuePreparation() {
                 <Button
                   asChild
                   size="sm"
-                  className={cn(
-                    'w-full h-7 text-[11px]',
-                    card.status === 'in-progress' &&
-                      'border-0 bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] font-semibold text-white shadow-md shadow-orange-600/30 hover:brightness-110'
-                  )}
-                  variant={card.status === 'in-progress' ? 'default' : 'outline'}
+                  className="h-7 w-full border-0 bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] text-[11px] font-semibold text-white shadow-md shadow-orange-600/30 ring-1 ring-inset ring-white/25 hover:brightness-110"
                 >
                   <Link href={card.status === 'in-progress' && card.attemptId ? `/student/tests/attempt/${card.attemptId}` : `/student/tests/${card.setId}`}>
+                    <CtaIcon className="!size-3" />
                     {ctaText}
                   </Link>
                 </Button>
