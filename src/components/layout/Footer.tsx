@@ -2,9 +2,9 @@ import Link from 'next/link';
 import { Logo } from '@/components/ui/Logo';
 
 const quickLinks = [
-  { title: 'Courses', href: '/quizzes' },
+  { title: 'Courses', href: '/courses' },
   { title: 'Results', href: '/leaderboard' },
-  { title: 'Pricing', href: '/student/subscriptions' },
+  { title: 'Pricing', href: '/pricing' },
 ];
 
 const examLinks = [

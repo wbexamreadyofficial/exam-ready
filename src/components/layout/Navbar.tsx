@@ -19,10 +19,9 @@ import { Logo } from '@/components/ui/Logo';
 
 const navItems = [
   { title: 'Home',            href: '/' },
-  { title: 'Courses',         href: '/quizzes' },
-  { title: 'Results',         href: '/leaderboard' },
-  { title: 'Pricing',         href: '/student/subscriptions' },
-  { title: 'Blog',            href: '/contact' },
+  { title: 'Courses',         href: '/courses' },
+  { title: 'Pricing',         href: '/pricing' },
+  { title: 'Blog',            href: '/blog' },
   { title: 'Contact',         href: '/contact' },
 ];
 
