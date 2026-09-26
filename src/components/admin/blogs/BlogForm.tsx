@@ -95,11 +95,11 @@ export function BlogForm({ blog }: BlogFormProps) {
 
   const createMutation = useMutation({
     mutationFn: (payload: CreateBlogInput) => blogsApi.createBlog(payload),
-    onSuccess: (created) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['blogs'] });
       queryClient.invalidateQueries({ queryKey: ['blog-categories'] });
       toast.success('Blog created');
-      router.push(`/admin/blogs/${created._id}/edit`);
+      router.push('/admin/blogs');
     },
     onError: (error: unknown) => toast.error(getErrorMessage(error, 'Could not create the blog')),
   });
