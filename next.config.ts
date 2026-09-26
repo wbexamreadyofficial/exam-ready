@@ -10,6 +10,8 @@ const nextConfig: NextConfig = {
       { source: "/subscriptions", destination: "/student/subscriptions", permanent: false },
       { source: "/exam/:path*", destination: "/student/exam/:path*", permanent: false },
       { source: "/quiz/:path*", destination: "/student/quiz/:path*", permanent: false },
+      { source: "/exams", destination: "/student/mock-tests", permanent: false },
+      { source: "/exams/:path*", destination: "/student/mock-tests", permanent: false },
       { source: "/examiner", destination: "/examiner/dashboard", permanent: false },
       { source: "/partner", destination: "/partner/dashboard", permanent: false },
     ];

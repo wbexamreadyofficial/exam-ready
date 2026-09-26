@@ -42,7 +42,14 @@ export const authApi = {
    * the register page redirects to /login for the actual sign-in step.
    */
   verifyWebOtpOnly: async (mobileNumber: string, otp: string): Promise<void> => {
-    await apiClient.post('/auth/web/register/verify-otp', { mobileNumber, otp });
+    const { data } = await apiClient.post<ApiResponse<LoginResult>>('/auth/web/register/verify-otp', {
+      mobileNumber,
+      otp,
+    });
+    // The session this created is never used; revoke it so the follow-up login isn't seen as a second device.
+    await apiClient
+      .post('/auth/web/logout', { refreshToken: data.data.tokens.refreshToken })
+      .catch(() => undefined);
   },
 
   /**
@@ -50,9 +57,10 @@ export const authApi = {
    * needed. Works whether the number was verified via the web flow or the
    * app flow.
    */
-  loginWeb: async (mobileNumber: string): Promise<WebLoginResult> => {
+  loginWeb: async (mobileNumber: string, forceLogout = false): Promise<WebLoginResult> => {
     const { data } = await apiClient.post<ApiResponse<WebLoginResult>>('/auth/web/login', {
       mobileNumber,
+      ...(forceLogout ? { forceLogout: true } : {}),
     });
 
     // Admin accounts get an OTP challenge instead of tokens — finish via verifyWebOtp.

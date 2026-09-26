@@ -1,6 +1,6 @@
 import type { PaginationMeta } from './user';
 
-export type NotificationType = 'user.registered';
+export type NotificationType = 'user.registered' | 'test.submitted' | 'test.auto_submitted';
 
 /** A row from GET /api/notifications. `readAt` is missing/null while unread. */
 export interface NotificationItem {
@@ -33,4 +33,5 @@ export type SocketMessage =
   | { type: 'pong' }
   | { type: 'sync' }
   | { type: 'auth_error'; message?: string }
+  | { type: 'session.replaced'; message?: string }
   | { type: 'notification'; notification: NotificationItem };

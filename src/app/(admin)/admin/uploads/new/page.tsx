@@ -9,6 +9,7 @@ import {
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import { UploadStep } from '@/components/admin/wizard/UploadStep';
 import { ResolveStep } from '@/components/admin/wizard/ResolveStep';
 import { SubjectsStep } from '@/components/admin/wizard/SubjectsStep';
@@ -242,9 +243,42 @@ function UploadWizard() {
       )}
 
       {uploadId && isLoading && (
-        <div className="flex items-center justify-center gap-2 py-16 text-[var(--color-muted-foreground)]">
-          <Loader2 className="h-5 w-5 animate-spin" />
-          {t.common.loading}
+        <div className="space-y-4" aria-busy="true" aria-label={t.common.loading}>
+          {/* File summary card */}
+          <Card>
+            <CardContent className="flex flex-wrap items-center gap-x-5 gap-y-2 p-3.5">
+              <Skeleton className="h-4 w-52" />
+              <Skeleton className="h-3.5 w-28" />
+              <Skeleton className="h-3.5 w-24" />
+              <Skeleton className="h-3.5 w-28" />
+            </CardContent>
+          </Card>
+
+          {/* Step heading */}
+          <div className="space-y-2">
+            <Skeleton className="h-6 w-64" />
+            <Skeleton className="h-4 w-full max-w-xl" />
+          </div>
+
+          {/* Step body: resolution cards */}
+          {Array.from({ length: 3 }, (_, i) => (
+            <Card key={i}>
+              <CardContent className="space-y-3 p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <Skeleton className="h-4 w-40" />
+                  <Skeleton className="h-5 w-20 rounded-full" />
+                </div>
+                <Skeleton className="h-10 w-full rounded-md" />
+                <Skeleton className="h-3.5 w-2/3" />
+              </CardContent>
+            </Card>
+          ))}
+
+          {/* Action bar */}
+          <div className="flex gap-2 pt-1">
+            <Skeleton className="h-10 w-36 rounded-md" />
+            <Skeleton className="h-10 w-24 rounded-md" />
+          </div>
         </div>
       )}
 

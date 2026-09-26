@@ -30,7 +30,12 @@ function createApiClient(): AxiosInstance {
   // giving up. Concurrent 401s share the same in-flight refresh call.
   client.interceptors.response.use(
     (response) => response,
-    async (error: AxiosError<{ message?: string; errors?: string[] }>) => {
+    async (error: AxiosError<{ message?: string; errors?: string[]; code?: string }>) => {
+      if (error.response?.status === 401 && error.response.data?.code === 'SESSION_REPLACED') {
+        endSession('session-replaced');
+        return Promise.reject(error);
+      }
+
       const original = error.config as (AxiosRequestConfig & { _retried?: boolean }) | undefined;
       const isRefreshCall = original?.url?.includes('/token/refresh');
 
@@ -58,7 +63,7 @@ function createApiClient(): AxiosInstance {
 /** The token was rejected and can't be refreshed (expired, revoked, or the
  *  account was deactivated) — drop all local session state and send the user
  *  to the login page instead of leaving them on a page that only shows errors. */
-function endSession() {
+export function endSession(reason?: 'session-replaced') {
   clearAuthTokens();
   if (typeof window === 'undefined') return;
 
@@ -66,9 +71,10 @@ function endSession() {
   clearSessionRoleCookie();
 
   if (window.location.pathname !== '/login') {
+    const query = `next=${encodeURIComponent(window.location.pathname)}${reason ? `&reason=${reason}` : ''}`;
     // Intentional hard navigation: this runs outside React (no router), and a full reload also clears cached user data.
     // eslint-disable-next-line @next/next/no-location-assign-relative-destination
-    window.location.assign(`/login?next=${encodeURIComponent(window.location.pathname)}`);
+    window.location.assign(`/login?${query}`);
   }
 }
 

@@ -9,7 +9,7 @@ import TopExams from '@/components/dashboard/TopExams';
 
 function RightSidebar() {
   return (
-    <div className="space-y-6 pt-6">
+    <div className="space-y-4 pt-4">
       <PerformanceOverview />
       <StreakTracker />
       <DailyGoal />

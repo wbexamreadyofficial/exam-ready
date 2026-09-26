@@ -108,7 +108,7 @@ function ExamPaths() {
       <ExamGrid>
         {exams.map(({ title, label, description, icon: Icon, tone }, index) => (
           <Link
-            href="/exams"
+            href="/student/mock-tests"
             key={title}
             className={`${styles.examCard} ${styles[tone]}`}
             data-exam-card
@@ -141,7 +141,7 @@ function ExamPaths() {
         <span>
           <HeartPulse size={18} /> Preparing for WB Health or another exam?
         </span>
-        <Link href="/exams">
+        <Link href="/student/mock-tests">
           View all exams <ArrowRight size={16} />
         </Link>
       </div>
@@ -431,7 +431,7 @@ function HomeCallToAction() {
             begin.
           </p>
           <div className={styles.actions}>
-            <Link href="/exams" className={styles.primaryButton}>
+            <Link href="/student/mock-tests" className={styles.primaryButton}>
               Let&apos;s get exam ready <ArrowRight size={18} />
             </Link>
             <span className={styles.ctaNote}>

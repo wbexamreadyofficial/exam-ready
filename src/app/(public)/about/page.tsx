@@ -507,7 +507,7 @@ export default function AboutPage() {
               </Link>
             </Button>
             <Button size="lg" variant="outline" className="border-slate-700 text-white hover:bg-slate-900 font-extrabold" asChild>
-              <Link href="/exams">Explore Test Series 2026</Link>
+              <Link href="/student/mock-tests">Explore Test Series 2026</Link>
             </Button>
           </div>
         </div>

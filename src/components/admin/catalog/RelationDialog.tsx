@@ -111,7 +111,7 @@ interface RelationDialogProps {
 export function RelationDialog({ target, onClose, onEditQuestion }: RelationDialogProps) {
   return (
     <Dialog open={Boolean(target)} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="flex max-h-[92vh] flex-col gap-0 overflow-hidden p-0 sm:max-w-6xl">
+      <DialogContent className="flex max-h-[92vh] flex-col gap-0 overflow-hidden rounded-2xl border-orange-200/60 p-0 shadow-2xl shadow-orange-900/20 sm:max-w-6xl dark:border-orange-400/20">
         {target && <RelationBody key={`${target.scope}:${target.id}`} target={target} onEditQuestion={onEditQuestion} />}
       </DialogContent>
     </Dialog>
@@ -142,8 +142,8 @@ function RelationBody({
 
   return (
     <>
-      <DialogHeader className="space-y-2 border-b border-[var(--color-border)] px-6 pb-4 pt-6 pr-12">
-        <p className="text-[11px] font-bold uppercase tracking-wider text-[var(--color-primary)]">{SCOPE_LABEL[scope]}</p>
+      <DialogHeader className="space-y-2 border-b border-orange-200/60 bg-gradient-to-br from-orange-50 via-white to-orange-50/40 px-6 pb-4 pt-6 pr-12 dark:border-orange-400/15 dark:from-orange-500/10 dark:via-transparent dark:to-transparent">
+        <p className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em] text-[#c95817] dark:text-orange-300"><span className="h-px w-5 bg-orange-400/70" />{SCOPE_LABEL[scope]}</p>
         <DialogTitle className="text-xl leading-tight">{summary?.name ?? (isLoading ? 'Loading…' : 'Not found')}</DialogTitle>
         <DialogDescription asChild>
           <div>{summary ? <SummaryLine summary={summary} /> : isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}</div>
@@ -162,16 +162,16 @@ function RelationBody({
                 aria-selected={active}
                 onClick={() => go(view)}
                 className={cn(
-                  'flex items-center gap-2 rounded-lg border px-3 py-1.5 text-sm font-semibold transition-colors',
+                  'flex items-center gap-2 rounded-lg border px-3 py-1.5 text-sm font-semibold transition-all duration-200',
                   active
-                    ? 'border-[var(--color-primary)] bg-[var(--color-primary)] text-[var(--color-primary-foreground)]'
-                    : 'border-[var(--color-border)] hover:bg-[var(--color-muted)]'
+                    ? 'border-transparent bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] text-white shadow-md shadow-orange-600/30 ring-1 ring-inset ring-white/25'
+                    : 'border-orange-200/70 bg-white/80 text-[var(--color-foreground)] hover:-translate-y-px hover:border-orange-300 hover:bg-orange-50 hover:text-[#c95817] dark:border-white/10 dark:bg-white/5 dark:hover:bg-orange-500/10'
                 )}
               >
                 <Icon className="h-4 w-4" />
                 {VIEW_META[view].label}
                 {count !== undefined && (
-                  <span className={cn('rounded px-1.5 text-[11px]', active ? 'bg-white/20' : 'bg-[var(--color-muted)]')}>
+                  <span className={cn('rounded px-1.5 text-[11px]', active ? 'bg-white/25' : 'bg-orange-100 text-[#b9450d] dark:bg-orange-500/20 dark:text-orange-300')}>
                     {count.toLocaleString()}
                   </span>
                 )}

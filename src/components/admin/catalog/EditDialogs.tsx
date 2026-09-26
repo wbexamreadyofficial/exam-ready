@@ -7,9 +7,10 @@ import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ErrorState } from '@/components/ui/error-state';
 import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
@@ -27,6 +28,56 @@ import {
 import { LANGUAGE_LABEL, DIFFICULTY_LABEL, QUESTION_STATUS, SET_STATUS, FormField, useOptions } from './ui';
 
 const NONE = 'none';
+
+const ORANGE_BUTTON =
+  'gap-2 border-0 bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] font-semibold text-white shadow-md shadow-orange-600/30 ring-1 ring-inset ring-white/25 transition-all hover:-translate-y-px hover:bg-transparent hover:brightness-110 hover:shadow-lg hover:shadow-orange-600/40 disabled:opacity-60 disabled:shadow-none';
+
+/** Modal frame: fixed themed header and footer, only the middle scrolls. */
+function EditFrame({
+  title,
+  description,
+  onClose,
+  wide,
+  body,
+  footer,
+  as,
+  onSubmit,
+}: {
+  title: string;
+  description: string;
+  onClose: () => void;
+  wide?: boolean;
+  body: ReactNode;
+  footer?: ReactNode;
+  as?: 'form';
+  onSubmit?: (event: FormEvent) => void;
+}) {
+  const Wrapper = as === 'form' ? 'form' : 'div';
+  return (
+    <Dialog open onOpenChange={(open) => !open && onClose()}>
+      <DialogContent
+        className={`flex max-h-[90vh] flex-col gap-0 overflow-hidden rounded-2xl border-orange-200/60 p-0 shadow-2xl shadow-orange-900/20 dark:border-orange-400/20 ${
+          wide ? 'sm:max-w-3xl' : 'sm:max-w-xl'
+        }`}
+      >
+        <DialogHeader className="shrink-0 space-y-1.5 border-b border-orange-200/60 bg-gradient-to-br from-orange-50 via-white to-orange-50/40 px-6 pb-4 pt-6 pr-12 text-left dark:border-orange-400/15 dark:from-orange-500/10 dark:via-transparent dark:to-transparent">
+          <DialogTitle className="text-xl leading-tight">{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
+        </DialogHeader>
+        <Wrapper onSubmit={onSubmit} className="flex min-h-0 flex-1 flex-col">
+          <div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-6 py-5" data-lenis-prevent>
+            {body}
+          </div>
+          {footer && (
+            <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 border-t border-orange-200/60 bg-gradient-to-r from-white via-orange-50/40 to-orange-50/70 px-6 py-3.5 dark:border-orange-400/15 dark:from-transparent dark:via-transparent dark:to-orange-500/10">
+              {footer}
+            </div>
+          )}
+        </Wrapper>
+      </DialogContent>
+    </Dialog>
+  );
+}
 
 /** Dialog + form + Save/Cancel + toast + refresh of every catalog list, shared by all four editors. */
 function EditShell({
@@ -64,26 +115,26 @@ function EditShell({
   };
 
   return (
-    <Dialog open onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className={`max-h-[90vh] overflow-y-auto ${wide ? 'sm:max-w-3xl' : 'sm:max-w-xl'}`}>
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
-        </DialogHeader>
-        <form onSubmit={submit} className="space-y-4">
-          {children}
-          <DialogFooter className="gap-2 sm:gap-0">
-            <Button type="button" variant="outline" onClick={onClose}>
-              Cancel
-            </Button>
-            <Button type="submit" variant="cta" disabled={mutation.isPending} className="gap-2">
-              {mutation.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
-              Save changes
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+    <EditFrame
+      as="form"
+      onSubmit={submit}
+      title={title}
+      description={description}
+      onClose={onClose}
+      wide={wide}
+      body={children}
+      footer={
+        <>
+          <Button type="button" variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button type="submit" disabled={mutation.isPending} className={ORANGE_BUTTON}>
+            {mutation.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
+            Save changes
+          </Button>
+        </>
+      }
+    />
   );
 }
 
@@ -462,7 +513,7 @@ function QuestionForm({ question, onClose }: { question: QuestionDetail; onClose
 }
 
 export function QuestionEditDialog({ questionId, onClose }: { questionId: string; onClose: () => void }) {
-  const { data, isLoading, isError, refetch } = useQuery({
+  const { data, isError, refetch } = useQuery({
     queryKey: ['catalog', 'question', questionId],
     queryFn: () => catalogApi.question(questionId),
   });
@@ -470,20 +521,39 @@ export function QuestionEditDialog({ questionId, onClose }: { questionId: string
   if (data) return <QuestionForm key={data._id + data.updatedAt} question={data} onClose={onClose} />;
 
   return (
-    <Dialog open onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Edit question</DialogTitle>
-          <DialogDescription>Loading the question…</DialogDescription>
-        </DialogHeader>
-        {isLoading ? (
-          <div className="flex justify-center py-8">
-            <Loader2 className="h-6 w-6 animate-spin text-[var(--color-muted-foreground)]" />
-          </div>
-        ) : isError ? (
+    <EditFrame
+      title="Edit question"
+      description={isError ? 'Something went wrong.' : 'Loading the question…'}
+      onClose={onClose}
+      wide
+      body={
+        isError ? (
           <ErrorState message="Could not load this question." onRetry={() => refetch()} className="py-6" />
-        ) : null}
-      </DialogContent>
-    </Dialog>
+        ) : (
+          <div aria-busy="true" className="space-y-4">
+            <Skeleton className="h-3.5 w-24" />
+            <Skeleton className="h-20 w-full rounded-md" />
+            <Skeleton className="h-3.5 w-20" />
+            <Skeleton className="h-20 w-full rounded-md" />
+            <div className="grid gap-3 sm:grid-cols-2">
+              {Array.from({ length: 4 }, (_, i) => (
+                <div key={i} className="space-y-2">
+                  <Skeleton className="h-3.5 w-16" />
+                  <Skeleton className="h-10 w-full rounded-md" />
+                </div>
+              ))}
+            </div>
+            <Skeleton className="h-3.5 w-24" />
+            <Skeleton className="h-16 w-full rounded-md" />
+          </div>
+        )
+      }
+      footer={
+        <>
+          <Skeleton className="h-10 w-24 rounded-md" />
+          <Skeleton className="h-10 w-36 rounded-md" />
+        </>
+      }
+    />
   );
 }

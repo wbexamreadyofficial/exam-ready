@@ -21,10 +21,16 @@ function getPostLoginDestination(user: AuthUser): string {
   return getRoleHome(user.role);
 }
 
+export interface OtherDeviceSession {
+  device: string;
+  lastActiveAt?: string;
+}
+
 export type TryWebLoginResult =
   | 'logged-in'
   | 'no-account'
-  | { otpRequired: true; devOtp?: string };
+  | { otpRequired: true; devOtp?: string }
+  | { alreadyLoggedIn: OtherDeviceSession };
 
 export function useAuth() {
   const router = useRouter();
@@ -108,11 +114,11 @@ export function useAuth() {
    * as a real error instead of being mistaken for a new number.
    */
   const tryWebLogin = useCallback(
-    async (mobileNumber: string): Promise<TryWebLoginResult> => {
+    async (mobileNumber: string, forceLogout = false): Promise<TryWebLoginResult> => {
       setLoading(true);
       setError(null);
       try {
-        const result = await authApi.loginWeb(mobileNumber);
+        const result = await authApi.loginWeb(mobileNumber, forceLogout);
 
         if ('otpRequired' in result) {
           return { otpRequired: true, devOtp: result.devOtp };
@@ -125,6 +131,11 @@ export function useAuth() {
       } catch (err) {
         if (err instanceof AxiosError && err.response?.status === 404) {
           return 'no-account';
+        }
+
+        if (err instanceof AxiosError && err.response?.status === 409 && err.response.data?.code === 'ALREADY_LOGGED_IN') {
+          const info = err.response.data.data as Partial<OtherDeviceSession> | undefined;
+          return { alreadyLoggedIn: { device: info?.device ?? 'another device', lastActiveAt: info?.lastActiveAt } };
         }
 
         const message = getErrorMessage(err, 'Could not log you in. Please try again.');

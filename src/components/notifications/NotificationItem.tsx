@@ -1,6 +1,6 @@
 'use client';
 
-import { Check, Trash2, UserPlus } from 'lucide-react';
+import { Check, ClipboardCheck, TimerOff, Trash2, UserPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { formatDateTime, timeAgo } from '@/lib/userFormat';
 import { cn } from '@/lib/utils';
@@ -9,7 +9,15 @@ import type { NotificationItem as NotificationData, NotificationType } from '@/t
 const TYPE_META: Record<NotificationType, { icon: React.ElementType; tone: string }> = {
   'user.registered': {
     icon: UserPlus,
-    tone: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
+    tone: 'bg-orange-100 text-[#e2691f] dark:bg-orange-500/15 dark:text-orange-300',
+  },
+  'test.submitted': {
+    icon: ClipboardCheck,
+    tone: 'bg-green-100 text-green-600 dark:bg-green-500/15 dark:text-green-400',
+  },
+  'test.auto_submitted': {
+    icon: TimerOff,
+    tone: 'bg-orange-100 text-[#e2691f] dark:bg-orange-500/15 dark:text-orange-300',
   },
 };
 
@@ -45,14 +53,14 @@ export function NotificationRow({
       <button
         type="button"
         onClick={() => onOpen(notification)}
-        className="flex min-w-0 flex-1 items-start gap-3 px-4 py-3.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-ring)]"
+        className="flex min-w-0 flex-1 items-start gap-2.5 px-3.5 py-2.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-ring)]"
       >
-        <span className={cn('mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl', tone)}>
+        <span className={cn('mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg', tone)}>
           <Icon className="h-4 w-4" />
         </span>
         <span className="min-w-0 flex-1">
           <span className="flex items-center gap-2">
-            <span className={cn('truncate text-sm', unread ? 'font-bold' : 'font-medium')}>{notification.title}</span>
+            <span className={cn('truncate text-[13px]', unread ? 'font-bold' : 'font-medium')}>{notification.title}</span>
             {unread && (
               <span
                 className="h-2 w-2 shrink-0 rounded-full bg-[var(--color-cta)]"
@@ -61,13 +69,13 @@ export function NotificationRow({
               />
             )}
           </span>
-          <span className="mt-0.5 line-clamp-2 block text-sm text-[var(--color-muted-foreground)]">
+          <span className="mt-0.5 line-clamp-2 block text-xs leading-snug text-[var(--color-muted-foreground)]">
             {notification.message}
           </span>
           <time
             dateTime={notification.createdAt}
             title={formatDateTime(notification.createdAt)}
-            className="mt-1 block text-xs text-[var(--color-muted-foreground)]/80"
+            className="mt-0.5 block text-[11px] text-[var(--color-muted-foreground)]/80"
           >
             {timeAgo(notification.createdAt)}
           </time>

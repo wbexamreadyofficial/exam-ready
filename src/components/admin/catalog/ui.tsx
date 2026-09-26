@@ -24,7 +24,7 @@ import { ALL, type ListState } from './useListState';
 
 export const SET_STATUS: Record<SetStatus, { label: string; hint: string; variant: 'success' | 'warning' | 'secondary' }> = {
   draft: { label: 'Draft', hint: 'Saved, but students cannot see it yet', variant: 'warning' },
-  published: { label: 'Published', hint: 'Live — students can take it', variant: 'success' },
+  published: { label: 'Approved', hint: 'Approved and live — students can take it', variant: 'success' },
   archived: { label: 'Archived', hint: 'Retired — hidden from students', variant: 'secondary' },
 };
 
@@ -71,6 +71,23 @@ export function SetStatusBadge({ status }: { status: SetStatus }) {
       <span aria-hidden className={`h-1.5 w-1.5 rounded-full ${STATUS_DOT[meta.variant]}`} />
       {meta.label}
     </Badge>
+  );
+}
+
+/** "40 / 100 approved" — how far a set is through approval. Green once every question is approved. */
+export function SetApprovalCount({ approved, total }: { approved?: number; total: number }) {
+  if (approved === undefined || total === 0) return null;
+  const complete = approved >= total;
+  return (
+    <span
+      className={cn(
+        'whitespace-nowrap text-xs font-semibold tabular-nums',
+        complete ? 'text-green-700 dark:text-green-400' : 'text-[var(--color-muted-foreground)]'
+      )}
+      title={`${approved} of ${total} questions approved`}
+    >
+      {approved} / {total} approved
+    </span>
   );
 }
 

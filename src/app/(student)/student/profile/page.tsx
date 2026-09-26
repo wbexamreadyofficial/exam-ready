@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { PhotoPreviewDialog } from '@/components/admin/PhotoPreviewDialog';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -17,6 +18,8 @@ import {
   Clock,
   Loader2,
   Save,
+  Smartphone,
+  UserRound,
 } from 'lucide-react';
 import { usersApi } from '@/lib/api/users';
 import { mediaApi } from '@/lib/api/media';
@@ -28,13 +31,6 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const ROLE_LABEL: Record<string, string> = {
@@ -45,6 +41,126 @@ const ROLE_LABEL: Record<string, string> = {
 };
 
 const FIELD_ERROR = 'border-red-400 focus-visible:ring-red-500/30';
+
+const SECTION =
+  'rounded-2xl border border-orange-200/60 bg-[var(--color-surface)] p-4 shadow-elevated dark:border-orange-400/20';
+
+function SectionHeader({ icon: Icon, title, subtitle }: { icon: typeof MapPin; title: string; subtitle?: string }) {
+  return (
+    <div className="mb-3.5 flex items-center gap-2.5 border-b border-orange-200/50 pb-3 dark:border-orange-400/15">
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] text-white shadow-md shadow-orange-600/30 ring-1 ring-inset ring-white/25">
+        <Icon size={15} />
+      </span>
+      <div className="min-w-0">
+        <h2 className="text-sm font-black leading-tight tracking-tight text-[var(--color-ink-900)]">{title}</h2>
+        {subtitle && <p className="text-xs text-[var(--color-muted-foreground)]">{subtitle}</p>}
+      </div>
+    </div>
+  );
+}
+
+function InfoPill({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-orange-200/70 bg-orange-50/70 px-2.5 py-0.5 text-xs font-medium text-[var(--color-ink-700)] dark:border-orange-400/25 dark:bg-orange-500/10">
+      {children}
+    </span>
+  );
+}
+
+/** Mirrors the loaded page piece for piece while the profile is fetched. */
+function ProfileSkeleton() {
+  const tone = 'bg-[rgba(244,149,63,0.2)]';
+  const field = (wide = false) => (
+    <div className={cn('space-y-1.5', wide && 'sm:col-span-2')}>
+      <Skeleton className="h-3.5 w-24" />
+      <Skeleton className="h-9 w-full rounded-md" />
+    </div>
+  );
+  const header = (
+    <div className="mb-3.5 flex items-center gap-2.5 border-b border-orange-200/50 pb-3">
+      <Skeleton className={cn('h-8 w-8 rounded-lg', tone)} />
+      <div className="space-y-1.5">
+        <Skeleton className="h-4 w-32" />
+        <Skeleton className="h-3 w-48" />
+      </div>
+    </div>
+  );
+  return (
+    <div className="w-full space-y-4" aria-busy="true" aria-label="Loading your profile">
+      {/* Cover + identity */}
+      <div className="overflow-hidden rounded-2xl border border-orange-200/60 bg-[var(--color-surface)] shadow-elevated">
+        <div className={cn('h-24 sm:h-28', tone)} />
+        <div className="px-4 pb-4 sm:px-6">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
+            <Skeleton className="-mt-10 h-20 w-20 shrink-0 rounded-full ring-4 ring-[var(--color-surface)] sm:-mt-12 sm:h-24 sm:w-24" />
+            <div className="min-w-0 flex-1 space-y-2 pt-2">
+              <div className="flex items-center gap-2">
+                <Skeleton className="h-6 w-44" />
+                <Skeleton className={cn('h-5 w-14 rounded-full', tone)} />
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Skeleton className="h-6 w-40 rounded-full" />
+                <Skeleton className="h-6 w-52 rounded-full" />
+                <Skeleton className="h-6 w-36 rounded-full" />
+              </div>
+            </div>
+          </div>
+          <div className="mt-3.5 rounded-xl border border-orange-200/60 p-3">
+            <div className="mb-2 flex justify-between">
+              <Skeleton className="h-3.5 w-56" />
+              <Skeleton className="h-3.5 w-10" />
+            </div>
+            <Skeleton className="h-1.5 w-full rounded-full" />
+          </div>
+        </div>
+      </div>
+
+      {/* Personal details */}
+      <div className={SECTION}>
+        {header}
+        <div className="grid gap-3 sm:grid-cols-2">
+          {field()}
+          {field()}
+          {field()}
+          {field()}
+          {field()}
+        </div>
+      </div>
+
+      {/* Address */}
+      <div className={SECTION}>
+        {header}
+        <div className="grid gap-3 sm:grid-cols-2">
+          {field(true)}
+          {field()}
+          {field()}
+          {field()}
+          {field()}
+        </div>
+      </div>
+
+      {/* Account */}
+      <div className={SECTION}>
+        {header}
+        <div className="grid gap-3 sm:grid-cols-3">
+          {Array.from({ length: 3 }, (_, i) => (
+            <div key={i} className="flex items-center gap-2.5 rounded-xl border border-orange-200/60 p-2.5">
+              <Skeleton className={cn('h-8 w-8 rounded-lg', tone)} />
+              <div className="space-y-2">
+                <Skeleton className="h-3 w-20" />
+                <Skeleton className="h-4 w-28" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex justify-end">
+        <Skeleton className={cn('h-9 w-36 rounded-xl', tone)} />
+      </div>
+    </div>
+  );
+}
 
 const emptyAddress = { houseNoStreet: '', area: '', city: '', district: '', pinCode: '' };
 
@@ -124,6 +240,7 @@ export default function ProfilePage() {
   const setStoreUser = useAuthStore((s) => s.setUser);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
+  const [photoPreview, setPhotoPreview] = useState<{ url: string; name: string } | null>(null);
 
   const { data: profile, isLoading } = useQuery({
     queryKey: ['profile'],
@@ -230,33 +347,38 @@ export default function ProfilePage() {
   };
 
   if (isLoading || !profile) {
-    return (
-      <div className="w-full space-y-6">
-        <Skeleton className="h-48 w-full rounded-2xl" />
-        <Skeleton className="h-64 w-full rounded-2xl" />
-        <Skeleton className="h-48 w-full rounded-2xl" />
-      </div>
-    );
+    return <ProfileSkeleton />;
   }
 
   const initials = generateInitials(profile.fullName || profile.email || profile.mobileNumber || 'User');
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full space-y-4">
       {/* Cover + avatar */}
-      <div className="rounded-2xl border border-[var(--color-hairline)] bg-[var(--color-surface)] overflow-hidden shadow-elevated">
-        <div className="h-32 sm:h-40 bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-500 relative">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.18),transparent_45%)]" />
+      <div className="overflow-hidden rounded-2xl border border-orange-200/60 bg-[var(--color-surface)] shadow-elevated dark:border-orange-400/20">
+        <div
+          className="h-24 sm:h-28 relative"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E"), radial-gradient(520px 260px at 100% 0%, rgba(255,217,168,0.45), transparent 62%), radial-gradient(420px 240px at 0% 100%, rgba(110,35,8,0.4), transparent 65%), linear-gradient(152deg, #f4953f 0%, #e2691f 40%, #c4501a 72%, #97370f 100%)`,
+            backgroundBlendMode: 'soft-light, normal, normal, normal',
+          }}
+        >
+          <div className="pointer-events-none absolute -right-16 -top-24 h-72 w-72 rounded-full border border-white/25 shadow-[0_0_0_46px_rgba(255,255,255,0.04),0_0_0_47px_rgba(255,255,255,0.16)]" />
         </div>
-        <div className="px-5 sm:px-8 pb-6">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
-            <div className="relative shrink-0 -mt-14 sm:-mt-16">
-              <div className="h-28 w-28 sm:h-32 sm:w-32 rounded-full ring-4 ring-[var(--color-surface)] bg-gradient-to-br from-blue-500 to-blue-700 overflow-hidden flex items-center justify-center shadow-[0_16px_32px_-12px_rgba(37,99,235,0.55)]">
+        <div className="px-4 sm:px-6 pb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5">
+            <div className="relative w-fit shrink-0 -mt-10 sm:-mt-12">
+              <div className="h-20 w-20 sm:h-24 sm:w-24 rounded-full ring-4 ring-[var(--color-surface)] bg-gradient-to-br from-[#f4953f] to-[#c4501a] overflow-hidden flex items-center justify-center shadow-[0_0_0_3px_rgba(226,105,31,0.35),0_18px_36px_-12px_rgba(201,88,23,0.65)]">
                 {profile.profilePhoto ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={profile.profilePhoto} alt={profile.fullName || 'Profile photo'} className="h-full w-full object-cover" />
+                  <img
+                    src={profile.profilePhoto}
+                    alt={profile.fullName || 'Profile photo'}
+                    onClick={() => setPhotoPreview({ url: profile.profilePhoto!, name: profile.fullName || 'Profile photo' })}
+                    className="h-full w-full cursor-zoom-in object-cover"
+                  />
                 ) : (
-                  <span className="text-3xl font-bold text-white">{initials}</span>
+                  <span className="text-2xl font-bold text-white">{initials}</span>
                 )}
                 {isUploadingPhoto && (
                   <div className="absolute inset-0 flex items-center justify-center bg-black/40">
@@ -269,9 +391,9 @@ export default function ProfilePage() {
                 onClick={handlePhotoPick}
                 disabled={isUploadingPhoto}
                 aria-label="Change profile photo"
-                className="absolute right-0.5 bottom-0.5 flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-cta)] text-[var(--color-cta-foreground)] shadow-md ring-4 ring-[var(--color-surface)] hover:brightness-105 transition disabled:opacity-60"
+                className="absolute right-0 bottom-0 flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] text-white shadow-lg shadow-orange-600/40 ring-4 ring-[var(--color-surface)] hover:scale-105 transition disabled:opacity-60"
               >
-                <Camera size={15} />
+                <Camera size={12} />
               </button>
               <input
                 ref={fileInputRef}
@@ -282,55 +404,55 @@ export default function ProfilePage() {
               />
             </div>
 
-            <div className="flex-1 min-w-0 pt-2 sm:pt-3">
+            <div className="flex-1 min-w-0 pt-2">
               <div className="flex flex-wrap items-center gap-2">
-                <h1 className="text-xl sm:text-2xl font-bold text-[var(--color-ink-900)] truncate">
+                <h1 className="truncate text-lg font-black tracking-tight text-[var(--color-ink-900)] sm:text-xl">
                   {profile.fullName || 'Complete your profile'}
                 </h1>
-                <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide bg-[var(--color-primary)]/10 text-[var(--color-primary)]">
+                <span className="inline-flex items-center rounded-full bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white shadow-sm shadow-orange-600/30">
                   {ROLE_LABEL[profile.role] ?? profile.role}
                 </span>
               </div>
-              <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[13px] text-[var(--color-muted-foreground)]">
+              <div className="mt-2.5 flex flex-wrap items-center gap-2">
                 {profile.mobileNumber && (
-                  <span className="inline-flex items-center gap-1.5">
-                    <Phone size={13} />
+                  <InfoPill>
+                    <Phone size={13} className="text-[#e2691f]" />
                     +91 {profile.mobileNumber}
                     {profile.isMobileVerified && <BadgeCheck size={13} className="text-[var(--color-data-positive)]" />}
-                  </span>
+                  </InfoPill>
                 )}
                 {profile.email && (
-                  <span className="inline-flex items-center gap-1.5">
-                    <Mail size={13} />
+                  <InfoPill>
+                    <Mail size={13} className="text-[#e2691f]" />
                     {profile.email}
                     {profile.isEmailVerified && <BadgeCheck size={13} className="text-[var(--color-data-positive)]" />}
-                  </span>
+                  </InfoPill>
                 )}
-                <span className="inline-flex items-center gap-1.5">
-                  <Clock size={13} />
+                <InfoPill>
+                  <Clock size={13} className="text-[#e2691f]" />
                   Joined {formatDate(profile.createdAt)}
-                </span>
+                </InfoPill>
               </div>
             </div>
           </div>
 
           {completion && !completion.isComplete && (
-            <div className="mt-5 rounded-xl border border-[var(--color-hairline)] bg-[var(--color-surface-subtle)] p-4">
+            <div className="mt-3.5 rounded-xl border border-orange-200/70 bg-gradient-to-br from-orange-50/80 to-white p-3 dark:border-orange-400/25 dark:from-orange-500/10 dark:to-transparent">
               <div className="flex items-center justify-between text-[12.5px] font-medium text-[var(--color-muted-foreground)] mb-1.5">
                 <span>{completion.bannerText}</span>
                 <span className="tabular font-bold text-[var(--color-ink-900)]">{completion.completionPercentage}%</span>
               </div>
-              <Progress value={completion.completionPercentage} className="h-1.5" />
+              <Progress value={completion.completionPercentage} className="h-2 [&>div]:bg-gradient-to-r [&>div]:from-[#f4953f] [&>div]:to-[#c4501a]" />
             </div>
           )}
         </div>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Personal details */}
-        <section className="rounded-2xl border border-[var(--color-hairline)] bg-[var(--color-surface)] p-5 sm:p-6 shadow-elevated">
-          <h2 className="text-[15px] font-bold text-[var(--color-ink-900)] mb-4">Personal Details</h2>
-          <div className="grid sm:grid-cols-2 gap-4">
+        <section className={SECTION}>
+          <SectionHeader icon={UserRound} title="Personal Details" subtitle="Your name, contact and preferences" />
+          <div className="grid sm:grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label htmlFor="fullName">Full Name</Label>
               <Input
@@ -393,16 +515,32 @@ export default function ProfilePage() {
                 control={control}
                 name="preferredLanguage"
                 render={({ field }) => (
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger>
-                      <Languages size={15} className="mr-1.5 text-[var(--color-muted-foreground)]" />
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="en">English</SelectItem>
-                      <SelectItem value="bn">Bengali</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <div role="tablist" aria-label="Preferred language" className="grid h-10 grid-cols-2 gap-1 rounded-xl border border-orange-200/70 bg-orange-50/60 p-1 dark:border-orange-400/25 dark:bg-orange-500/10">
+                    {[
+                      { value: 'en', label: 'English' },
+                      { value: 'bn', label: 'Bengali' },
+                    ].map((opt) => {
+                      const active = field.value === opt.value;
+                      return (
+                        <button
+                          key={opt.value}
+                          type="button"
+                          role="tab"
+                          aria-selected={active}
+                          onClick={() => field.onChange(opt.value)}
+                          className={cn(
+                            'flex cursor-pointer items-center justify-center gap-1.5 rounded-lg text-[13px] font-semibold transition-all',
+                            active
+                              ? 'bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] text-white shadow-md shadow-orange-600/30'
+                              : 'text-[var(--color-ink-700)] hover:bg-white/70 dark:hover:bg-white/10'
+                          )}
+                        >
+                          <Languages size={14} />
+                          {opt.label}
+                        </button>
+                      );
+                    })}
+                  </div>
                 )}
               />
             </div>
@@ -410,18 +548,12 @@ export default function ProfilePage() {
         </section>
 
         {/* Address */}
-        <section className="rounded-2xl border border-[var(--color-hairline)] bg-[var(--color-surface)] p-5 sm:p-6 shadow-elevated">
-          <h2 className="text-[15px] font-bold text-[var(--color-ink-900)] mb-1 flex items-center gap-2">
-            <MapPin size={16} className="text-[var(--color-muted-foreground)]" />
-            Address
-          </h2>
-          <p className="text-[12.5px] text-[var(--color-muted-foreground)] mb-4">
-            Fill in every field, or leave the whole section blank.
-          </p>
+        <section className={SECTION}>
+          <SectionHeader icon={MapPin} title="Address" subtitle="Fill in every field, or leave the whole section blank." />
           {errors.address?.message && (
             <p className="text-[12px] text-red-600 mb-3">{errors.address.message}</p>
           )}
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className="grid sm:grid-cols-2 gap-3">
             <div className="space-y-1.5 sm:col-span-2">
               <Label htmlFor="houseNoStreet">House No. / Street</Label>
               <Input
@@ -461,43 +593,43 @@ export default function ProfilePage() {
         </section>
 
         {/* Account info (read-only) */}
-        <section className="rounded-2xl border border-[var(--color-hairline)] bg-[var(--color-surface)] p-5 sm:p-6 shadow-elevated">
-          <h2 className="text-[15px] font-bold text-[var(--color-ink-900)] mb-4 flex items-center gap-2">
-            <ShieldCheck size={16} className="text-[var(--color-muted-foreground)]" />
-            Account
-          </h2>
-          <div className="grid sm:grid-cols-3 gap-4 text-[13px]">
-            <div>
-              <p className="text-[var(--color-muted-foreground)] mb-0.5">Account Type</p>
-              <p className="font-semibold text-[var(--color-ink-900)]">{ROLE_LABEL[profile.role] ?? profile.role}</p>
-            </div>
-            <div>
-              <p className="text-[var(--color-muted-foreground)] mb-0.5">Signed up via</p>
-              <p className="font-semibold text-[var(--color-ink-900)]">{profile.isAppUser ? 'Mobile (App)' : 'Email (Web)'}</p>
-            </div>
-            <div>
-              <p className="text-[var(--color-muted-foreground)] mb-0.5">Last Login</p>
-              <p className="font-semibold text-[var(--color-ink-900)]">{formatDate(profile.lastLoginAt)}</p>
-            </div>
+        <section className={SECTION}>
+          <SectionHeader icon={ShieldCheck} title="Account" subtitle="Read-only details about your account" />
+          <div className="grid gap-3 sm:grid-cols-3">
+            {[
+              { icon: ShieldCheck, label: 'Account Type', value: ROLE_LABEL[profile.role] ?? profile.role },
+              { icon: Smartphone, label: 'Signed up via', value: profile.isAppUser ? 'Mobile (App)' : 'Email (Web)' },
+              { icon: Clock, label: 'Last Login', value: formatDate(profile.lastLoginAt) },
+            ].map(({ icon: Icon, label, value }) => (
+              <div key={label} className="flex items-center gap-2.5 rounded-xl border border-orange-200/60 bg-gradient-to-br from-orange-50/60 to-transparent p-2.5 dark:border-orange-400/20 dark:from-orange-500/10">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white text-[#e2691f] shadow-sm dark:bg-white/10">
+                  <Icon size={17} />
+                </span>
+                <div className="min-w-0">
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-[var(--color-muted-foreground)]">{label}</p>
+                  <p className="truncate text-[13.5px] font-bold text-[var(--color-ink-900)]">{value}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 
         {/* Save bar */}
-        <div className="flex justify-end pt-1 pb-2">
+        <div className="flex items-center justify-between gap-3 rounded-2xl border border-orange-200/60 bg-[var(--color-surface)] px-4 py-2 shadow-elevated dark:border-orange-400/20">
+          <p className="text-xs text-[var(--color-muted-foreground)]">
+            {isDirty ? 'You have unsaved changes.' : 'All changes saved.'}
+          </p>
           <Button
             type="submit"
             disabled={!isDirty || updateMutation.isPending}
-            className="btn-premium gap-2 h-11 px-6 rounded-xl font-bold shadow-lg"
+            className="btn-premium h-9 gap-2 rounded-xl px-4 border-0 bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] px-5 font-semibold text-white shadow-lg shadow-orange-600/30 ring-1 ring-inset ring-white/25 transition-all hover:-translate-y-px hover:brightness-110 disabled:translate-y-0 disabled:opacity-50 disabled:shadow-none"
           >
-            {updateMutation.isPending ? (
-              <Loader2 size={16} className="animate-spin" />
-            ) : (
-              <Save size={16} />
-            )}
+            {updateMutation.isPending ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
             Save Changes
           </Button>
         </div>
       </form>
+      <PhotoPreviewDialog photo={photoPreview} onClose={() => setPhotoPreview(null)} />
     </div>
   );
 }

@@ -1,9 +1,10 @@
 'use client';
 
-import { CheckCircle2, ChevronRight, Eye, HelpCircle, ListChecks, Pencil } from 'lucide-react';
+import { CheckCircle2, ChevronRight, Eye, HelpCircle, ListChecks, MoreVertical, Pencil } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import type { ExamRow, QuestionRow, QuestionSetRow } from '@/lib/api/catalog';
 import {
@@ -12,6 +13,7 @@ import {
   LANGUAGE_LABEL,
   QuestionStatusBadge,
   RelationButton,
+  SetApprovalCount,
   SetStatusBadge,
 } from './ui';
 
@@ -117,9 +119,11 @@ interface QuestionSetsTableProps {
   showParents?: boolean;
   onEdit?: (set: QuestionSetRow) => void;
   onOpenQuestions?: (set: QuestionSetRow) => void;
+  /** Approve every ready question and publish the set. */
+  onApprove?: (set: QuestionSetRow) => void;
 }
 
-export function QuestionSetsTable({ items, showParents = true, onEdit, onOpenQuestions }: QuestionSetsTableProps) {
+export function QuestionSetsTable({ items, showParents = true, onEdit, onOpenQuestions, onApprove }: QuestionSetsTableProps) {
   return (
     <Table>
       <TableHeader>
@@ -156,21 +160,49 @@ export function QuestionSetsTable({ items, showParents = true, onEdit, onOpenQue
                 .join(' · ')}
             </TableCell>
             <TableCell>
-              <div className="flex flex-wrap items-center gap-1.5">
-                <SetStatusBadge status={set.status} />
-                {!set.isActive && <ActiveBadge active={false} />}
+              <div className="flex flex-col items-start gap-1">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <SetStatusBadge status={set.status} />
+                  {!set.isActive && <ActiveBadge active={false} />}
+                </div>
+                <SetApprovalCount approved={set.approvedCount} total={set.questionCount} />
               </div>
             </TableCell>
             <TableCell>
-              <div className="flex flex-wrap justify-end gap-1.5">
-                {onOpenQuestions && (
-                  <RelationButton icon={HelpCircle} label="Questions" count={set.questionCount} onClick={() => onOpenQuestions(set)} />
-                )}
-                {onEdit && (
-                  <Button variant="ghost" size="sm" className="h-8 gap-1.5" onClick={() => onEdit(set)}>
-                    <Pencil className="h-3.5 w-3.5" /> Edit
-                  </Button>
-                )}
+              <div className="flex justify-end">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 rounded-full text-[var(--color-muted-foreground)] hover:bg-orange-50 hover:text-[#c95817] data-[state=open]:bg-orange-50 data-[state=open]:text-[#c95817]"
+                      aria-label={`Actions for ${set.title.en}`}
+                    >
+                      <MoreVertical className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-52 rounded-xl p-1.5 shadow-xl">
+                    {onOpenQuestions && (
+                      <DropdownMenuItem className="cursor-pointer gap-2.5 rounded-lg px-3 py-2 focus:bg-orange-50 focus:text-[#c95817] dark:focus:bg-orange-500/10" onSelect={() => onOpenQuestions(set)}>
+                        <HelpCircle className="h-4 w-4" /> Questions
+                        <span className="ml-auto rounded bg-[var(--color-muted)] px-1.5 py-px text-[10px] font-bold">{set.questionCount.toLocaleString()}</span>
+                      </DropdownMenuItem>
+                    )}
+                    {onEdit && (
+                      <DropdownMenuItem className="cursor-pointer gap-2.5 rounded-lg px-3 py-2 focus:bg-orange-50 focus:text-[#c95817] dark:focus:bg-orange-500/10" onSelect={() => onEdit(set)}>
+                        <Pencil className="h-4 w-4" /> Edit
+                      </DropdownMenuItem>
+                    )}
+                    {onApprove && set.status !== 'published' && (
+                      <DropdownMenuItem
+                        className="cursor-pointer gap-2.5 rounded-lg px-3 py-2 font-semibold text-green-700 focus:bg-green-50 focus:text-green-700 dark:text-green-400 dark:focus:bg-green-900/20"
+                        onSelect={() => onApprove(set)}
+                      >
+                        <CheckCircle2 className="h-4 w-4" /> Approve all questions
+                      </DropdownMenuItem>
+                    )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </TableCell>
           </TableRow>
@@ -244,27 +276,45 @@ export function QuestionsTable({
               </div>
             </TableCell>
             <TableCell>
-              <div className="flex flex-wrap justify-end gap-1.5">
-                {onApprove && question.status !== 'approved' && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-8 gap-1.5 border-green-600/40 text-green-700 hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-900/20"
-                    onClick={() => onApprove(question)}
-                  >
-                    <CheckCircle2 className="h-3.5 w-3.5" /> Approve
-                  </Button>
-                )}
-                {onView && (
-                  <Button variant="outline" size="sm" className="h-8 gap-1.5" onClick={() => onView(question)}>
-                    <Eye className="h-3.5 w-3.5" /> View
-                  </Button>
-                )}
-                {onEdit && (
-                  <Button variant="ghost" size="sm" className="h-8 gap-1.5" onClick={() => onEdit(question)}>
-                    <Pencil className="h-3.5 w-3.5" /> Edit
-                  </Button>
-                )}
+              <div className="flex justify-end">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 rounded-full text-[var(--color-muted-foreground)] hover:bg-orange-50 hover:text-[#c95817] data-[state=open]:bg-orange-50 data-[state=open]:text-[#c95817]"
+                      aria-label={`Actions for question ${question.questionNumber ?? ''}`}
+                    >
+                      <MoreVertical className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-44 rounded-xl p-1.5 shadow-xl">
+                    {onView && (
+                      <DropdownMenuItem
+                        className="cursor-pointer gap-2.5 rounded-lg px-3 py-2 focus:bg-orange-50 focus:text-[#c95817] dark:focus:bg-orange-500/10"
+                        onSelect={() => onView(question)}
+                      >
+                        <Eye className="h-4 w-4" /> View
+                      </DropdownMenuItem>
+                    )}
+                    {onEdit && (
+                      <DropdownMenuItem
+                        className="cursor-pointer gap-2.5 rounded-lg px-3 py-2 focus:bg-orange-50 focus:text-[#c95817] dark:focus:bg-orange-500/10"
+                        onSelect={() => onEdit(question)}
+                      >
+                        <Pencil className="h-4 w-4" /> Edit
+                      </DropdownMenuItem>
+                    )}
+                    {onApprove && question.status !== 'approved' && (
+                      <DropdownMenuItem
+                        className="cursor-pointer gap-2.5 rounded-lg px-3 py-2 font-semibold text-green-700 focus:bg-green-50 focus:text-green-700 dark:text-green-400 dark:focus:bg-green-900/20"
+                        onSelect={() => onApprove(question)}
+                      >
+                        <CheckCircle2 className="h-4 w-4" /> Approve
+                      </DropdownMenuItem>
+                    )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </TableCell>
           </TableRow>

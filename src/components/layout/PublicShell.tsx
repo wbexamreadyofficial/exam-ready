@@ -10,7 +10,7 @@ import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import { useAuthStore } from '@/store/authStore';
 
 /** Public pages the student sidebar links to; a signed-in student sees them inside the dashboard shell. */
-const SIDEBAR_PAGES = /^\/(exams|quizzes|leaderboard)(\/|$)/;
+const SIDEBAR_PAGES = /^\/(quizzes|leaderboard)(\/|$)/;
 
 export function PublicShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() ?? '';

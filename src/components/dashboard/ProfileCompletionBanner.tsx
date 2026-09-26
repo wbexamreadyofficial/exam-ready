@@ -73,7 +73,7 @@ export function ProfileCompletionBanner() {
   });
 
   return (
-    <div className="relative flex flex-wrap items-center gap-4 rounded-2xl border border-[var(--color-hairline)] bg-[var(--color-surface)] px-4 py-3.5 pr-11 sm:px-5 shadow-[0_1px_2px_rgba(30,64,110,0.05),0_6px_16px_-2px_rgba(30,64,110,0.08),0_16px_40px_-8px_rgba(30,64,110,0.16)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.4),0_10px_24px_-4px_rgba(0,0,0,0.6)]">
+    <div className="relative flex flex-wrap items-center gap-3 rounded-xl border border-[var(--color-hairline)] bg-[var(--color-surface)] px-4 py-2.5 pr-10 sm:px-4 shadow-[0_1px_2px_rgba(30,64,110,0.05),0_6px_16px_-2px_rgba(30,64,110,0.08),0_16px_40px_-8px_rgba(30,64,110,0.16)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.4),0_10px_24px_-4px_rgba(0,0,0,0.6)]">
       <CircularProgress value={completion.completionPercentage} />
 
       <div className="min-w-0 flex-1 space-y-1">
@@ -94,7 +94,7 @@ export function ProfileCompletionBanner() {
       <button
         type="button"
         onClick={() => router.push('/student/profile')}
-        className="shrink-0 inline-flex items-center gap-1.5 rounded-xl bg-[var(--color-data-primary)] px-4 py-2.5 text-[13px] font-bold text-white hover:opacity-90 transition-opacity"
+        className="shrink-0 inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] px-3 py-1.5 text-[11px] font-semibold shadow-sm shadow-orange-600/30 text-white hover:opacity-90 transition-opacity"
       >
         Complete Profile
         <ArrowRight size={15} />
