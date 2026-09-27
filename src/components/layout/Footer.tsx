@@ -16,11 +16,11 @@ const examLinks = [
 ];
 
 const supportLinks = [
-  { title: 'Help Center', href: '/contact' },
+  { title: 'Help Center', href: '/help' },
   { title: 'Contact Us', href: '/contact' },
-  { title: 'Privacy Policy', href: '/about' },
-  { title: 'Terms & Conditions', href: '/about' },
-  { title: 'Refund Policy', href: '/about' },
+  { title: 'Privacy Policy', href: '/privacy' },
+  { title: 'Terms & Conditions', href: '/terms' },
+  { title: 'Refund Policy', href: '/terms' },
 ];
 
 const socialLinks = [

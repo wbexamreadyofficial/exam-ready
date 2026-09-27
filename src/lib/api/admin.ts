@@ -31,6 +31,33 @@ export interface DashboardStats {
   categories: { total: number; active: number; inactive: number };
   /** Zero-filled daily sign-ups, oldest first. `date` is YYYY-MM-DD in the requested time zone. */
   registrations: { date: string; count: number }[];
+  content: {
+    subjects: { total: number; active: number };
+    exams: { total: number; active: number };
+    questionSets: { total: number; published: number; draft: number };
+    questions: { total: number; approved: number; pending: number; rejected: number };
+  };
+  uploads: {
+    total: number;
+    committed: number;
+    inProgress: number;
+    today: number;
+    recent: {
+      id: string;
+      fileName: string;
+      status: string;
+      questionCount: number;
+      createdAt: string;
+    }[];
+  };
+  attempts: {
+    total: number;
+    today: number;
+    avgScorePercent: number | null;
+    /** Zero-filled daily submitted-attempt counts, oldest first. */
+    trend: { date: string; count: number }[];
+  };
+  contacts: { total: number; open: number };
 }
 
 export interface SubjectItem {

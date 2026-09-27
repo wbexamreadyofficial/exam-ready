@@ -3,6 +3,12 @@ import type { ApiResponse } from '@/types/api';
 import type { SiteContent, SiteContentType, UpdateSiteContentInput } from '@/types/siteContent';
 
 export const siteContentApi = {
+  /** Public, unauthenticated read — used by the /terms, /privacy and /help pages. */
+  getPublic: async (type: SiteContentType): Promise<SiteContent> => {
+    const { data } = await apiClient.get<ApiResponse<{ content: SiteContent }>>(`/content/${type}`);
+    return data.data.content;
+  },
+
   get: async (type: SiteContentType): Promise<SiteContent> => {
     const { data } = await apiClient.get<ApiResponse<{ content: SiteContent }>>(`/admin/content/${type}`);
     return data.data.content;
