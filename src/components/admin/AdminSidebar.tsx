@@ -61,7 +61,7 @@ export function AdminSidebar({ isCollapsed, onToggle, onClose }: AdminSidebarPro
         isCollapsed ? 'w-[72px]' : 'w-[264px]'
       )}
     >
-      {/* Header — logo + desktop collapse toggle */}
+      {/* Header — logo + desktop collapse toggle  */}
       <div className="flex h-[72px] shrink-0 items-center justify-between gap-1.5 border-b border-[var(--color-hairline)] px-3">
         <Link href="/admin" onClick={onClose} className="flex min-w-0 items-center gap-2 overflow-hidden">
           <LogoIcon className="h-8 w-8 shrink-0" />
