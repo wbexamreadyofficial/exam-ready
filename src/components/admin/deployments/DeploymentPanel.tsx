@@ -21,6 +21,9 @@ import { getErrorMessage } from '@/lib/api/errors';
 import { timeAgo } from '@/lib/userFormat';
 import { cn } from '@/lib/utils';
 
+const ORANGE_BUTTON =
+  'border-0 bg-gradient-to-br from-[#f4953f] via-[#e2691f] to-[#c4501a] font-semibold text-white shadow-md shadow-orange-600/30 ring-1 ring-inset ring-white/25 transition-all hover:-translate-y-px hover:bg-transparent hover:brightness-110 hover:shadow-lg hover:shadow-orange-600/40 disabled:translate-y-0 disabled:opacity-50 disabled:shadow-none';
+
 const STATE_BADGE: Record<string, NonNullable<BadgeProps['variant']>> = {
   READY: 'success',
   BUILDING: 'warning',
@@ -111,9 +114,8 @@ export function DeploymentPanel({ project, label, icon: Icon }: DeploymentPanelP
         </div>
                 <div className="flex items-center gap-2">
           <Button
-            variant="outline"
             size="sm"
-            className="gap-1.5"
+            className={cn('gap-1.5', ORANGE_BUTTON)}
             disabled={!selected || isActive}
             onClick={() => setConfirmOpen(true)}
           >
@@ -215,7 +217,7 @@ export function DeploymentPanel({ project, label, icon: Icon }: DeploymentPanelP
             </Button>
             <Button
               type="button"
-              className="gap-2"
+              className={cn('gap-2', ORANGE_BUTTON)}
               disabled={redeployMutation.isPending}
               onClick={() => redeployMutation.mutate()}
             >
