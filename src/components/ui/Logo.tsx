@@ -9,7 +9,7 @@ interface LogoProps {
   variant?: 'default' | 'light' | 'dark';
 }
 
-export function LogoIcon({ className = 'h-10 w-10' }: { className?: string }) {
+export function LogoIcon({ className = 'h-10 w-10', idPrefix = '' }: { className?: string; idPrefix?: string }) {
   return (
     <svg
       viewBox="0 0 140 120"
@@ -19,36 +19,36 @@ export function LogoIcon({ className = 'h-10 w-10' }: { className?: string }) {
     >
       <defs>
         {/* Cap Top Gradient — brand blue */}
-        <linearGradient id="capTopGrad" x1="10" y1="10" x2="110" y2="60" gradientUnits="userSpaceOnUse">
+        <linearGradient id={`${idPrefix}capTopGrad`} x1="10" y1="10" x2="110" y2="60" gradientUnits="userSpaceOnUse">
           <stop offset="0%" stopColor="#3B82F6" />
           <stop offset="100%" stopColor="#1D4ED8" />
         </linearGradient>
 
         {/* Cap Base Gradient — deeper blue */}
-        <linearGradient id="capBaseGrad" x1="30" y1="40" x2="90" y2="80" gradientUnits="userSpaceOnUse">
+        <linearGradient id={`${idPrefix}capBaseGrad`} x1="30" y1="40" x2="90" y2="80" gradientUnits="userSpaceOnUse">
           <stop offset="0%" stopColor="#1D4ED8" />
           <stop offset="100%" stopColor="#1E3A8A" />
         </linearGradient>
 
         {/* Book Outline Gradient — brand orange */}
-        <linearGradient id="bookGrad" x1="0" y1="40" x2="140" y2="110" gradientUnits="userSpaceOnUse">
+        <linearGradient id={`${idPrefix}bookGrad`} x1="0" y1="40" x2="140" y2="110" gradientUnits="userSpaceOnUse">
           <stop offset="0%" stopColor="#FB923C" />
           <stop offset="100%" stopColor="#EA580C" />
         </linearGradient>
 
         {/* Tassel Gradient — orange */}
-        <linearGradient id="tasselGrad" x1="60" y1="30" x2="105" y2="90" gradientUnits="userSpaceOnUse">
+        <linearGradient id={`${idPrefix}tasselGrad`} x1="60" y1="30" x2="105" y2="90" gradientUnits="userSpaceOnUse">
           <stop offset="0%" stopColor="#FB923C" />
           <stop offset="100%" stopColor="#EA580C" />
         </linearGradient>
 
-        <filter id="softGlow" x="-10%" y="-10%" width="120%" height="120%">
+        <filter id={`${idPrefix}softGlow`} x="-10%" y="-10%" width="120%" height="120%">
           <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#2563EB" floodOpacity="0.25" />
         </filter>
       </defs>
 
       {/* OPEN BOOK (Orange Layered Lines) */}
-      <g stroke="url(#bookGrad)" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" fill="none">
+      <g stroke={`url(#${idPrefix}bookGrad)`} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" fill="none">
         {/* Outer Book Page Outline */}
         <path d="M 70 102 C 42 86 18 96 6 102 V 64 C 18 58 42 48 70 64 C 98 48 122 58 134 64 V 102 C 122 96 98 86 70 102 Z" strokeWidth="4.5" fill="#FFF7ED" />
         
@@ -61,17 +61,17 @@ export function LogoIcon({ className = 'h-10 w-10' }: { className?: string }) {
       </g>
 
       {/* GRADUATION CAP */}
-      <g filter="url(#softGlow)">
+      <g filter={`url(#${idPrefix}softGlow)`}>
         {/* Skull Cap Base */}
         <path
           d="M 36 46 V 64 C 36 74 104 74 104 64 V 46 Z"
-          fill="url(#capBaseGrad)"
+          fill={`url(#${idPrefix}capBaseGrad)`}
         />
 
         {/* Diamond Mortarboard Top */}
         <path
           d="M 70 8 L 132 34 L 70 58 L 8 34 Z"
-          fill="url(#capTopGrad)"
+          fill={`url(#${idPrefix}capTopGrad)`}
           stroke="#1D4ED8"
           strokeWidth="1.5"
         />
@@ -92,7 +92,7 @@ export function LogoIcon({ className = 'h-10 w-10' }: { className?: string }) {
         <path
           d="M 70 33 Q 92 36 102 54 L 104 84"
           fill="none"
-          stroke="url(#tasselGrad)"
+          stroke={`url(#${idPrefix}tasselGrad)`}
           strokeWidth="3.5"
           strokeLinecap="round"
         />
@@ -103,7 +103,7 @@ export function LogoIcon({ className = 'h-10 w-10' }: { className?: string }) {
         {/* Tassel Fringe / Brush */}
         <path
           d="M 101 77 L 97 96 M 104 77 L 104 98 M 107 77 L 111 96"
-          stroke="url(#tasselGrad)"
+          stroke={`url(#${idPrefix}tasselGrad)`}
           strokeWidth="2.5"
           strokeLinecap="round"
         />

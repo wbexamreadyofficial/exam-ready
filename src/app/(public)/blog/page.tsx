@@ -1,21 +1,21 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, ArrowUpRight, Calendar, Check, Clock3, GraduationCap, Sparkles, User } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, BookOpen, Calendar, Check, Clock3, GraduationCap, Heart, MessageCircle, Sparkles, User } from 'lucide-react';
 import { CoursesExperience } from '@/components/courses/CoursesExperience';
 import { HomeAmbient } from '@/components/home/HomeAmbient';
-import { blogPosts } from '@/data/blog-posts';
+import { PostCover } from '@/components/blog/PostCover';
+import { formatBlogDate, formatReadingTime, getBlogCategoryLabel, getBlogExcerpt, getPublishedBlogs } from '@/lib/blog/publicBlogs';
 import styles from '@/components/blog/blog.module.css';
 
 export const metadata: Metadata = {
   title: 'Blog — Exam Ready',
   description: 'Study tips, exam strategy, and preparation habits for WBPSC, WBCS, SSC, and other West Bengal competitive exams.',
 };
+export const revalidate = 300;
 
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
-}
+export default async function BlogPage() {
+  const posts = await getPublishedBlogs();
 
-export default function BlogPage() {
   return (
     <CoursesExperience className={styles.page}>
       <section className={styles.hero} aria-labelledby="blog-title">
@@ -27,32 +27,41 @@ export default function BlogPage() {
       </section>
 
       <section className={`${styles.shell} ${styles.postsSection}`} aria-label="Blog posts">
-        <div className={styles.postGrid}>
-          {blogPosts.map((post, index) => {
-            const Icon = post.icon;
-            return (
-              <div key={post.slug} data-course-reveal data-reveal-variant="card" data-delay={String((index % 3) * 100)}>
-                <article className={styles.postCard} data-tone={post.tone}>
-                  <div className={styles.postCover}>
-                    <Icon className={styles.postCoverMark} strokeWidth={0.65} aria-hidden="true" />
-                    <span className={styles.postCoverIcon}><Icon size={24} /></span>
-                  </div>
-                  <div className={styles.postBody}>
-                    <span className={styles.postCategory}>{post.category}</span>
-                    <h2><Link href={`/blog/${post.slug}`}>{post.title}</Link></h2>
-                    <p className={styles.postExcerpt}>{post.excerpt}</p>
-                    <div className={styles.postMeta}>
-                      <span><User size={12} /> {post.author}</span>
-                      <span><Calendar size={12} /> {formatDate(post.date)}</span>
-                      <span><Clock3 size={12} /> {post.readTime}</span>
+        {posts.length ? (
+          <div className={styles.postGrid}>
+            {posts.map((post, index) => {
+              const tone: 'orange' | 'blue' = index % 2 ? 'blue' : 'orange';
+              return (
+                <div key={post._id} data-course-reveal data-reveal-variant="card" data-delay={String((index % 3) * 100)}>
+                  <article className={styles.postCard} data-tone={tone}>
+                    <PostCover post={post} />
+                    <div className={styles.postBody}>
+                      <span className={styles.postCategory}>{getBlogCategoryLabel(post.category)}</span>
+                      <h2><Link href={`/blog/${post.slug}`}>{post.title}</Link></h2>
+                      <p className={styles.postExcerpt}>{getBlogExcerpt(post)}</p>
+                      <div className={styles.postMeta}>
+                        <span><User size={12} /> {post.authorLabel}</span>
+                        <span><Calendar size={12} /> {formatBlogDate(post)}</span>
+                        <span><Clock3 size={12} /> {formatReadingTime(post.readingTime)}</span>
+                      </div>
+                      <div className={styles.postStats}>
+                        <span><Heart size={12} /> {post.likeCount}</span>
+                        <span><MessageCircle size={12} /> {post.commentCount}</span>
+                      </div>
+                      <Link href={`/blog/${post.slug}`} className={styles.postReadMore}>Read article <ArrowUpRight size={15} /></Link>
                     </div>
-                    <Link href={`/blog/${post.slug}`} className={styles.postReadMore}>Read article <ArrowUpRight size={15} /></Link>
-                  </div>
-                </article>
-              </div>
-            );
-          })}
-        </div>
+                  </article>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className={styles.empty} data-course-reveal>
+            <BookOpen size={32} />
+            <h3>Your next read is on its way.</h3>
+            <p>We&apos;re working on new study strategy posts — check back soon.</p>
+          </div>
+        )}
       </section>
 
       <section className={`${styles.shell} ${styles.ctaWrap}`} aria-labelledby="blog-cta-title">

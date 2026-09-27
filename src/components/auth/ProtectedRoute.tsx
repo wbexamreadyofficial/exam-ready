@@ -3,14 +3,14 @@ import { getRoleHome } from '@/lib/auth/roleHome';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
-import { AppLayoutSkeleton } from '@/components/ui/page-skeletons';
+import { BrandLoader } from '@/components/ui/BrandLoader';
 import type { UserRole } from '@/types/auth';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
   requiredRole?: UserRole;
   redirectTo?: string;
-  /** Shown while the session resolves; should mirror the layout being protected. */
+  /** Optional replacement for the branded screen while the session resolves. */
   fallback?: React.ReactNode;
 }
 
@@ -26,7 +26,7 @@ export function ProtectedRoute({ children, requiredRole, redirectTo = '/login', 
       }
     }
   }, [isAuthenticated, isLoading, user, requiredRole, redirectTo, router]);
-  if (isLoading) return <>{fallback ?? <AppLayoutSkeleton />}</>;
+  if (isLoading) return <>{fallback ?? <BrandLoader />}</>;
   if (!isAuthenticated) return null;
   if (requiredRole && user?.role !== requiredRole) return null;
   return <>{children}</>;
