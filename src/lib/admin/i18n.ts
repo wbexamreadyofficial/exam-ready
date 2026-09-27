@@ -45,6 +45,7 @@ export const adminCopy = {
       users: 'Users',
       contacts: 'Contact Messages',
       notifications: 'Notifications',
+      deployments: 'Deployments',
       settings: 'Settings',
     },
 
@@ -302,6 +303,7 @@ export const adminCopy = {
       users: 'ব্যবহারকারী',
       contacts: 'যোগাযোগ বার্তা',
       notifications: 'বিজ্ঞপ্তি',
+      deployments: 'ডিপ্লয়মেন্ট',
       settings: 'সেটিংস',
     },
 
