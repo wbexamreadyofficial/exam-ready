@@ -272,6 +272,10 @@ export interface CommitPayload {
    * so the backend can set subjectId on each question (never the string name).
    */
   subjectMappings: Array<{ parsedName: string; subjectId: string | null }>;
+  /** The marking scheme confirmed in step 8 — saved only at commit. */
+  pattern?: PatternInput;
+  /** Questions written by hand in step 9 — appended after the parsed ones at commit. */
+  newQuestions?: NewQuestionInput[];
 }
 
 /** Errors the wizard shows verbatim, so the API owns the wording. */
