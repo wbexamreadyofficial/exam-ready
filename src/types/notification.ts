@@ -1,6 +1,10 @@
 import type { PaginationMeta } from './user';
 
-export type NotificationType = 'user.registered' | 'test.submitted' | 'test.auto_submitted';
+export type NotificationType =
+  | 'user.registered'
+  | 'test.submitted'
+  | 'test.auto_submitted'
+  | 'contact.submitted';
 
 /** A row from GET /api/notifications. `readAt` is missing/null while unread. */
 export interface NotificationItem {

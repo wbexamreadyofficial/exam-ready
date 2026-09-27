@@ -37,6 +37,7 @@ export const adminCopy = {
 
       system: 'System',
       users: 'Users',
+      contacts: 'Contact Messages',
       notifications: 'Notifications',
     },
 
@@ -282,6 +283,7 @@ export const adminCopy = {
 
       system: 'সিস্টেম',
       users: 'ব্যবহারকারী',
+      contacts: 'যোগাযোগ বার্তা',
       notifications: 'বিজ্ঞপ্তি',
     },
 

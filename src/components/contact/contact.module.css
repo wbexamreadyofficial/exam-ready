@@ -66,6 +66,7 @@
 .submitButton:disabled { opacity: .7; transform: none; cursor: default; }
 .formNote { display: flex; align-items: center; gap: 8px; margin-top: 14px; font-size: 10.5px; color: var(--muted); }
 .formSuccess { display: flex; align-items: center; gap: 10px; margin-top: 22px; padding: 14px 16px; border-radius: 12px; background: color-mix(in srgb, #31866a 12%, transparent); color: #31866a; font-size: 12.5px; font-weight: 650; }
+.formError { margin-top: 12px; padding: 11px 13px; border: 1px solid color-mix(in srgb, #d64545 32%, transparent); border-radius: 10px; background: color-mix(in srgb, #d64545 7%, transparent); color: #c83838; font-size: 11.5px; font-weight: 600; }
 
 .sidebarCard { border: 1px solid var(--line); border-radius: 20px; background: var(--warm); padding: 30px; }
 .sidebarCard + .sidebarCard { margin-top: 20px; }
@@ -79,6 +80,14 @@
 .socialRow { display: flex; gap: 10px; margin-top: 18px; }
 .socialRow a { display: grid; place-items: center; width: 38px; height: 38px; border: 1px solid var(--line); border-radius: 50%; color: var(--muted); transition: color .3s ease, border-color .3s ease, transform .3s ease; }
 .socialRow a:hover { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, var(--line)); transform: translateY(-2px); }
+
+.quickLinks { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 2px; }
+.quickLinks li + li { margin-top: 2px; }
+.quickLinks a { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 11px 2px; font-size: 12.5px; font-weight: 650; color: var(--ink); border-bottom: 1px solid var(--line); transition: color .25s ease, padding-left .25s ease; }
+.quickLinks li:last-child a { border-bottom: 0; }
+.quickLinks a svg { color: var(--muted); transition: transform .25s ease, color .25s ease; }
+.quickLinks a:hover { color: var(--accent); padding-left: 6px; }
+.quickLinks a:hover svg { color: var(--accent); transform: translate(2px, -2px); }
 
 /* FAQ (shared pattern) */
 .faqSection { display: grid; grid-template-columns: .9fr 1.25fr; gap: 100px; padding-block: 0 100px; }

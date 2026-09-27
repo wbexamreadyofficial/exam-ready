@@ -48,6 +48,7 @@ export const adminNavGroups: AdminNavGroup[] = [
   {
     titleKey: 'system',
     items: [
+      { labelKey: 'contacts', href: '/admin/contacts', icon: 'MessagesSquare' },
       { labelKey: 'notifications', href: '/admin/notifications', icon: 'Bell' },
     ],
   },

@@ -1,6 +1,6 @@
 'use client';
 
-import { Check, ClipboardCheck, TimerOff, Trash2, UserPlus } from 'lucide-react';
+import { Check, ClipboardCheck, MessageSquare, TimerOff, Trash2, UserPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { formatDateTime, timeAgo } from '@/lib/userFormat';
 import { cn } from '@/lib/utils';
@@ -18,6 +18,10 @@ const TYPE_META: Record<NotificationType, { icon: React.ElementType; tone: strin
   'test.auto_submitted': {
     icon: TimerOff,
     tone: 'bg-orange-100 text-[#e2691f] dark:bg-orange-500/15 dark:text-orange-300',
+  },
+  'contact.submitted': {
+    icon: MessageSquare,
+    tone: 'bg-blue-100 text-blue-600 dark:bg-blue-500/15 dark:text-blue-300',
   },
 };
 

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, ArrowUpRight, Check, Clock3, GraduationCap, Mail, MapPin, MessageCircle, Phone, Sparkles } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Check, Clock3, GraduationCap, LifeBuoy, Mail, MapPin, MessageCircle, Phone, Sparkles } from 'lucide-react';
 import { CoursesExperience } from '@/components/courses/CoursesExperience';
 import { FaqAccordion } from '@/components/courses/FaqAccordion';
 import { HomeAmbient } from '@/components/home/HomeAmbient';
@@ -73,6 +73,15 @@ export default function ContactPage() {
                 <a href="#" aria-label="WhatsApp support"><MessageCircle size={15} /></a>
                 <a href="#" aria-label="Email us"><Mail size={15} /></a>
               </div>
+            </div>
+            <div className={styles.sidebarCard} data-course-reveal data-reveal-variant="card" data-delay="200">
+              <h3><LifeBuoy size={16} /> While you wait</h3>
+              <p>Some things are faster to check yourself before writing in.</p>
+              <ul className={styles.quickLinks}>
+                <li><Link href="/courses">Browse courses <ArrowUpRight size={13} /></Link></li>
+                <li><Link href="/pricing">Compare plans <ArrowUpRight size={13} /></Link></li>
+                <li><Link href="#contact-faq-title">Read the FAQ <ArrowUpRight size={13} /></Link></li>
+              </ul>
             </div>
           </div>
         </div>
