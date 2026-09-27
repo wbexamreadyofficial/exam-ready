@@ -3,6 +3,8 @@
 import { useState, type FormEvent } from 'react';
 import { CheckCircle2, MessageSquare } from 'lucide-react';
 import styles from '@/components/contact/contact.module.css';
+import { contactsApi } from '@/lib/api/contacts';
+import { getErrorMessage } from '@/lib/api/errors';
 
 type FieldName = 'name' | 'email' | 'subject' | 'message';
 type Errors = Partial<Record<FieldName, string>>;
@@ -23,6 +25,7 @@ export function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
   const [pending, setPending] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
+  const [submitError, setSubmitError] = useState('');
 
   function clearError(field: FieldName) {
     setErrors((current) => {
@@ -33,7 +36,7 @@ export function ContactForm() {
     });
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
     const data = {
@@ -44,14 +47,24 @@ export function ContactForm() {
     };
     const nextErrors = validate(data);
     setErrors(nextErrors);
+    setSubmitError('');
     if (Object.keys(nextErrors).length > 0) return;
 
     setPending(true);
-    // Front-end only for now — wire this up to the support inbox once the endpoint exists.
-    window.setTimeout(() => {
-      setPending(false);
+    try {
+      await contactsApi.submit({
+        name: data.name.trim(),
+        email: data.email.trim(),
+        subject: data.subject.trim(),
+        message: data.message.trim(),
+      });
+      form.reset();
       setSubmitted(true);
-    }, 600);
+    } catch (error: unknown) {
+      setSubmitError(getErrorMessage(error, 'Could not send your message. Please try again.'));
+    } finally {
+      setPending(false);
+    }
   }
 
   return (
@@ -123,6 +136,7 @@ export function ContactForm() {
           <button type="submit" className={styles.submitButton} disabled={pending}>
             {pending ? 'Sending…' : 'Submit message'}
           </button>
+          {submitError && <p className={styles.formError} role="alert">{submitError}</p>}
           <p className={styles.formNote}>We typically reply within 2 hours on working days.</p>
         </form>
       )}

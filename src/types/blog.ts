@@ -47,6 +47,9 @@ export interface Blog {
   viewCount: number;
   likeCount: number;
   commentCount: number;
+  /** Whether the current signed-in user has liked this blog. Always `false`
+   *  for anonymous requests. */
+  likedByMe: boolean;
   isFeatured: boolean;
   displayOrder: number;
   isActive: boolean;

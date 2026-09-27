@@ -29,6 +29,7 @@ export const adminCopy = {
       exams: 'Exams',
       questionSets: 'Question Sets',
       questions: 'Question Bank',
+      legalPages: 'Help, Terms & Privacy',
 
       blog: 'Blog',
       blogs: 'Blogs',
@@ -42,6 +43,7 @@ export const adminCopy = {
 
       system: 'System',
       users: 'Users',
+      contacts: 'Contact Messages',
       notifications: 'Notifications',
     },
 
@@ -283,6 +285,7 @@ export const adminCopy = {
       exams: 'পরীক্ষা',
       questionSets: 'প্রশ্নসেট',
       questions: 'প্রশ্নব্যাংক',
+      legalPages: 'হেল্প, শর্তাবলী ও প্রাইভেসি',
 
       blog: 'ব্লগ',
       blogs: 'ব্লগসমূহ',
@@ -296,6 +299,7 @@ export const adminCopy = {
 
       system: 'সিস্টেম',
       users: 'ব্যবহারকারী',
+      contacts: 'যোগাযোগ বার্তা',
       notifications: 'বিজ্ঞপ্তি',
     },
 

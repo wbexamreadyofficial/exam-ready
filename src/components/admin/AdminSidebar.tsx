@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard, FileUp, History, BookOpen, LayoutGrid,
-  Library, FileText, ListChecks, HelpCircle, Bell, Users,
-  Newspaper, FolderKanban, MessageSquare,
+  Library, FileText, ListChecks, HelpCircle, Bell, Users, MessagesSquare,
+  Newspaper, FolderKanban, MessageSquare, LifeBuoy,
   ChevronLeft, ChevronRight, LogOut,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -20,8 +20,8 @@ import { ConfirmDialog } from './ConfirmDialog';
 
 const iconMap: Record<string, React.ElementType> = {
   LayoutDashboard, FileUp, History, BookOpen, LayoutGrid,
-  Library, FileText, ListChecks, HelpCircle, Bell, Users,
-  Newspaper, FolderKanban, MessageSquare,
+  Library, FileText, ListChecks, HelpCircle, Bell, Users, MessagesSquare,
+  Newspaper, FolderKanban, MessageSquare, LifeBuoy,
 };
 
 interface AdminSidebarProps {
@@ -61,7 +61,7 @@ export function AdminSidebar({ isCollapsed, onToggle, onClose }: AdminSidebarPro
         isCollapsed ? 'w-[72px]' : 'w-[264px]'
       )}
     >
-      {/* Header — logo + desktop collapse toggle */}
+      {/* Header — logo + desktop collapse toggle  */}
       <div className="flex h-[72px] shrink-0 items-center justify-between gap-1.5 border-b border-[var(--color-hairline)] px-3">
         <Link href="/admin" onClick={onClose} className="flex min-w-0 items-center gap-2 overflow-hidden">
           <LogoIcon className="h-8 w-8 shrink-0" />

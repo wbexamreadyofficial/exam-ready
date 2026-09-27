@@ -1,0 +1,188 @@
+.screen {
+  --loader-paper: #fcfbf9;
+  --loader-muted: #718096;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  min-height: 100svh;
+  overflow: hidden;
+  color: #142b44;
+  background:
+    radial-gradient(ellipse at 41% 43%, #e8effb85, transparent 36%),
+    radial-gradient(ellipse at 61% 55%, #fbeada95, transparent 36%),
+    var(--loader-paper);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 24px 64px;
+  animation: arrive 600ms cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.emblem {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 164px;
+  height: 164px;
+  margin-bottom: 28px;
+}
+
+.halo {
+  position: absolute;
+  inset: -24px;
+  border: 1px solid #7199cd0e;
+  border-radius: 50%;
+  background: radial-gradient(circle, #c7dafa26, transparent 72%);
+  animation: breathe 4s ease-in-out infinite;
+}
+
+.orbit {
+  position: absolute;
+  inset: 0;
+  border: 1px solid #7392bf20;
+  border-radius: 50%;
+  animation: orbit 8s linear infinite;
+}
+
+.orbit::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border: 1px solid transparent;
+  border-top-color: #4888df90;
+  border-right-color: #4888df35;
+  border-radius: inherit;
+  transform: rotate(-38deg);
+}
+
+.orbit span {
+  position: absolute;
+  top: -3px;
+  left: calc(50% - 3px);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #e78338;
+  box-shadow: 0 0 0 5px #e7833810;
+}
+
+.logoPlate {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 120px;
+  height: 120px;
+  border: 1px solid #ffffff;
+  border-radius: 36px;
+  background: linear-gradient(145deg, #ffffff, #fffdf9);
+  box-shadow: 0 16px 40px -24px #2139584d, 0 2px 6px #21395805;
+  animation: float 4s ease-in-out infinite;
+}
+
+.logo { width: 84px; height: 74px; }
+
+.wordmark {
+  font-size: clamp(30px, 5vw, 36px);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -.055em;
+}
+
+.wordmark span:first-child { color: #1664dd; }
+.wordmark span:last-child { color: #df671c; }
+
+.tagline {
+  margin-top: 10px;
+  color: var(--loader-muted);
+  font-size: 12px;
+  font-weight: 450;
+  letter-spacing: .065em;
+}
+
+.loading {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  margin-top: 38px;
+}
+
+.track {
+  width: 112px;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: #7890b31c;
+}
+
+.track span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, transparent, #4c87df 25%, #e78c44 75%, transparent);
+  animation: travel 2.2s cubic-bezier(.65, 0, .35, 1) infinite;
+}
+
+.loading p {
+  color: var(--loader-muted);
+  font-size: 11px;
+  letter-spacing: .035em;
+}
+
+.dots { display: inline-block; width: 10px; }
+
+.signature {
+  position: absolute;
+  bottom: max(32px, env(safe-area-inset-bottom));
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--loader-muted);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: .2em;
+}
+
+.signature span { width: 4px; height: 4px; border-radius: 50%; background: #d98950; }
+
+:global(.dark) .screen {
+  --loader-paper: #0b1423;
+  --loader-muted: #91a2b8;
+  background:
+    radial-gradient(ellipse at 41% 43%, #1d408d26, transparent 36%),
+    radial-gradient(ellipse at 61% 55%, #81421718, transparent 36%),
+    var(--loader-paper);
+}
+
+:global(.dark) .logoPlate {
+  border-color: #ffffff12;
+  background: linear-gradient(145deg, #1c2c44, #111e30);
+  box-shadow: 0 16px 40px -24px #00000080, inset 0 1px #ffffff06;
+}
+
+:global(.dark) .wordmark span:first-child { color: #69a5ff; }
+:global(.dark) .wordmark span:last-child { color: #f79b59; }
+
+@keyframes arrive { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes orbit { to { transform: rotate(360deg); } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes breathe { 0%, 100% { opacity: .5; transform: scale(.96); } 50% { opacity: 1; transform: scale(1.04); } }
+@keyframes travel { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+@media (max-height: 500px) {
+  .content { padding: 20px 24px 44px; }
+  .emblem { width: 120px; height: 120px; margin-bottom: 18px; }
+  .logoPlate { width: 88px; height: 88px; border-radius: 26px; }
+  .logo { width: 64px; height: 56px; }
+  .loading { margin-top: 20px; gap: 10px; }
+  .signature { bottom: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .content, .orbit, .logoPlate, .halo, .track span { animation: none; }
+}

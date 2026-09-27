@@ -43,6 +43,7 @@ export const adminNavGroups: AdminNavGroup[] = [
       { labelKey: 'exams', href: '/admin/exams', icon: 'FileText' },
       { labelKey: 'questionSets', href: '/admin/question-sets', icon: 'ListChecks' },
       { labelKey: 'questions', href: '/admin/questions', icon: 'HelpCircle' },
+      { labelKey: 'legalPages', href: '/admin/legal-pages', icon: 'LifeBuoy' },
     ],
   },
   {
@@ -56,6 +57,7 @@ export const adminNavGroups: AdminNavGroup[] = [
   {
     titleKey: 'system',
     items: [
+      { labelKey: 'contacts', href: '/admin/contacts', icon: 'MessagesSquare' },
       { labelKey: 'notifications', href: '/admin/notifications', icon: 'Bell' },
     ],
   },
