@@ -14,6 +14,7 @@ import type {
   UserProfile,
   UserSuggestion,
 } from '@/types/user';
+import type { ProgressHistoryParams, ProgressReportResult } from '@/types/progress';
 
 interface LoginListResponse extends ApiResponse<Pick<LoginListResult, 'user' | 'logins' | 'summary'>> {
   pagination: LoginListResult['pagination'];
@@ -78,6 +79,12 @@ export const usersApi = {
       summary: data.data.summary,
       pagination: data.pagination,
     };
+  },
+
+  /** GET /api/users/:userId/progress — Admin only. Full progress report: stats, score trend, subject accuracy, and a paginated exam history. */
+  getUserProgress: async (userId: string, params?: ProgressHistoryParams): Promise<ProgressReportResult> => {
+    const { data } = await apiClient.get<ApiResponse<ProgressReportResult>>(`/users/${userId}/progress`, { params });
+    return data.data;
   },
 
   /** GET /api/users/autocomplete — Admin only. Up to 10 suggestions; newest users when `q` is empty. */
