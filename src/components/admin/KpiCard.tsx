@@ -8,7 +8,7 @@ interface KpiCardProps {
   label: string;
   value: string | number;
   sub?: string;
-  /** Tailwind classes for the icon tile, e.g. "bg-blue-100 text-blue-600". */
+  /** Tailwind classes for the icon tile, e.g. "bg-blue-100 text-blue-600" */
   tone: string;
 }
 
