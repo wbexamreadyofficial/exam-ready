@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard, FileUp, History, BookOpen, LayoutGrid,
   Library, FileText, ListChecks, HelpCircle, Bell, Users, MessagesSquare,
-  Newspaper, FolderKanban, MessageSquare, LifeBuoy, Settings, Rocket, Mail,
+  Newspaper, FolderKanban, MessageSquare, LifeBuoy, Settings, Rocket, Mail, CreditCard,
   ChevronLeft, ChevronRight, LogOut,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -21,7 +21,7 @@ import { ConfirmDialog } from './ConfirmDialog';
 const iconMap: Record<string, React.ElementType> = {
   LayoutDashboard, FileUp, History, BookOpen, LayoutGrid,
   Library, FileText, ListChecks, HelpCircle, Bell, Users, MessagesSquare,
-  Newspaper, FolderKanban, MessageSquare, LifeBuoy, Settings, Rocket, Mail,
+  Newspaper, FolderKanban, MessageSquare, LifeBuoy, Settings, Rocket, Mail, CreditCard,
 };
 
 interface AdminSidebarProps {
